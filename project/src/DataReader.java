@@ -1,5 +1,6 @@
+import model.Place;
+
 import java.io.*;
-import java.util.*;
 
 public class DataReader {
     private final int NUM_COMPANIES = 91;
