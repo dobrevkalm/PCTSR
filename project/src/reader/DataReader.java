@@ -1,3 +1,5 @@
+package reader;
+
 import model.Place;
 
 import java.io.*;

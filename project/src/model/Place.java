@@ -44,4 +44,9 @@ public class Place implements Cloneable {
     public double getFirmProfit() {
         return firmProfit;
     }
+
+    @Override
+    public String toString() {
+        return "\n{> " + this.companyName + " <}";
+    }
 }

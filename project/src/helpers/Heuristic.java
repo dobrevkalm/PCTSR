@@ -3,7 +3,7 @@ package helpers;
 import model.PathResult;
 import model.Place;
 
-public class Heuristic {
+public abstract class Heuristic {
     protected Place[] places;
     protected int startVertex;
     protected int agentsNumber;
@@ -22,4 +22,6 @@ public class Heuristic {
         this.visited = new boolean[places.length];
         this.pathResult = new PathResult[this.agentsNumber];
     }
+
+    public abstract PathResult[] getResultPaths();
 }

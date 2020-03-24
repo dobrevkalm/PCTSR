@@ -22,7 +22,8 @@ public class HeuristicOne extends Heuristic {
     private List<ArrayList<Neighbor>> initializeNeighborList() {
         List<ArrayList<Neighbor>> neighborList = new ArrayList<>(places.length);
         for (Place place : places) {
-            neighborList.set(place.getId(), new ArrayList<>());
+            neighborList.add(place.getId(), new ArrayList<>());
+            //neighborList.set(place.getId(), new ArrayList<>());
             for (Place placeNeighbor : places) {
                 if (place.getId() != placeNeighbor.getId()) { //don't add itself
                     distance = distanceMatrix[place.getId()][placeNeighbor.getId()];

@@ -111,9 +111,13 @@ public class HeuristicTwo extends Heuristic {
             }
         }
 
-        Place placeToInsert = places[besti];
-        double profitIncrease = placeToInsert.getFirmProfit();
+        double profitIncrease = 0.0;
+        if (besti == -1) {
+            return profitIncrease;
+        }
 
+        Place placeToInsert = places[besti];
+        profitIncrease = placeToInsert.getFirmProfit();
         pathResult[k].increasePathLength(plusLength);
         pathResult[k].increaseActualProfit(profitIncrease);
         pathResult[k].getResultPath().add(bestj, placeToInsert);
