@@ -14,27 +14,31 @@ public class Main {
         int startVertex = 5;
         int agentsNumber = 2;
         // in billions MAX is 380.70
-        int minProfit = 150;
+        int minProfit = 200;
 
         Heuristic hOne = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
         HeuristicTwo hTwo = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
 
-        PathResult[] hOneResults = hOne.getResultPaths();
+        // Results for solution 1
+        printResults(hOne.getClass().getName(), hOne.getResultPaths());
+        // Results for solution 2
+        printResults(hTwo.getClass().getName(), hTwo.getResultPaths());
+    }
 
-        PathResult[] hTwoResults = hTwo.getResultPaths();
-        for (PathResult pr : hOneResults) {
-            System.out.println("\nResult for agent -> ");
+    private static void printResults(String method, PathResult[] results) {
+        printResultHeader(method);
+        int agent = 0;
+        for (PathResult pr : results) {
+            System.out.println("\n Result for agent #" + agent++);
             printResultPath(pr.getResultPath());
         }
+    }
 
+    private static void printResultHeader(String method) {
+        String name = method.substring(method.indexOf('.') + 1);
         System.out.println("\n ######################## ");
-        System.out.println(" > HeuristicTwo Results ");
+        System.out.println(" > " + name + " Results <");
         System.out.println(" ######################## ");
-
-        for (PathResult pr : hTwoResults) {
-            System.out.println("\nResult for agent -> ");
-            printResultPath(pr.getResultPath());
-        }
     }
 
     private static void printResultPath(List<Place> places) {
