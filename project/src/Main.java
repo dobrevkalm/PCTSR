@@ -17,12 +17,21 @@ public class Main {
         int minProfit = 150;
 
         Heuristic hOne = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
-        Heuristic hTwo = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        HeuristicTwo hTwo = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
 
         PathResult[] hOneResults = hOne.getResultPaths();
-        // does not yet work =[
-        //PathResult[] hTwoResults = hTwo.getResultPaths();
+
+        PathResult[] hTwoResults = hTwo.getResultPaths();
         for (PathResult pr : hOneResults) {
+            System.out.println("\nResult for agent -> ");
+            printResultPath(pr.getResultPath());
+        }
+
+        System.out.println("\n ######################## ");
+        System.out.println(" > HeuristicTwo Results ");
+        System.out.println(" ######################## ");
+
+        for (PathResult pr : hTwoResults) {
             System.out.println("\nResult for agent -> ");
             printResultPath(pr.getResultPath());
         }

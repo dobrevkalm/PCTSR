@@ -235,6 +235,7 @@ public class HeuristicTwo extends Heuristic {
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i] = new PathResult(distanceMatrix);
             pathResult[i].getResultPath().add(places[startVertex]);
+            pathResult[i].getResultPath().add(places[startVertex]);
         }
     }
 }
