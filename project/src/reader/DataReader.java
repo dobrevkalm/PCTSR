@@ -20,7 +20,7 @@ public class DataReader {
     }
 
     private void readFile() throws IOException {
-        File data = new File("../../data/data.txt");
+        File data = new File("data/data.txt");
         BufferedReader br = new BufferedReader(new FileReader(data));
         for(int i = 0; i < NUM_COMPANIES; i++) {
             // parse company data 0 - name, 1 - address, 2 - profit, 3 - latitude, 4 - longitude, 5 - distance array
