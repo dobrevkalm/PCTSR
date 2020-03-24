@@ -44,7 +44,7 @@ public class HeuristicTwo extends Heuristic {
     }
 
     // k is the agent number
-    private void remove(int k, String type) {
+    private void remove(int k, boolean best) {
         int n = pathResult[k].getResultPath().size();
         double bestH = -1.0;
         int besti = -1;
@@ -60,11 +60,11 @@ public class HeuristicTwo extends Heuristic {
 
             double minusProfit = pathResult[k].getResultPath().get(i).getFirmProfit();
 
-            if (type.equals("basic") && (minus - plus) / minusProfit > bestH) {
+            if (!best && (minus - plus) / minusProfit > bestH) {
                 bestH = (minus - plus) / minusProfit;
                 besti = i;
                 minusLength = minus - plus;
-            } else if (type.equals("best") && minusProfit > bestH) {
+            } else if (best && minusProfit > bestH) {
                 bestH = minusProfit;
                 besti = i;
                 minusLength = minus - plus;
@@ -175,9 +175,9 @@ public class HeuristicTwo extends Heuristic {
 
         for (int i = 0; i < verticesToRemove; i++) {
             if (i < 3) {
-                remove(agent, "best");
+                remove(agent, true);
             } else {
-                remove(agent, "basic");
+                remove(agent, false);
             }
         }
     }
