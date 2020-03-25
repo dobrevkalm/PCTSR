@@ -32,6 +32,8 @@ public class Main {
             System.out.println("\n Result for agent #" + agent++);
             printResultPath(pr.getResultPath());
         }
+        System.out.println("\nTotal length: " + getTotalLength(results));
+        System.out.println(getTotalProfitCollected(results));
     }
 
     private static void printResultHeader(String method) {
@@ -39,6 +41,22 @@ public class Main {
         System.out.println("\n ######################## ");
         System.out.println(" > " + name + " Results <");
         System.out.println(" ######################## ");
+    }
+
+    private static double getTotalLength(PathResult[] results) {
+        double length = 0.0;
+        for(PathResult res: results) {
+            length += res.getPathLength();
+        }
+        return length;
+    }
+
+    private static double getTotalProfitCollected(PathResult[] results) {
+        double profit = 0.0;
+        for(PathResult res: results) {
+            profit += res.getActualProfit();
+        }
+        return profit;
     }
 
     private static void printResultPath(List<Place> places) {

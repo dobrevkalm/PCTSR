@@ -28,29 +28,61 @@ public class PathResult {
     public boolean opt2() {
         double minus, plus;
         int n = this.resultPath.size();
-        List<Place> newPlaces;
+        // variables used to find the best possible edges to exchange
+        double bestPlus = 0.0, bestMinus=0.0, biggestDiff=0.0;
+        int besti = -1, bestj = -1;
         for(int i = 0; i < n-2; i++) {
             for(int j = i+2; j < n-1; j++) {
+                //check the distances of edges before and after possible exchange
+                //minus - sum of edges (i, i+1) and (j, j+1) (before possible exchange)
+                //plus - sum of edges (i, j) and (i+1, j+1) (after possible exchange)
                 minus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i+1).getId()] + neighborsMatrix[resultPath.get(j).getId()][resultPath.get(j+1).getId()];
                 plus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(j).getId()] + neighborsMatrix[resultPath.get(i+1).getId()][resultPath.get(j+1).getId()];
+                // check if exchange of edges (i,i+1) (j, j+1) into edges (i,j) (i+1, j+1) shortens the route
                 if (plus < minus) {
-                    newPlaces = new ArrayList<>();
-                    for (int k = 0; k <= i; k++) {
-                        newPlaces.add(resultPath.get(k));
+                    double diff = minus - plus;
+                    //check if found possible exchange is better than ones currently found
+                    if(diff > biggestDiff) {
+                        // update
+                        biggestDiff = diff;
+                        bestPlus = plus;
+                        bestMinus = minus;
+                        besti = i;
+                        bestj = j;
                     }
-                    for( int k = j; k >= i+1; k--) {
-                        newPlaces.add(resultPath.get(k));
-                    }
-                    for (int k = j+1; k <= n-1; k++) {
-                        newPlaces.add(resultPath.get(k));
-                    }
-                    this.resultPath = newPlaces;
-                    this.pathLength += plus - minus;
-                    return true;
+
                 }
             }
         }
+
+        // found the best 2opt correction for the moment
+        if(besti!=-1 && bestj!=-1) {
+            exchangeEdges(besti, bestj);
+            this.pathLength += (bestPlus - bestMinus);
+            return true;
+        }
+
+        // 2opt correction not found
         return false;
+    }
+
+    //exchange (i, i+1) and (j, j+1) to (i,j) (i+1, j+1)
+    private void exchangeEdges(int i, int j) {
+        List<Place> newPlaces = new ArrayList<>();
+        int pathSize = this.resultPath.size();
+        //add vertices from starting vertex to vertex i
+        for (int k = 0; k <= i; k++) {
+            newPlaces.add(resultPath.get(k));
+        }
+        //add vertices from vertex j to vertex i+1
+        for (int k = j; k >= i + 1; k--) {
+            newPlaces.add(resultPath.get(k));
+        }
+        //add verticed from vertex j+1 to the the starting vertex
+        for (int k = j + 1; k <= pathSize - 1; k++) {
+            newPlaces.add(resultPath.get(k));
+        }
+        this.resultPath = newPlaces;
     }
 
     public void realData() {
