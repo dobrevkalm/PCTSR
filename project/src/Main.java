@@ -13,7 +13,7 @@ public class Main {
     private static Place[] places = reader.getAllCompanies();
 
     public static void main(String[] args) {
-        runTests();
+
     }
 
     private static void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
