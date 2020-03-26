@@ -106,15 +106,5 @@ public class DataReader {
             }
         }
     }
-
-    /**
-     * MAIN
-     */
-    public static void main(String[] args) throws IOException {
-        DataReader dr = new DataReader();
-        dr.testDistanceMatrix();
-        dr.testPlaces();
-        dr.checkDistanceMatrix();
-    }
 }
 

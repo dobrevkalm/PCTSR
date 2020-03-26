@@ -15,7 +15,19 @@ public class Main {
 
     public static void main(String[] args) {
         GUI gui = new GUI();
+        gui.setPlacesCoordinates(getPlacesCoordinates());
         gui.run();
+    }
+
+    private static double[][] getPlacesCoordinates() {
+        double[][] coordinates = new double[places.length][2];
+        int placeIdx = 0;
+        for (Place place : places) {
+            coordinates[placeIdx][0] = place.getLatitude();
+            coordinates[placeIdx][1] = place.getLongitude();
+            placeIdx++;
+        }
+        return coordinates;
     }
 
     private static void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
