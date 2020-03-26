@@ -28,9 +28,6 @@ public class PathResult {
     public boolean opt2() {
         double minus, plus;
         int n = this.resultPath.size();
-        // variables used to find the best possible edges to exchange
-        double biggestDiff = 0.0;
-        int besti = -1, bestj = -1;
         for (int i = 0; i < n - 2; i++) {
             for (int j = i + 2; j < n - 1; j++) {
                 //check the distances of edges before and after possible exchange
@@ -40,23 +37,13 @@ public class PathResult {
                 plus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(j).getId()] + neighborsMatrix[resultPath.get(i + 1).getId()][resultPath.get(j + 1).getId()];
                 // check if exchange of edges (i,i+1) (j, j+1) into edges (i,j) (i+1, j+1) shortens the route
                 if (plus < minus) {
+                    exchangeEdges(i, j);
+                    //update the path length
                     double diff = minus - plus;
-                    //check if found possible exchange is better than ones currently found
-                    if (diff > biggestDiff) {
-                        // update besti, bestj and biggestDiff variables
-                        biggestDiff = diff;
-                        besti = i;
-                        bestj = j;
-                    }
+                    this.pathLength -= diff;
+                    return true;
                 }
             }
-        }
-
-        // found the best 2opt correction for the moment
-        if (besti != -1 && bestj != -1) {
-            exchangeEdges(besti, bestj);
-            this.pathLength -= biggestDiff;
-            return true;
         }
 
         // 2opt correction not found
