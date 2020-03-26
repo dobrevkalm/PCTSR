@@ -1,3 +1,4 @@
+import GUI.GUI;
 import helpers.*;
 import model.PathResult;
 import model.Place;
@@ -13,7 +14,8 @@ public class Main {
     private static Place[] places = reader.getAllCompanies();
 
     public static void main(String[] args) {
-
+        GUI gui = new GUI();
+        gui.run();
     }
 
     private static void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
