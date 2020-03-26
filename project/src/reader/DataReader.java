@@ -14,6 +14,7 @@ public class DataReader {
     public DataReader() {
         try {
             readFile();
+            makeMatrixSymmetric();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +40,18 @@ public class DataReader {
             distanceArray[i] = Double.parseDouble(distanceString[i]);
         }
         return distanceArray;
+    }
+
+    private void makeMatrixSymmetric() {
+        for(int i=0; i<DISTANCE_MATRIX.length; i++) {
+            for(int j=0; j<DISTANCE_MATRIX.length; j++){
+                if(DISTANCE_MATRIX[i][j] != DISTANCE_MATRIX[j][i]) {
+                    double avg = (DISTANCE_MATRIX[i][j]+ DISTANCE_MATRIX[j][i])/2;
+                    DISTANCE_MATRIX[i][j] = avg;
+                    DISTANCE_MATRIX[j][i] = avg;
+                }
+            }
+        }
     }
 
     /**
@@ -86,6 +99,14 @@ public class DataReader {
         }
     }
 
+    private void checkDistanceMatrix() {
+        for(int i=0; i< DISTANCE_MATRIX.length; i++) {
+            for(int j=0; j<DISTANCE_MATRIX.length; j++){
+                assert (DISTANCE_MATRIX[i][j] == DISTANCE_MATRIX[j][i]);
+            }
+        }
+    }
+
     /**
      * MAIN
      */
@@ -93,6 +114,7 @@ public class DataReader {
         DataReader dr = new DataReader();
         dr.testDistanceMatrix();
         dr.testPlaces();
+        dr.checkDistanceMatrix();
     }
 }
 

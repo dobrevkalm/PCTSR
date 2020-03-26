@@ -29,36 +29,33 @@ public class PathResult {
         double minus, plus;
         int n = this.resultPath.size();
         // variables used to find the best possible edges to exchange
-        double bestPlus = 0.0, bestMinus=0.0, biggestDiff=0.0;
+        double biggestDiff = 0.0;
         int besti = -1, bestj = -1;
-        for(int i = 0; i < n-2; i++) {
-            for(int j = i+2; j < n-1; j++) {
+        for (int i = 0; i < n - 2; i++) {
+            for (int j = i + 2; j < n - 1; j++) {
                 //check the distances of edges before and after possible exchange
                 //minus - sum of edges (i, i+1) and (j, j+1) (before possible exchange)
                 //plus - sum of edges (i, j) and (i+1, j+1) (after possible exchange)
-                minus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i+1).getId()] + neighborsMatrix[resultPath.get(j).getId()][resultPath.get(j+1).getId()];
-                plus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(j).getId()] + neighborsMatrix[resultPath.get(i+1).getId()][resultPath.get(j+1).getId()];
+                minus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i + 1).getId()] + neighborsMatrix[resultPath.get(j).getId()][resultPath.get(j + 1).getId()];
+                plus = neighborsMatrix[resultPath.get(i).getId()][resultPath.get(j).getId()] + neighborsMatrix[resultPath.get(i + 1).getId()][resultPath.get(j + 1).getId()];
                 // check if exchange of edges (i,i+1) (j, j+1) into edges (i,j) (i+1, j+1) shortens the route
                 if (plus < minus) {
                     double diff = minus - plus;
                     //check if found possible exchange is better than ones currently found
-                    if(diff > biggestDiff) {
-                        // update
+                    if (diff > biggestDiff) {
+                        // update besti, bestj and biggestDiff variables
                         biggestDiff = diff;
-                        bestPlus = plus;
-                        bestMinus = minus;
                         besti = i;
                         bestj = j;
                     }
-
                 }
             }
         }
 
         // found the best 2opt correction for the moment
-        if(besti!=-1 && bestj!=-1) {
+        if (besti != -1 && bestj != -1) {
             exchangeEdges(besti, bestj);
-            this.pathLength += (bestPlus - bestMinus);
+            this.pathLength -= biggestDiff;
             return true;
         }
 
@@ -89,8 +86,8 @@ public class PathResult {
         double length = 0;
         double profit = 0;
         for (int i = 0; i < resultPath.size(); i++) {
-            if (i < resultPath.size()-1) {
-                length += neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i+1).getId()];
+            if (i < resultPath.size() - 1) {
+                length += neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i + 1).getId()];
             }
             profit += resultPath.get(i).getFirmProfit();
         }

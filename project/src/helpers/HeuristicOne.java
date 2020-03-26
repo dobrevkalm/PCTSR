@@ -26,7 +26,7 @@ public class HeuristicOne extends Heuristic {
             //neighborList.set(place.getId(), new ArrayList<>());
             for (Place placeNeighbor : places) {
                 if (place.getId() != placeNeighbor.getId()) { //don't add itself
-                    distance = distanceMatrix[place.getId()][placeNeighbor.getId()];
+                    double distance = distanceMatrix[place.getId()][placeNeighbor.getId()];
 
                     if (place.getFirmProfit() != 0 || place.getId() == this.startVertex) {
                         neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
