@@ -71,13 +71,15 @@ public class HeuristicTwo extends Heuristic {
             }
         }
 
-        double decreasedProfit = pathResult[k].getResultPath().get(besti).getFirmProfit();
-        pathResult[k].increasePathLength(-minusLength);
-        pathResult[k].increaseActualProfit(-decreasedProfit);
-        //unmark the removed from the path vertex
-        visited[pathResult[k].getResultPath().get(besti).getId()] = false;
-        //remove the vertex from the result path (cycle)
-        pathResult[k].getResultPath().remove(besti);
+        if(besti != -1) {
+            double decreasedProfit = pathResult[k].getResultPath().get(besti).getFirmProfit();
+            pathResult[k].increasePathLength(-minusLength);
+            pathResult[k].increaseActualProfit(-decreasedProfit);
+            //unmark the removed from the path vertex
+            visited[pathResult[k].getResultPath().get(besti).getId()] = false;
+            //remove the vertex from the result path (cycle)
+            pathResult[k].getResultPath().remove(besti);
+        }
     }
 
     private double insert(int k) {

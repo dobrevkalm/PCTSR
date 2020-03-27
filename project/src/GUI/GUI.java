@@ -1,5 +1,8 @@
 package GUI;
 
+import helpers.Heuristic;
+import helpers.HeuristicOne;
+import helpers.HeuristicTwo;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import model.PathResult;
 import model.Place;
+import reader.DataReader;
 
 import java.util.List;
 
@@ -23,16 +28,27 @@ import java.util.List;
  * Intro to JavaFX - https://openjfx.io/openjfx-docs/#introduction
  */
 public class GUI extends Application {
-    private double[][] coordinates;
     private final String TITLE = "PCTSR";
-    private final int WIDTH = 1200;
+    private final int WIDTH = 1000;
     private final int HEIGHT = 800;
     // in JavaFX, the window is called Stage
     private Stage window;
+    private Canvas canvas;
     // used to draw inside our main canvas
-    private GraphicsContext drawTool;
+    private double[][] distanceMatrix;
+    private Place[] places;
+    private GUIUtil guiUtil;
+    private PathResult[] pathResults;
+    private TextField startVertexTxt;
+    private TextField minProfitTxt;
+    private TextField agentsNumberTxt;
+    private TextField heuristicTxt;
+    private int startVertex = -1;
+    private static final int CANVAS_MARGIN = 10;
+    private Color[] color = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET,
+            Color.HOTPINK, Color.BROWN, Color.LIME, Color.AQUA, Color.GREY};
 
-    public void run () {
+    public void run() {
         // method from Application to set up the program as Java FX app
         launch();
     }
@@ -40,6 +56,12 @@ public class GUI extends Application {
     // abstract method from Application
     @Override
     public void start(Stage primaryStage) {
+        //prepare data
+        DataReader reader = new DataReader();
+        distanceMatrix = reader.getDistanceMatrix();
+        places = reader.getAllCompanies();
+        guiUtil = new GUIUtil(places);
+        //prepare window
         this.window = primaryStage;
         this.window.setTitle(this.TITLE);
         this.window.setScene(getScene());
@@ -60,64 +82,88 @@ public class GUI extends Application {
         return new Scene(pane, this.WIDTH, this.HEIGHT);
     }
 
-    private Canvas getMainCanvas() {
-        Canvas canvas = new Canvas();
-        this.drawTool = canvas.getGraphicsContext2D();
-        this.drawTool.setStroke(Color.BLACK);
-        this.drawTool.setLineWidth(2);
-        test();
-        return canvas;
+    private Pane getMainCanvas() {
+        Pane wrapperPane = new Pane();
+        this.canvas = new Canvas();
+        wrapperPane.getChildren().add(canvas);
+        canvas.getGraphicsContext2D();
+        // Bind the width/height property to the wrapper Pane
+        canvas.widthProperty().bind(wrapperPane.widthProperty());
+        canvas.heightProperty().bind(wrapperPane.heightProperty());
+        // redraw when resized
+        canvas.widthProperty().addListener(event -> draw(canvas));
+        canvas.heightProperty().addListener(event -> draw(canvas));
+        draw(canvas);
+        return wrapperPane;
     }
 
     private VBox getInteractionPanel() {
         final TextAlignment alignment = TextAlignment.LEFT;
         final int fontSize = 12;
-        return new VBox() {{
-           getChildren().addAll(
-                   createLabel("Starting vertex:", alignment, fontSize),
-                   createInputTextField("0 to 90"),
-                   createLabel("Agents number:", alignment, fontSize),
-                   createInputTextField("1 to 10"),
-                   createLabel("Desired profit:", alignment, fontSize),
-                   createInputTextField("max 300"),
-                   createLabel("Method:", alignment, fontSize),
-                   createInputTextField("one or two"),
-                   createStartButton()
-           );
-            setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
-            setSpacing(5);
-            List<Node> children = getChildren();
-            for(int i = 0; i < children.size(); i++) {
-                if (i % 2 == 0) {
-                    setMargin(children.get(i), new Insets(20, 10, 0, 5));
-                } else {
-                    setMargin(children.get(i), new Insets(0, 10, 0, 5));
-                }
+        initializeTextInputs();
+        VBox box = new VBox();
+        box.getChildren().addAll(
+                createLabel("Starting vertex:", alignment, fontSize),
+                this.startVertexTxt,
+                createLabel("Desired profit:", alignment, fontSize),
+                this.minProfitTxt,
+                createLabel("Agents number:", alignment, fontSize),
+                this.agentsNumberTxt,
+                createLabel("Method:", alignment, fontSize),
+                this.heuristicTxt,
+                createStartButton()
+        );
+
+        box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        box.setSpacing(5);
+        List<Node> children = box.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            if (i % 2 == 0) {
+                box.setMargin(children.get(i), new Insets(20, 10, 0, 5));
+            } else {
+                box.setMargin(children.get(i), new Insets(0, 10, 0, 5));
             }
-        }};
+        }
+        return box;
     }
 
     private Button createStartButton() {
         return new Button("Run") {{
-            setOnAction(event -> {
-                test();
+            setOnAction(e -> {
+                getInputAndDraw();
             });
         }};
     }
 
-    public void test() {
-        this.drawTool.beginPath();
-        this.drawTool.moveTo(100, 100);
-        this.drawTool.quadraticCurveTo(30, 150, 300, 200);
-        this.drawTool.fill();
-        this.drawTool.closePath();
+    private void getInputAndDraw() {
+        try {
+            int startingV = Integer.parseInt(this.startVertexTxt.getText());
+            int minProfit = Integer.parseInt(this.minProfitTxt.getText());
+            int agentsNumber = Integer.parseInt(this.agentsNumberTxt.getText());
+            String method = this.heuristicTxt.getText().trim().toLowerCase();
+            if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < guiUtil.getTotalProfit() - places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10 && (method.equals("one") || method.equals("two"))) {
+                getResultPath(method.equals("one"), startingV, agentsNumber, minProfit);
+                System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
+                draw(this.canvas);
+            } else {
+                System.out.println("Invalid input");
+                this.pathResults = null;
+                draw(this.canvas);
+            }
+        } catch (NumberFormatException e) {
+            e.getStackTrace();
+        }
     }
 
-    // create a simple input field with placeholder
-    private TextField createInputTextField(String placeHolder) {
-        return new TextField() {{
-           setPromptText(placeHolder);
-        }};
+    private void initializeTextInputs() {
+        this.startVertexTxt = new TextField();
+        this.startVertexTxt.setPromptText("0 to 90");
+        this.minProfitTxt = new TextField();
+        this.minProfitTxt.setPromptText("max 300");
+        this.agentsNumberTxt = new TextField();
+        this.agentsNumberTxt.setPromptText("1 to 10");
+        this.heuristicTxt = new TextField();
+        this.heuristicTxt.setPromptText("one or two");
     }
 
     // creates a node that contains a text box
@@ -139,7 +185,71 @@ public class GUI extends Application {
         }};
     }
 
-    public void setPlacesCoordinates(double[][] coordinates) {
-        this.coordinates = coordinates;
+
+    private void draw(Canvas canvas) {
+        int width = (int) canvas.getWidth();
+        int height = (int) canvas.getHeight();
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        //clear canvas
+        gc.clearRect(0, 0, width, height);
+        //set line color
+        gc.setStroke(Color.BLACK);
+        //set oval color
+        gc.setFill(Color.BLACK);
+        //draw places
+        drawPlaces(gc, width, height);
+        if (this.pathResults != null) {
+            drawPaths(gc, width, height);
+        }
+    }
+
+    private void drawPlaces(GraphicsContext gc, int width, int height) {
+        int diameter = 3;
+        if (places != null) {
+            for (int i = 0; i < places.length; i++) {
+                Place p = places[i];
+                int x = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN);
+                int y = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN);
+                if (i == this.startVertex) {
+                    gc.setFill(Color.GREEN);
+                    gc.fillOval(x, y, diameter, diameter);
+                    gc.setFill(Color.BLACK);
+                } else {
+                    gc.fillOval(x, y, diameter, diameter);
+                }
+                i++;
+            }
+        }
+    }
+
+    private void drawPaths(GraphicsContext gc, int width, int height) {
+        for (int i = 0; i < this.pathResults.length; i++) {
+            gc.setStroke(color[i]);
+            List<Place> rp = this.pathResults[i].getResultPath();
+            gc.beginPath();
+            int startX = guiUtil.getPlaceXposition(rp.get(0), CANVAS_MARGIN, width - CANVAS_MARGIN) + 1;
+            int startY = guiUtil.getPlaceYposition(rp.get(0), CANVAS_MARGIN, height - CANVAS_MARGIN) + 1;
+
+            gc.moveTo(startX, startY);
+            for (int j = 1; j < rp.size() - 1; j++) {
+                Place p = rp.get(j);
+                int x1 = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN) + 1;
+                int y1 = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN) + 1;
+                gc.lineTo(x1, y1);
+            }
+            gc.lineTo(startX, startY);
+            gc.stroke();
+        }
+    }
+
+    private void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
+        this.startVertex = startVertex;
+        Heuristic h;
+        if (one) {
+            h = new HeuristicOne(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+        } else {
+            h = new HeuristicTwo(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+        }
+        this.pathResults = h.getResultPaths();
     }
 }
