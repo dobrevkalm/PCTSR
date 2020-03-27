@@ -38,7 +38,6 @@ public class GUI extends Application {
     private TextField startVertexTxt;
     private TextField minProfitTxt;
     private TextField agentsNumberTxt;
-    private TextField heuristicTxt;
     private int startVertex = -1;
     private static final int CANVAS_MARGIN = 20;
     private final Color[] color = {
@@ -124,9 +123,8 @@ public class GUI extends Application {
                 this.minProfitTxt,
                 createLabel("Agents number:", alignment, fontSize),
                 this.agentsNumberTxt,
-                createLabel("Method:", alignment, fontSize),
-                this.heuristicTxt,
-                createStartButton()
+                createStartButton("HeuristicOne", true),
+                createStartButton("HeuristicTwo", false)
         );
 
         box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -142,23 +140,22 @@ public class GUI extends Application {
         return box;
     }
 
-    private Button createStartButton() {
-        return new Button("Run") {{
+    private Button createStartButton(String buttonText, boolean one) {
+        return new Button(buttonText) {{
             setOnAction(e -> {
-                getInputAndDraw();
+                getInputAndDraw(one);
             });
         }};
     }
 
-    private void getInputAndDraw() {
+    private void getInputAndDraw(boolean one) {
         try {
             int startingV = Integer.parseInt(this.startVertexTxt.getText());
             int minProfit = Integer.parseInt(this.minProfitTxt.getText());
             int agentsNumber = Integer.parseInt(this.agentsNumberTxt.getText());
-            String method = this.heuristicTxt.getText().trim().toLowerCase();
-            if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < guiUtil.getTotalProfit() - places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10 && (method.equals("one") || method.equals("two"))) {
-                getResultPath(method.equals("one"), startingV, agentsNumber, minProfit);
-                System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
+            if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < guiUtil.getTotalProfit() - places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10) {
+                getResultPath(one, startingV, agentsNumber, minProfit);
+                System.out.println(one + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
             } else {
                 System.out.println("Invalid input");
@@ -177,8 +174,6 @@ public class GUI extends Application {
         this.minProfitTxt.setPromptText("max 300");
         this.agentsNumberTxt = new TextField();
         this.agentsNumberTxt.setPromptText("1 to 10");
-        this.heuristicTxt = new TextField();
-        this.heuristicTxt.setPromptText("one or two");
     }
 
     // creates a node that contains a text box
@@ -219,7 +214,7 @@ public class GUI extends Application {
     }
 
     private void drawPlaces(GraphicsContext gc, int width, int height) {
-        int diameter = 4;
+        final int diameter = 4;
         if (places != null) {
             for (int i = 0; i < places.length; i++) {
                 Place p = places[i];
@@ -232,24 +227,24 @@ public class GUI extends Application {
                 } else {
                     gc.fillOval(x, y, diameter, diameter);
                 }
-                i++;
             }
         }
     }
 
     private void drawPaths(GraphicsContext gc, int width, int height) {
+        final int vertexRadius = 2;
         for (int i = 0; i < this.pathResults.length; i++) {
             gc.setStroke(color[i]);
             List<Place> rp = this.pathResults[i].getResultPath();
             gc.beginPath();
-            int startX = guiUtil.getPlaceXposition(rp.get(0), CANVAS_MARGIN, width - CANVAS_MARGIN) + 1;
-            int startY = guiUtil.getPlaceYposition(rp.get(0), CANVAS_MARGIN, height - CANVAS_MARGIN) + 1;
+            int startX = guiUtil.getPlaceXposition(rp.get(0), CANVAS_MARGIN, width - CANVAS_MARGIN) + vertexRadius;
+            int startY = guiUtil.getPlaceYposition(rp.get(0), CANVAS_MARGIN, height - CANVAS_MARGIN) + vertexRadius;
 
             gc.moveTo(startX, startY);
             for (int j = 1; j < rp.size() - 1; j++) {
                 Place p = rp.get(j);
-                int x1 = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN) + 1;
-                int y1 = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN) + 1;
+                int x1 = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN) + vertexRadius;
+                int y1 = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN) + vertexRadius;
                 gc.lineTo(x1, y1);
             }
             gc.lineTo(startX, startY);
