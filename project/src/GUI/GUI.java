@@ -13,6 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,15 +25,12 @@ import reader.DataReader;
 
 import java.util.List;
 
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
+
 /**
  * Intro to JavaFX - https://openjfx.io/openjfx-docs/#introduction
  */
 public class GUI extends Application {
-    private final String TITLE = "PCTSR";
-    private final int WIDTH = 1000;
-    private final int HEIGHT = 800;
-    // in JavaFX, the window is called Stage
-    private Stage window;
     private Canvas canvas;
     // used to draw inside our main canvas
     private double[][] distanceMatrix;
@@ -44,9 +42,19 @@ public class GUI extends Application {
     private TextField agentsNumberTxt;
     private TextField heuristicTxt;
     private int startVertex = -1;
-    private static final int CANVAS_MARGIN = 10;
-    private Color[] color = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.VIOLET,
-            Color.HOTPINK, Color.BROWN, Color.LIME, Color.AQUA, Color.GREY};
+    private static final int CANVAS_MARGIN = 20;
+    private final Color[] color = {
+            Color.RED,
+            Color.BLUE,
+            Color.GREEN,
+            Color.YELLOW,
+            Color.VIOLET,
+            Color.HOTPINK,
+            Color.BROWN,
+            Color.LIME,
+            Color.AQUA,
+            Color.GREY
+    };
 
     public void run() {
         // method from Application to set up the program as Java FX app
@@ -56,44 +64,53 @@ public class GUI extends Application {
     // abstract method from Application
     @Override
     public void start(Stage primaryStage) {
+        final String TITLE = "PCTSR";
         //prepare data
         DataReader reader = new DataReader();
         distanceMatrix = reader.getDistanceMatrix();
         places = reader.getAllCompanies();
         guiUtil = new GUIUtil(places);
+
         //prepare window
-        this.window = primaryStage;
-        this.window.setTitle(this.TITLE);
-        this.window.setScene(getScene());
-        this.window.show();
+        // in JavaFX, the window is called Stage
+        primaryStage.setTitle(TITLE);
+        primaryStage.setScene(getScene());
+        primaryStage.show();
     }
 
     // creates the 'canvas'
     private Scene getScene() {
+        final int WIDTH = 1400;
+        final int HEIGHT = 900;
+
         // the layouts are called panes. This is a default layout from JavaFX - https://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(10));
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(225, 229, 204), CornerRadii.EMPTY, Insets.EMPTY)));
+
         // set the layout sections
         pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", 22));
         pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", 20));
         pane.setLeft(getInteractionPanel());
         pane.setCenter(getMainCanvas());
-        return new Scene(pane, this.WIDTH, this.HEIGHT);
+
+        return new Scene(pane, WIDTH, HEIGHT);
     }
 
     private Pane getMainCanvas() {
         Pane wrapperPane = new Pane();
         this.canvas = new Canvas();
         wrapperPane.getChildren().add(canvas);
-        canvas.getGraphicsContext2D();
+
         // Bind the width/height property to the wrapper Pane
         canvas.widthProperty().bind(wrapperPane.widthProperty());
         canvas.heightProperty().bind(wrapperPane.heightProperty());
+
         // redraw when resized
         canvas.widthProperty().addListener(event -> draw(canvas));
         canvas.heightProperty().addListener(event -> draw(canvas));
         draw(canvas);
+
         return wrapperPane;
     }
 
@@ -204,7 +221,7 @@ public class GUI extends Application {
     }
 
     private void drawPlaces(GraphicsContext gc, int width, int height) {
-        int diameter = 3;
+        int diameter = 4;
         if (places != null) {
             for (int i = 0; i < places.length; i++) {
                 Place p = places[i];

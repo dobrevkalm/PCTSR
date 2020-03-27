@@ -2,7 +2,7 @@ package GUI;
 
 import model.Place;
 
-public class GUIUtil {
+class GUIUtil {
     private double minLatitude;
     private double maxLatitude;
     private double minLongitude;
@@ -50,15 +50,15 @@ public class GUIUtil {
         }
     }
 
-    public int getPlaceXposition(Place place, int minX, int maxX) {
+    int getPlaceXposition(Place place, int minX, int maxX) {
         return (int) (minX + (((place.getLongitude() - minLongitude) * (maxX - minX)) / (maxLongitude - minLongitude)));
     }
 
-    public int getPlaceYposition(Place place, int minY, int maxY) {
+    int getPlaceYposition(Place place, int minY, int maxY) {
         return (int) (maxY - (((place.getLatitude() - minLatitude) * (maxY - minY)) / (maxLatitude - minLatitude)));
     }
 
-    public double getTotalProfit() {
+    double getTotalProfit() {
         return totalProfit;
     }
 }

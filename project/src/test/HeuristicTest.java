@@ -7,7 +7,7 @@ import reader.*;
 public class HeuristicTest {
     private DataReader reader = new DataReader();
 
-    public void runHeuristicTests() {
+    public void runTests() {
         double[][] matrix = reader.getDistanceMatrix();
         Place[] places = reader.getAllCompanies();
         int vertex = 0;

@@ -4,16 +4,16 @@ import model.PathResult;
 import model.Place;
 
 public abstract class Heuristic {
-    protected Place[] places;
-    protected int startVertex;
-    protected int agentsNumber;
-    protected int minProfit;
-    protected PathResult[] pathResult;
-    protected double[][] distanceMatrix;
-    protected boolean[] visited;
-    protected double sumProfit = 0.0;
+    Place[] places;
+    int startVertex;
+    int agentsNumber;
+    int minProfit;
+    PathResult[] pathResult;
+    double[][] distanceMatrix;
+    boolean[] visited;
+    double sumProfit = 0.0;
 
-    public Heuristic(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
+    Heuristic(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         this.distanceMatrix = distanceMatrix;
         this.places = places;
         this.startVertex = startVertex;

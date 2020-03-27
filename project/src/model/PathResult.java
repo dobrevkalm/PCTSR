@@ -62,22 +62,11 @@ public class PathResult {
         for (int k = j; k >= i + 1; k--) {
             newPlaces.add(resultPath.get(k));
         }
-        //add verticed from vertex j+1 to the the starting vertex
+        //add vertices from vertex j+1 to the the starting vertex
         for (int k = j + 1; k <= pathSize - 1; k++) {
             newPlaces.add(resultPath.get(k));
         }
         this.resultPath = newPlaces;
-    }
-
-    public void realData() {
-        double length = 0;
-        double profit = 0;
-        for (int i = 0; i < resultPath.size(); i++) {
-            if (i < resultPath.size() - 1) {
-                length += neighborsMatrix[resultPath.get(i).getId()][resultPath.get(i + 1).getId()];
-            }
-            profit += resultPath.get(i).getFirmProfit();
-        }
     }
 
     public List<Place> getResultPath() {

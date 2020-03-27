@@ -27,10 +27,6 @@ public class Neighbor {
         return profit;
     }
 
-    public void setProfit(double profit) {
-        this.profit = profit;
-    }
-
     public double getHeuristic() {
         return heuristic;
     }
