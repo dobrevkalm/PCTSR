@@ -1,8 +1,5 @@
-# PCTSR
-Prize Collecting Traveling Sales Representative
-
 ## Description
-The Prize Collecting Traveling Sales Representative is an NP-hard problem in theoretical computer science. Given a list of marketplaces, travel costs (e.g. distances between them) and a non-negative prize to collect at each market, the goal is to collect a given quota while minimizing the length of the tour.
+The Prize Collecting Traveling Sales Representative (PCTSR) is an NP-hard problem in theoretical computer science. Given a list of marketplaces, travel costs (e.g. distances between them) and a non-negative prize to collect at each market, the goal is to collect a given quota while minimizing the length of the tour.
 
 ## Implementation
 The implementation is made using Java 8 and JavaFX. In order to run it, you need to make sure your JDK version supports JavaFX as some of them have it removed. More information about JavaFX and how to run it can be found on https://openjfx.io/.
