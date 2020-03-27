@@ -25,8 +25,6 @@ import reader.DataReader;
 
 import java.util.List;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
-
 /**
  * Intro to JavaFX - https://openjfx.io/openjfx-docs/#introduction
  */
