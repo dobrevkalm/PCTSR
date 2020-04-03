@@ -97,7 +97,10 @@ public class GUI extends Application {
     private Pane getMainCanvas() {
         Pane wrapperPane = new Pane();
         this.canvas = new Canvas();
+        Image image = new Image("file:dk.JPG");
         wrapperPane.getChildren().add(canvas);
+        // this does not work :(
+        wrapperPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         // Bind the width/height property to the wrapper Pane
         canvas.widthProperty().bind(wrapperPane.widthProperty());
