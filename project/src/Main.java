@@ -1,3 +1,4 @@
+import experiments.HeuristicOneCoefficient;
 import GUI.GUI;
 import test.HeuristicTest;
 import test.ReaderTest;
@@ -5,6 +6,12 @@ import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
+        HeuristicOneCoefficient h = new HeuristicOneCoefficient();
+        h.run();
+    }
+
+    // runs the interface
+    private static void runGUI() {
         GUI gui = new GUI();
         gui.run();
     }

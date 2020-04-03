@@ -13,9 +13,18 @@ public class HeuristicOne extends Heuristic {
     private double distance = 0.0;
     private double minHeuristic = Double.MAX_VALUE;
     private List<ArrayList<Neighbor>> neighborList;
+    private double[] multipliers;
 
     public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        this.neighborList = initializeNeighborList();
+    }
+
+    // this constructor will be used for experiments
+    // the double[] multipliers is used in the Neighbor class to set the ratio between distance and profit
+    public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, double[] multipliers) {
+        super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        this.multipliers = multipliers;
         this.neighborList = initializeNeighborList();
     }
 
@@ -23,13 +32,19 @@ public class HeuristicOne extends Heuristic {
         List<ArrayList<Neighbor>> neighborList = new ArrayList<>(places.length);
         for (Place place : places) {
             neighborList.add(place.getId(), new ArrayList<>());
-            //neighborList.set(place.getId(), new ArrayList<>());
             for (Place placeNeighbor : places) {
                 if (place.getId() != placeNeighbor.getId()) { //don't add itself
                     double distance = distanceMatrix[place.getId()][placeNeighbor.getId()];
 
                     if (place.getFirmProfit() != 0 || place.getId() == this.startVertex) {
-                        neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
+                        if (this.multipliers == null) {
+                            neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
+                        } else {
+                            Neighbor neighbor = new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit());
+                            // multipliers 0 is the distance multiplier and 1 is the profit multiplier
+                            neighbor.setHeuristicCoefficient(multipliers[0], multipliers[1]);
+                            neighborList.get(place.getId()).add(neighbor);
+                        }
                     }
                 }
             }
