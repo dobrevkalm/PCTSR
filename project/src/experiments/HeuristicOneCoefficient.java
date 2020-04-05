@@ -78,7 +78,7 @@ public class HeuristicOneCoefficient {
     }
 
     private void writeResultsToFile(int agents, double distanceMultiplier, double profitMultiplier, double time, double distance) {
-        writer.println(String.format("%d,%.2f,%.2f,%.2f,%.2f", agents, distanceMultiplier, profitMultiplier, time, distance));
+        writer.println(String.format("%d,%.0f,%.0f,%.0f,%.0f", agents, distanceMultiplier, profitMultiplier, time, distance));
     }
 
 }
