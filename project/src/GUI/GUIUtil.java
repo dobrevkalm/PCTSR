@@ -3,14 +3,14 @@ package GUI;
 import model.Place;
 
 class GUIUtil {
-    private double minLatitude;
-    private double maxLatitude;
-    private double minLongitude;
-    private double maxLongitude;
+    //map's latitude and longitude values
+    private final double MIN_LATITUDE = 54.554316;
+    private final double MAX_LATITUDE = 57.751806;
+    private final double MIN_LONGITUDE = 8.072245;
+    private final double MAX_LONGITUDE = 12.793928;
     private double totalProfit;
 
     GUIUtil(Place[] places) {
-        setExtremeCoordinateVals(places);
         setTotalProfit(places);
     }
 
@@ -21,41 +21,12 @@ class GUIUtil {
         }
     }
 
-
-    private void setExtremeCoordinateVals(Place[] places) {
-        this.minLatitude = Double.MAX_VALUE;
-        this.maxLatitude = 0.0;
-        this.minLongitude = Double.MAX_VALUE;
-        this.maxLongitude = 0.0;
-
-        for (Place place : places) {
-            double latitude = place.getLatitude();
-            double longitude = place.getLongitude();
-
-            if (latitude < this.minLatitude) {
-                this.minLatitude = latitude;
-            }
-
-            if (latitude > this.maxLatitude) {
-                this.maxLatitude = latitude;
-            }
-
-            if (longitude < this.minLongitude) {
-                this.minLongitude = longitude;
-            }
-
-            if (longitude > this.maxLongitude) {
-                this.maxLongitude = longitude;
-            }
-        }
+    int getPlaceXposition(Place place, int maxX) {
+        return (int) ((((place.getLongitude() - MIN_LONGITUDE) * (maxX)) / (MAX_LONGITUDE - MIN_LONGITUDE)));
     }
 
-    int getPlaceXposition(Place place, int minX, int maxX) {
-        return (int) (minX + (((place.getLongitude() - minLongitude) * (maxX - minX)) / (maxLongitude - minLongitude)));
-    }
-
-    int getPlaceYposition(Place place, int minY, int maxY) {
-        return (int) (maxY - (((place.getLatitude() - minLatitude) * (maxY - minY)) / (maxLatitude - minLatitude)));
+    int getPlaceYposition(Place place, int maxY) {
+        return (int) (maxY - (((place.getLatitude() - MIN_LATITUDE) * (maxY)) / (MAX_LATITUDE - MIN_LATITUDE)));
     }
 
     double getTotalProfit() {

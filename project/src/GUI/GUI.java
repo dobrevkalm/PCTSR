@@ -13,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -43,7 +42,6 @@ public class GUI extends Application {
     private static Label errorMsg;
     private static TextFlow totalResultTxt;
     private int startVertex = -1;
-    private static final int CANVAS_MARGIN = 20;
     private static final int FONT_SIZE = 12;
     private final Color[] color = {
             Color.RED,
@@ -102,11 +100,10 @@ public class GUI extends Application {
     private Pane getMainCanvas() {
         Pane wrapperPane = new Pane();
         this.canvas = new Canvas();
-        Image image = new Image("file:dk.JPG");
         wrapperPane.getChildren().add(canvas);
-        // this does not work :(
-        wrapperPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
+        //add background image
+        wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
+        
         // Bind the width/height property to the wrapper Pane
         canvas.widthProperty().bind(wrapperPane.widthProperty());
         canvas.heightProperty().bind(wrapperPane.heightProperty());
@@ -262,8 +259,8 @@ public class GUI extends Application {
         if (places != null) {
             for (int i = 0; i < places.length; i++) {
                 Place p = places[i];
-                int x = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN);
-                int y = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN);
+                int x = guiUtil.getPlaceXposition(p, width);
+                int y = guiUtil.getPlaceYposition(p, height);
                 if (i == this.startVertex) {
                     gc.setFill(Color.GREEN);
                     gc.fillOval(x, y, diameter, diameter);
@@ -281,14 +278,14 @@ public class GUI extends Application {
             gc.setStroke(color[i]);
             List<Place> rp = this.pathResults[i].getResultPath();
             gc.beginPath();
-            int startX = guiUtil.getPlaceXposition(rp.get(0), CANVAS_MARGIN, width - CANVAS_MARGIN) + vertexRadius;
-            int startY = guiUtil.getPlaceYposition(rp.get(0), CANVAS_MARGIN, height - CANVAS_MARGIN) + vertexRadius;
+            int startX = guiUtil.getPlaceXposition(rp.get(0), width) + vertexRadius;
+            int startY = guiUtil.getPlaceYposition(rp.get(0), height) + vertexRadius;
 
             gc.moveTo(startX, startY);
             for (int j = 1; j < rp.size() - 1; j++) {
                 Place p = rp.get(j);
-                int x1 = guiUtil.getPlaceXposition(p, CANVAS_MARGIN, width - CANVAS_MARGIN) + vertexRadius;
-                int y1 = guiUtil.getPlaceYposition(p, CANVAS_MARGIN, height - CANVAS_MARGIN) + vertexRadius;
+                int x1 = guiUtil.getPlaceXposition(p, width) + vertexRadius;
+                int y1 = guiUtil.getPlaceYposition(p, height) + vertexRadius;
                 gc.lineTo(x1, y1);
             }
             gc.lineTo(startX, startY);
