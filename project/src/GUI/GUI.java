@@ -43,6 +43,7 @@ public class GUI extends Application {
     private static TextFlow totalResultTxt;
     private int startVertex = -1;
     private static final int FONT_SIZE = 12;
+    private  Color TEXT_COLOR = Color.rgb(31, 41, 34);
     private final Color[] color = {
             Color.RED,
             Color.BLUE,
@@ -80,8 +81,8 @@ public class GUI extends Application {
 
     // creates the 'canvas'
     private Scene getScene() {
-        final int WIDTH = 1400;
-        final int HEIGHT = 900;
+        final int WIDTH = 860;
+        final int HEIGHT = 700;
 
         // the layouts are called panes. This is a default layout from JavaFX - https://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
         BorderPane pane = new BorderPane();
@@ -90,7 +91,7 @@ public class GUI extends Application {
 
         // set the layout sections
         pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", 22));
-        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", 20));
+        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", FONT_SIZE));
         pane.setLeft(getInteractionPanel());
         pane.setCenter(getMainCanvas());
 
@@ -103,7 +104,7 @@ public class GUI extends Application {
         wrapperPane.getChildren().add(canvas);
         //add background image
         wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
-        
+
         // Bind the width/height property to the wrapper Pane
         canvas.widthProperty().bind(wrapperPane.widthProperty());
         canvas.heightProperty().bind(wrapperPane.heightProperty());
@@ -136,7 +137,7 @@ public class GUI extends Application {
         );
 
         box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
-        box.setSpacing(5);
+        box.setSpacing(8);
         List<Node> children = box.getChildren();
         for (int i = 0; i < children.size(); i++) {
             if (i % 2 == 0) {
@@ -153,6 +154,7 @@ public class GUI extends Application {
             setOnAction(e -> {
                 getInputAndDraw(one);
             });
+            setPrefWidth(150);
         }};
     }
 
@@ -217,6 +219,7 @@ public class GUI extends Application {
         return new Label(text) {{
             setTextAlignment(alignment);
             setFont(new Font("Arial", fontSize));
+            setTextFill(TEXT_COLOR);
         }};
     }
 
@@ -309,14 +312,14 @@ public class GUI extends Application {
         String totalInfo = "Total profit: " + String.format("%.2f", sumProfit) + "\n"
                 + "Total distance: " + String.format("%.2f", getTotalDistance()) + "\n" + "\n"
                 + "Distance per agent:\n";
-        Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE, Color.BLACK);
+        Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
         totalResultTxt.getChildren().add(infoTXT);
         for (int i = 0; i < pathResults.length; i++) {
             PathResult p = pathResults[i];
             String agentNo = "#" + (i + 1) + " : ";
             String text = String.format("%.2f", p.getPathLength()) + "\n";
             Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE, color[i]);
-            Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE, Color.BLACK);
+            Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
             totalResultTxt.getChildren().addAll(t1, t2);
         }
     }
