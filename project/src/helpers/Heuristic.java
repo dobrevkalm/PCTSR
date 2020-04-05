@@ -24,4 +24,8 @@ public abstract class Heuristic {
     }
 
     public abstract PathResult[] getResultPaths();
+
+    public double getSumProfit() {
+        return sumProfit;
+    }
 }

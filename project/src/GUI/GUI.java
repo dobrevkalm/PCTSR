@@ -17,7 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import model.PathResult;
 import model.Place;
@@ -39,18 +41,20 @@ public class GUI extends Application {
     private TextField minProfitTxt;
     private TextField agentsNumberTxt;
     private static Label errorMsg;
+    private static TextFlow totalResultTxt;
     private int startVertex = -1;
     private static final int CANVAS_MARGIN = 20;
+    private static final int FONT_SIZE = 12;
     private final Color[] color = {
             Color.RED,
             Color.BLUE,
             Color.GREEN,
             Color.YELLOW,
             Color.VIOLET,
-            Color.HOTPINK,
-            Color.BROWN,
-            Color.LIME,
             Color.AQUA,
+            Color.HOTPINK,
+            Color.LIME,
+            Color.BROWN,
             Color.GREY
     };
 
@@ -117,20 +121,21 @@ public class GUI extends Application {
 
     private VBox getInteractionPanel() {
         final TextAlignment alignment = TextAlignment.LEFT;
-        final int fontSize = 12;
         initializeTextInputs();
         VBox box = new VBox();
-        createErrorMsgLabel(alignment, fontSize);
+        createErrorMsgLabel(alignment, FONT_SIZE);
+        totalResultTxt = new TextFlow();
         box.getChildren().addAll(
-                createLabel("Starting vertex:", alignment, fontSize),
+                createLabel("Starting vertex:", alignment, FONT_SIZE),
                 this.startVertexTxt,
-                createLabel("Desired profit:", alignment, fontSize),
+                createLabel("Desired profit:", alignment, FONT_SIZE),
                 this.minProfitTxt,
-                createLabel("Agents number:", alignment, fontSize),
+                createLabel("Agents number:", alignment, FONT_SIZE),
                 this.agentsNumberTxt,
                 createStartButton("HeuristicOne", true),
                 createStartButton("HeuristicTwo", false),
-                errorMsg
+                errorMsg,
+                totalResultTxt
         );
 
         box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -155,6 +160,10 @@ public class GUI extends Application {
     }
 
     private void getInputAndDraw(boolean one) {
+        //clear the error message, total distance and profit
+        errorMsg.setText("");
+        //clear detailed info text
+        totalResultTxt.getChildren().clear();
         try {
             int startingV = Integer.parseInt(this.startVertexTxt.getText());
             int minProfit = Integer.parseInt(this.minProfitTxt.getText());
@@ -163,18 +172,16 @@ public class GUI extends Application {
                 getResultPath(one, startingV, agentsNumber, minProfit);
                 System.out.println(one + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
-                //clear the error message
-                errorMsg.setText("");
             } else {
                 //set the error message
                 String error = "Invalid input. \n";
-                if(startingV < 0 || startingV > 91){
+                if (startingV < 0 || startingV > 90) {
                     error += "Starting vertex must be a number in range 0-90.\n";
                 }
-                if(startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > guiUtil.getTotalProfit() - places[startingV].getFirmProfit())) {
+                if (startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > guiUtil.getTotalProfit() - places[startingV].getFirmProfit())) {
                     error += "For chosen staring point profit can't be bigger than " + (int) (guiUtil.getTotalProfit() - places[startingV].getFirmProfit()) + ".\n";
                 }
-                if(agentsNumber < 0 || agentsNumber > 10) {
+                if (agentsNumber < 0 || agentsNumber > 10) {
                     error += "Max no. of agents 10.";
                 }
                 errorMsg.setText(error);
@@ -183,6 +190,7 @@ public class GUI extends Application {
                 draw(this.canvas);
             }
         } catch (NumberFormatException e) {
+            errorMsg.setText("Fill in all the fields.");
             e.getStackTrace();
         }
     }
@@ -215,10 +223,19 @@ public class GUI extends Application {
         }};
     }
 
+    // create a simple text
+    private Text createText(String text, TextAlignment alignment, int fontSize, Color color) {
+        return new Text(text) {{
+            setTextAlignment(alignment);
+            setFont(new Font("Arial", fontSize));
+            setFill(color);
+        }};
+    }
+
     private void createErrorMsgLabel(TextAlignment alignment, int fontSize) {
         errorMsg = new Label("");
         errorMsg.setTextAlignment(alignment);
-        errorMsg.setFont(new Font("Arial", fontSize-2));
+        errorMsg.setFont(new Font("Arial", fontSize - 2));
         errorMsg.setTextFill(Color.RED);
     }
 
@@ -288,5 +305,30 @@ public class GUI extends Application {
             h = new HeuristicTwo(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
         }
         this.pathResults = h.getResultPaths();
+        setDetailedInfo(h.getSumProfit());
+    }
+
+    private void setDetailedInfo(double sumProfit) {
+        String totalInfo = "Total profit: " + String.format("%.2f", sumProfit) + "\n"
+                + "Total distance: " + String.format("%.2f", getTotalDistance()) + "\n" + "\n"
+                + "Distance per agent:\n";
+        Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE, Color.BLACK);
+        totalResultTxt.getChildren().add(infoTXT);
+        for (int i = 0; i < pathResults.length; i++) {
+            PathResult p = pathResults[i];
+            String agentNo = "#" + (i + 1) + " : ";
+            String text = String.format("%.2f", p.getPathLength()) + "\n";
+            Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE, color[i]);
+            Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE, Color.BLACK);
+            totalResultTxt.getChildren().addAll(t1, t2);
+        }
+    }
+
+    private double getTotalDistance() {
+        double distance = 0.0;
+        for (PathResult p : pathResults) {
+            distance += p.getPathLength();
+        }
+        return distance;
     }
 }
