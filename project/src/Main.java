@@ -6,8 +6,7 @@ import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
-        HeuristicOneCoefficient h = new HeuristicOneCoefficient();
-        h.run();
+        runGUI();
     }
 
     // runs the interface
