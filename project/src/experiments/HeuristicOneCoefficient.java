@@ -33,11 +33,14 @@ public class HeuristicOneCoefficient {
             e.printStackTrace();
         }
         writer.println(String.format("%s,%s,%s,%s,%s", "agents", "distanceMultiplier", "profitMultiplier", "time", "distance"));
-        for (int dm = 1; dm <= 50; dm++) {
-            final double distanceMultiplier = dm / 10d;
-            for (int pm = 1; pm <= 50; pm++) {
-                final double profitMultiplier = pm / 10d;
+        double distanceMultiplier = 1.0;
+        for (int countPM = 1; countPM < 10 ;countPM++) {
+            distanceMultiplier *=2d;
+            double pm = 0.0;
+            for (double count = 1; count <= 20; count++) {
+                double profitMultiplier = pm ;
                 calculateResults(new double[]{distanceMultiplier, profitMultiplier});
+                pm += 5.0;
             }
         }
         writer.close();
