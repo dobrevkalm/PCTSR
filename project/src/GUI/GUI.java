@@ -38,6 +38,7 @@ public class GUI extends Application {
     private TextField startVertexTxt;
     private TextField minProfitTxt;
     private TextField agentsNumberTxt;
+    private static Label errorMsg;
     private int startVertex = -1;
     private static final int CANVAS_MARGIN = 20;
     private final Color[] color = {
@@ -119,6 +120,7 @@ public class GUI extends Application {
         final int fontSize = 12;
         initializeTextInputs();
         VBox box = new VBox();
+        createErrorMsgLabel(alignment, fontSize);
         box.getChildren().addAll(
                 createLabel("Starting vertex:", alignment, fontSize),
                 this.startVertexTxt,
@@ -127,7 +129,8 @@ public class GUI extends Application {
                 createLabel("Agents number:", alignment, fontSize),
                 this.agentsNumberTxt,
                 createStartButton("HeuristicOne", true),
-                createStartButton("HeuristicTwo", false)
+                createStartButton("HeuristicTwo", false),
+                errorMsg
         );
 
         box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -160,7 +163,21 @@ public class GUI extends Application {
                 getResultPath(one, startingV, agentsNumber, minProfit);
                 System.out.println(one + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
+                //clear the error message
+                errorMsg.setText("");
             } else {
+                //set the error message
+                String error = "Invalid input. \n";
+                if(startingV < 0 || startingV > 91){
+                    error += "Starting vertex must be a number in range 0-90.\n";
+                }
+                if(startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > guiUtil.getTotalProfit() - places[startingV].getFirmProfit())) {
+                    error += "For chosen staring point profit can't be bigger than " + (int) (guiUtil.getTotalProfit() - places[startingV].getFirmProfit()) + ".\n";
+                }
+                if(agentsNumber < 0 || agentsNumber > 10) {
+                    error += "Max no. of agents 10.";
+                }
+                errorMsg.setText(error);
                 System.out.println("Invalid input");
                 this.pathResults = null;
                 draw(this.canvas);
@@ -196,6 +213,13 @@ public class GUI extends Application {
             setTextAlignment(alignment);
             setFont(new Font("Arial", fontSize));
         }};
+    }
+
+    private void createErrorMsgLabel(TextAlignment alignment, int fontSize) {
+        errorMsg = new Label("");
+        errorMsg.setTextAlignment(alignment);
+        errorMsg.setFont(new Font("Arial", fontSize-2));
+        errorMsg.setTextFill(Color.RED);
     }
 
 
