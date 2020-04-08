@@ -13,6 +13,8 @@ public class Main {
     private static void runGUI() {
         GUI gui = new GUI();
         gui.run();
+        /*HeuristicOneCoefficient h = new HeuristicOneCoefficient();
+        h.run("one", "AgentsNumber.csv");*/
     }
 
     /**
