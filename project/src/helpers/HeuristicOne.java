@@ -40,6 +40,7 @@ public class HeuristicOne extends Heuristic {
                         if (this.multipliers == null) {
                             neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
                         } else {
+                            // if we have the multipliers we set the coefficient
                             Neighbor neighbor = new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit());
                             // multipliers 0 is the distance multiplier and 1 is the profit multiplier
                             neighbor.setHeuristicCoefficient(multipliers[0], multipliers[1]);

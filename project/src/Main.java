@@ -1,8 +1,6 @@
-import experiments.HeuristicOneCoefficient;
+import experiments.*;
 import GUI.GUI;
-import test.HeuristicTest;
-import test.ReaderTest;
-import test.ResultPathTest;
+import test.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,8 +11,8 @@ public class Main {
     private static void runGUI() {
         GUI gui = new GUI();
         gui.run();
-        /*HeuristicOneCoefficient h = new HeuristicOneCoefficient();
-        h.run("one", "AgentsNumber.csv");*/
+        /* Experiment e = new HeuristicComparison("comparison.csv");
+        e.run(); */
     }
 
     /**
