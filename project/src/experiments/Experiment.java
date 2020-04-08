@@ -21,10 +21,12 @@ public abstract class Experiment {
     Place[] places = reader.getAllCompanies();
     double[][] distanceMatrix = reader.getDistanceMatrix();
 
+    // the result file is the name of the output file, e.g. results.csv
     Experiment(String resultFile) {
         init(resultFile);
     }
 
+    // instantiate the print writer
     private void init(String resultFile) {
         Charset CHARSET = StandardCharsets.UTF_8;
         Path RES_FILE = Paths.get(resultFile);
@@ -35,22 +37,37 @@ public abstract class Experiment {
         }
     }
 
+    // all experiments must have a run method
     public abstract void run();
 
+    // print a row to the output file. The string must be formatted to fit the file type.
+    // For csv, use fx String.format("%s,%s,%d,%.2f", "someString", "anotherString", 234, 44.145)
     void printRow(String row) {
         writer.println(row);
     }
 
+    // close the writer at the end of the experiment
     void endExperiment() {
         writer.close();
     }
 
+    // sum all the doubles in an array. Used a lot during the experiments.
+    double sumArrayDoubles(double[] array) {
+        double res = 0d;
+        for (double d : array) {
+            res += d;
+        }
+        return res;
+    }
+
+    // just used to warm up the compiler before running the actual experiments
     void warmUp() {
         int profit = 290;
         // to warm up the compiler
         for (int i = 0; i < 10; i++) {
             Heuristic h = new HeuristicOne(distanceMatrix, places, i * 10, (i+1) * 2, profit);
             PathResult[] results = h.getResultPaths();
+            // tmp double used to collect and print the results in order to make sure they get computed
             double tmp = 0d;
             for (PathResult res : results) {
                 tmp += res.getPathLength();
