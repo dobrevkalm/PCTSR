@@ -8,9 +8,21 @@ import java.util.List;
 import java.util.Random;
 
 public class HeuristicTwo extends Heuristic {
+    // the test field variables are used for the experiments
+    private int testKmax = -1; // will determine the size of mutations to be made
+    private double testPercent = -1; // will determine the number of vertices to remove/change based on the vertices covered by the agent
+    private double testMutationsRatio = -1; // the ratio used to choose whether to remove the most profitable vertex in the route
 
     public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+    }
+
+    // constructor used for experiments
+    public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, int kmax, double percent, double mutationsRatio) {
+        super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        this.testKmax = kmax;
+        this.testPercent = percent;
+        this.testMutationsRatio = mutationsRatio;
     }
 
     public PathResult[] getResultPaths() {
@@ -22,18 +34,8 @@ public class HeuristicTwo extends Heuristic {
         //try to shorten the routes with opt2
         shortenRoutes();
 
-        double previousMinLength = 10000000000.0;
-        for (int i = 0; i < agentsNumber; i++) {
-            previousMinLength += pathResult[i].getPathLength();
-        }
-
-        Random random = new Random();
-        // the number of mutations
-        int kmax = 10;
-
-        for (int k = 0; k < kmax; k++) {
-            previousMinLength = generateMutations(random.nextInt(80), previousMinLength);
-        }
+        // perform selected number of mutations in order to optimize the route
+        performMutations();
 
         updateAgentsPathResult(false);
 
@@ -139,7 +141,29 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private double generateMutations(int percent, double previousMinLength) {
+    private void performMutations() {
+        double previousMinLength = 10000000000.0;
+        for (int i = 0; i < agentsNumber; i++) {
+            previousMinLength += pathResult[i].getPathLength();
+        }
+
+        Random random = new Random();
+        // the number of mutations
+        int kmax = 10;
+        double percent = random.nextInt(80);
+
+        // for experiments
+        if (this.testKmax != -1 && this.testPercent != -1) {
+            kmax = this.testKmax;
+            percent = this.testPercent;
+        }
+
+        for (int k = 0; k < kmax; k++) {
+            previousMinLength = generateMutations(percent, previousMinLength);
+        }
+    }
+
+    private double generateMutations(double percent, double previousMinLength) {
         for (int agent = 0; agent < agentsNumber; agent++) {
             generateAgentRouteMutation(agent, percent);
         }
@@ -170,13 +194,21 @@ public class HeuristicTwo extends Heuristic {
         return previousMin;
     }
 
-    private void generateAgentRouteMutation(int agent, int percent) {
+    private void generateAgentRouteMutation(int agent, double percent) {
         int n = pathResult[agent].getResultPath().size();
-        //number of vertices to remove per 1 agent
-        int verticesToRemove = n * percent / 100;
+        // how many vertices should be removed based on the vertices covered
+        // if one agents covers 10 vertices and testKmax = 0.3, we will make 3 mutations (30% of 10)
+        int verticesToRemove = (int) (n * percent);
+        int mutationsRatio = 3;
+
+        // used for experiments
+        if (this.testMutationsRatio != -1) {
+            // what part of the remove mutations should be done with removing the best vertex
+            mutationsRatio = (int) (this.testMutationsRatio * verticesToRemove);
+        }
 
         for (int i = 0; i < verticesToRemove; i++) {
-            if (i < 3) {
+            if (i < mutationsRatio) {
                 remove(agent, true);
             } else {
                 remove(agent, false);

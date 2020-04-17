@@ -20,6 +20,10 @@ public abstract class Experiment {
     private DataReader reader = new DataReader();
     Place[] places = reader.getAllCompanies();
     double[][] distanceMatrix = reader.getDistanceMatrix();
+    final int[] START_VERTICES = new int[]{ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90 };
+    final int[] AGENTS = new int[]{ 1, 2, 4, 8, 10, 15, 20, 25, 30 };
+    final int RUNS = 100;
+    final int MIN_PROFIT = 290;
 
     // the result file is the name of the output file, e.g. results.csv
     Experiment(String resultFile) {
@@ -58,6 +62,20 @@ public abstract class Experiment {
             res += d;
         }
         return res;
+    }
+
+    // used to calculate the time taken for calculating result path and its distance with given heuristic method object
+    void calculateTimeAndDistanceResults(Heuristic h, int index, double[] timeResults, double[] distanceResult) {
+        // get execution time
+        double time = System.nanoTime();
+        PathResult[] resultPath = h.getResultPaths();
+        timeResults[index] = System.nanoTime() - time;
+        // sum the total path length
+        double routeDistance = 0d;
+        for (PathResult res : resultPath) {
+            routeDistance += res.getPathLength();
+        }
+        distanceResult[index] = routeDistance;
     }
 
     // just used to warm up the compiler before running the actual experiments

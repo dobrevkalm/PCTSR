@@ -6,8 +6,6 @@ import helpers.HeuristicTwo;
 import model.PathResult;
 
 public class HeuristicComparison extends Experiment {
-    private final int[] START_VERTICES = new int[]{ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90 };
-    private final int[] AGENTS = new int[]{ 1, 2, 4, 8, 10, 15, 20, 25, 30 };
 
     public HeuristicComparison(String fileName) {
         super(fileName);
@@ -34,7 +32,6 @@ public class HeuristicComparison extends Experiment {
 
     private void calculateResults(boolean method, int agent) {
         int numVertices = START_VERTICES.length;
-        int RUNS = 100;
         // store the total distance and total time from each run
         double[] finalDistanceResults = new double[RUNS];
         double[] finalTimeResults = new double[RUNS];
@@ -66,21 +63,11 @@ public class HeuristicComparison extends Experiment {
         int startV = START_VERTICES[j];
         Heuristic h;
         // init heuristic method
-        int MIN_PROFIT = 290;
         if (method) {
             h = new HeuristicOne(distanceMatrix, places, startV, agent, MIN_PROFIT);
         } else {
             h = new HeuristicTwo(distanceMatrix, places, startV, agent, MIN_PROFIT);
         }
-        // get execution time
-        double time = System.nanoTime();
-        PathResult[] resultPath = h.getResultPaths();
-        routeTimeResults[j] = System.nanoTime() - time;
-        // sum the total path length
-        double routeDistance = 0d;
-        for (PathResult res : resultPath) {
-            routeDistance += res.getPathLength();
-        }
-        routeDistanceResult[j] = routeDistance;
+        calculateTimeAndDistanceResults(h, j, routeTimeResults, routeDistanceResult);
     }
 }

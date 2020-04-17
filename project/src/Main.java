@@ -11,8 +11,8 @@ public class Main {
     private static void runGUI() {
         GUI gui = new GUI();
         gui.run();
-        /* Experiment e = new HeuristicComparison("comparison.csv");
-        e.run(); */
+        /*Experiment e = new HeuristicTwoExperiment("test.csv");
+        e.run();*/
     }
 
     /**
