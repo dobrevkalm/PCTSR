@@ -69,12 +69,13 @@ public abstract class Experiment {
         // get execution time
         double time = System.nanoTime();
         PathResult[] resultPath = h.getResultPaths();
-        timeResults[index] = System.nanoTime() - time;
         // sum the total path length
         double routeDistance = 0d;
         for (PathResult res : resultPath) {
             routeDistance += res.getPathLength();
         }
+        // fill the results in the referenced arrays
+        timeResults[index] = System.nanoTime() - time;
         distanceResult[index] = routeDistance;
     }
 

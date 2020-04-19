@@ -3,7 +3,6 @@ package experiments;
 import helpers.Heuristic;
 import helpers.HeuristicOne;
 import helpers.HeuristicTwo;
-import model.PathResult;
 
 public class HeuristicComparison extends Experiment {
 
@@ -56,7 +55,7 @@ public class HeuristicComparison extends Experiment {
         double finalTime = sumArrayDoubles(finalTimeResults);
 
         // print the results on the output file
-        printRow(String.format("%s,%d,%.2f,%.2f", (method ? "one" : "two"), agent, (finalTime / RUNS), (finalDistance / RUNS)));
+        printRow(String.format("%s,%d,%.2f,%.2f", (method ? "one" : "two"), agent, (finalTime / owersh), (finalDistance / RUNS)));
     }
 
     private void calculateResults(boolean method, int j, int agent, double[] routeTimeResults, double[] routeDistanceResult) {

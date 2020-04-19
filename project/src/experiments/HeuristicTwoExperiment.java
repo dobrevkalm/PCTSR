@@ -2,7 +2,6 @@ package experiments;
 
 import helpers.Heuristic;
 import helpers.HeuristicTwo;
-import model.PathResult;
 
 public class HeuristicTwoExperiment extends Experiment {
 
