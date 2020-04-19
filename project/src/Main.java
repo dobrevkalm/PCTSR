@@ -1,6 +1,7 @@
-import experiments.*;
 import GUI.GUI;
-import test.*;
+import test.HeuristicTest;
+import test.ReaderTest;
+import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +13,11 @@ public class Main {
         GUI gui = new GUI();
         gui.run();
         /*Experiment e = new HeuristicTwoExperiment("test.csv");
-        e.run();*/
+        e.run();
+
+        Experiment e = new HeuristicOneExperiment("HeuristicOneExp.csv");
+        e.run();
+        */
     }
 
     /**
