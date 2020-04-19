@@ -55,7 +55,7 @@ public class HeuristicComparison extends Experiment {
         double finalTime = sumArrayDoubles(finalTimeResults);
 
         // print the results on the output file
-        printRow(String.format("%s,%d,%.2f,%.2f", (method ? "one" : "two"), agent, (finalTime / owersh), (finalDistance / RUNS)));
+        printRow(String.format("%s,%d,%.2f,%.2f", (method ? "one" : "two"), agent, (finalTime / RUNS), (finalDistance / RUNS)));
     }
 
     private void calculateResults(boolean method, int j, int agent, double[] routeTimeResults, double[] routeDistanceResult) {
