@@ -32,7 +32,15 @@ public class Neighbor {
     }
 
     // used for experiments
-    public void setHeuristicCoefficient(double distanceMultiplier, double profitMultiplier) {
-        this.heuristic = (this.distance * distanceMultiplier) / (this.profit * profitMultiplier);
+    public void setHeuristicCoefficient(double coefficient, boolean distance) {
+        if (distance) {
+            this.heuristic = (this.distance * coefficient) / (this.profit);
+        } else {
+            if(coefficient >= 0.0) {
+                this.heuristic = (this.distance) / (this.profit + coefficient);
+            } else {
+                this.heuristic = this.distance;
+            }
+        }
     }
 }

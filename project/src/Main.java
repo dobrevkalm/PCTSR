@@ -15,8 +15,8 @@ public class Main {
         /*Experiment e = new HeuristicTwoExperiment("test.csv");
         e.run();
 
-        Experiment e = new HeuristicOneExperiment("HeuristicOneExp.csv");
-        e.run();
+        Experiment e2 = new HeuristicOneExperiment("HeuristicOneExp.csv");
+        e2.run();
         */
     }
 
