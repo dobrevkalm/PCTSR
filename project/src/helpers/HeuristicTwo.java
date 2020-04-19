@@ -10,7 +10,7 @@ import java.util.Random;
 public class HeuristicTwo extends Heuristic {
     // the test field variables are used for the experiments
     private int testKmax = -1; // will determine the size of mutations to be made
-    private double testPercent = -1; // will determine the number of vertices to remove/change based on the vertices covered by the agent
+    private int testPercent = -1; // will determine the number of vertices to remove/change based on the vertices covered by the agent
     private double testMutationsRatio = -1; // the ratio used to choose whether to remove the most profitable vertex in the route
 
     public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
@@ -18,7 +18,7 @@ public class HeuristicTwo extends Heuristic {
     }
 
     // constructor used for experiments
-    public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, int kmax, double percent, double mutationsRatio) {
+    public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, int kmax, int percent, double mutationsRatio) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
         this.testKmax = kmax;
         this.testPercent = percent;
@@ -150,7 +150,7 @@ public class HeuristicTwo extends Heuristic {
         Random random = new Random();
         // the number of mutations
         int kmax = 10;
-        double percent = random.nextInt(80);
+        int percent = random.nextInt(80);
 
         // for experiments
         if (this.testKmax != -1 && this.testPercent != -1) {
@@ -163,7 +163,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private double generateMutations(double percent, double previousMinLength) {
+    private double generateMutations(int percent, double previousMinLength) {
         for (int agent = 0; agent < agentsNumber; agent++) {
             generateAgentRouteMutation(agent, percent);
         }
@@ -194,11 +194,12 @@ public class HeuristicTwo extends Heuristic {
         return previousMin;
     }
 
-    private void generateAgentRouteMutation(int agent, double percent) {
-        int n = pathResult[agent].getResultPath().size();
+    private void generateAgentRouteMutation(int agent, int percent) {
+        // the starting vertex appears twice in the result path
+        int n = pathResult[agent].getResultPath().size() - 2;
         // how many vertices should be removed based on the vertices covered
-        // if one agents covers 10 vertices and testKmax = 0.3, we will make 3 mutations (30% of 10)
-        int verticesToRemove = (int) (n * percent);
+        // if one agents covers 10 vertices and testPercent = 30, we will make 3 mutations (30% of 10)
+        int verticesToRemove = n * (percent / 100);
         int mutationsRatio = 3;
 
         // used for experiments

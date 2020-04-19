@@ -25,10 +25,9 @@ public class HeuristicTwoExperiment extends Experiment {
     private void runExperiment() {
         for (int agents : AGENTS) {
             for (int kmax = 1; kmax <= 15; kmax++) {
-                for (int p = 1; p <= 10; p++) {
-                    // thank you java for making us do this due to your wonderful work with doubles -.-
-                    double percent = p / 10d;
+                for (int percent = 10; percent <= 100; percent += 10) {
                     for (int m = 1; m <= 10; m++) {
+                        // thank you java for making us do this due to your wonderful work with doubles -.-
                         double mutationsRatio = m / 10d;
                         // only make 10 runs for general results. Might do 100 and when running the final experiment
                         int runs = RUNS/10;
@@ -42,15 +41,15 @@ public class HeuristicTwoExperiment extends Experiment {
                         double timeResult = sumArrayDoubles(finalTimeResults) / (runs);
 
                         // print row with test result
-                        printRow(String.format("%d,%d,%.2f,%.2f,%.2f,%.2f", agents, kmax, percent, mutationsRatio, distanceResult, timeResult));
+                        printRow(String.format("%d,%d,%d,%.2f,%.2f,%.2f", agents, kmax, percent, mutationsRatio, distanceResult, timeResult));
                     }
                 }
             }
         }
     }
 
-    private void makeRuns(double[] finalDistanceResults, double[] finalTimeResults, int agents, int kmax, double percent, double mutationsRatio) {
-        System.out.printf("@@@ RUN WITH %d - %.2f - %.2f @@@%n", kmax, percent, mutationsRatio);
+    private void makeRuns(double[] finalDistanceResults, double[] finalTimeResults, int agents, int kmax, int percent, double mutationsRatio) {
+        System.out.printf("@@@ RUN WITH %d - %d - %.2f @@@%n", kmax, percent, mutationsRatio);
         for (int i = 0; i < RUNS/10; i++) {
             int numTrials = START_VERTICES.length;
             double[] runTimeResults = new double[numTrials];
