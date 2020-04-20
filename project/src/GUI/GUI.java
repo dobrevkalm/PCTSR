@@ -1,8 +1,8 @@
 package GUI;
 
-import helpers.Heuristic;
-import helpers.HeuristicOne;
-import helpers.HeuristicTwo;
+import heuristics.Heuristic;
+import heuristics.HeuristicOne;
+import heuristics.HeuristicTwo;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

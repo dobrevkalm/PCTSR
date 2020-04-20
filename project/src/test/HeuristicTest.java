@@ -1,6 +1,6 @@
 package test;
 
-import helpers.*;
+import heuristics.*;
 import model.*;
 import reader.*;
 

@@ -1,4 +1,4 @@
-package helpers;
+package heuristics;
 
 import model.Neighbor;
 import model.PathResult;

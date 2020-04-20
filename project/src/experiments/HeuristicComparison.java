@@ -1,8 +1,8 @@
 package experiments;
 
-import helpers.Heuristic;
-import helpers.HeuristicOne;
-import helpers.HeuristicTwo;
+import heuristics.Heuristic;
+import heuristics.HeuristicOne;
+import heuristics.HeuristicTwo;
 
 public class HeuristicComparison extends Experiment {
 

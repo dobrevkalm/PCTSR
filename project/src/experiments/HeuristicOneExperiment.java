@@ -1,7 +1,7 @@
 package experiments;
 
-import helpers.Heuristic;
-import helpers.HeuristicOne;
+import heuristics.Heuristic;
+import heuristics.HeuristicOne;
 import model.PathResult;
 
 import java.util.Locale;

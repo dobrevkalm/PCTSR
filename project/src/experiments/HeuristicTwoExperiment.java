@@ -1,7 +1,7 @@
 package experiments;
 
-import helpers.Heuristic;
-import helpers.HeuristicTwo;
+import heuristics.Heuristic;
+import heuristics.HeuristicTwo;
 
 public class HeuristicTwoExperiment extends Experiment {
 

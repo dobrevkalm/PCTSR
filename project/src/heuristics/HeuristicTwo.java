@@ -1,4 +1,4 @@
-package helpers;
+package heuristics;
 
 import model.PathResult;
 import model.Place;
