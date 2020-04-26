@@ -3,8 +3,11 @@ package experiments;
 import heuristics.Heuristic;
 import heuristics.HeuristicOne;
 import heuristics.HeuristicTwo;
+import model.PathResult;
 
 public class HeuristicComparison extends Experiment {
+    private final int NUM_V = START_VERTICES.length;
+    private double[] timeResults = new double[NUM_V];
 
     public HeuristicComparison(String fileName) {
         super(fileName);
@@ -12,12 +15,15 @@ public class HeuristicComparison extends Experiment {
 
     public void run() {
         // print the header row for the csv
-        printRow(String.format("%s,%s,%s,%s", "method", "agents", "time", "distance"));
+        printRow(String.format("%s,%s,%s,%s,%s", "method", "agents", "profit", "time", "distance"));
+
         // warm up the compiler
         warmUp();
+
         // run with HeuristicOne and Two
         runExperiment(true);
         runExperiment(false);
+
         // close the print writer
         endExperiment();
     }
@@ -25,48 +31,58 @@ public class HeuristicComparison extends Experiment {
     // true for HeuristicOne, false for HeuristicTwo
     private void runExperiment(boolean method) {
         for (int agent : AGENTS) {
-            calculateResults(method, agent);
-        }
-    }
+            for (int profit : PROFITS) {
+                for (int startV : START_VERTICES) {
+                    // indicate what's running
+                    System.out.printf("@@@ RUN -> %d <> %d <> %d%n", agent, profit, startV);
 
-    private void calculateResults(boolean method, int agent) {
-        int numVertices = START_VERTICES.length;
-        // store the total distance and total time from each run
-        double[] finalDistanceResults = new double[RUNS];
-        double[] finalTimeResults = new double[RUNS];
+                    int resultIndex = 0;
+                    calculateResults(method, startV, agent, profit, resultIndex);
 
-        for (int i = 0; i < RUNS; i++) {
-            // the distance and time for each route with the different starting vertex
-            double[] routeDistanceResult = new double[numVertices];
-            double[] routeTimeResults = new double[numVertices];
+                    double distance = calculateAverageDistance();
+                    double time = 0d;
+                    for (double timeRes : timeResults) {
+                        time += timeRes;
+                    }
 
-            for (int j = 0; j < numVertices; j++) {
-                calculateResults(method, j, agent, routeTimeResults, routeDistanceResult);
+                    // print the results on the output file
+                    printRow(String.format("%s,%d,%d,%.2f,%.2f", (method ? "one" : "two"), agent, profit, (time / NUM_V), distance));
+
+                    // reset the two result arrays
+                    resetResultArrays();
+                }
             }
-
-            double distanceRes = sumArrayDoubles(routeDistanceResult);
-            finalDistanceResults[i] = distanceRes / numVertices;
-
-            double timeRes = sumArrayDoubles(routeTimeResults);
-            finalTimeResults[i] = timeRes / numVertices;
         }
-
-        double finalDistance = sumArrayDoubles(finalDistanceResults);
-        double finalTime = sumArrayDoubles(finalTimeResults);
-
-        // print the results on the output file
-        printRow(String.format("%s,%d,%.2f,%.2f", (method ? "one" : "two"), agent, (finalTime / RUNS), (finalDistance / RUNS)));
     }
 
-    private void calculateResults(boolean method, int j, int agent, double[] routeTimeResults, double[] routeDistanceResult) {
-        int startV = START_VERTICES[j];
+    private void calculateResults(boolean method, int startV, int agent, int profit, int resultIndex) {
         Heuristic h;
         // init heuristic method
         if (method) {
-            h = new HeuristicOne(distanceMatrix, places, startV, agent, MIN_PROFIT);
+            h = new HeuristicOne(distanceMatrix, places, startV, agent, profit);
         } else {
-            h = new HeuristicTwo(distanceMatrix, places, startV, agent, MIN_PROFIT);
+            h = new HeuristicTwo(distanceMatrix, places, startV, agent, profit);
         }
-        calculateTimeAndDistanceResults(h, j, routeTimeResults, routeDistanceResult);
+        getTimeAndDistanceResults(h, resultIndex);
+    }
+
+    private void getTimeAndDistanceResults(Heuristic h, int idx) {
+        // get execution time
+        double time = System.nanoTime();
+        PathResult[] resultPath = h.getResultPaths();
+        // sum the total path length
+        double totalDistance = 0d;
+        for (PathResult res : resultPath) {
+            totalDistance += res.getPathLength();
+        }
+        // fill the results in the arrays
+        timeResults[idx] = System.nanoTime() - time;
+        distanceResults[idx] = totalDistance;
+    }
+
+    private void resetResultArrays() {
+        // re-instantiate the distance array in the parent class
+        resetDistanceArray();
+        timeResults = new double[NUM_V];
     }
 }

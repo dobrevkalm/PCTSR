@@ -1,10 +1,15 @@
 import GUI.GUI;
+import experiments.Experiment;
+import experiments.HeuristicComparison;
+import experiments.HeuristicOneExperiment;
+import experiments.HeuristicTwoExperiment;
 import test.HeuristicTest;
 import test.ReaderTest;
 import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
+        //runExperiment();
         runGUI();
     }
 
@@ -12,12 +17,14 @@ public class Main {
     private static void runGUI() {
         GUI gui = new GUI();
         gui.run();
-        /*Experiment e = new HeuristicTwoExperiment("test.csv");
-        e.run();
+    }
 
-        Experiment e2 = new HeuristicOneExperiment("HeuristicOneExp.csv");
-        e2.run();
-        */
+    // to run an experiment
+    private static void runExperiment() {
+        //Experiment e = new HeuristicOneExperiment("h1.csv");
+        //Experiment e = new HeuristicTwoExperiment("h2.csv");
+        Experiment e = new HeuristicComparison("hc.csv");
+        e.run();
     }
 
     /**

@@ -198,7 +198,7 @@ public class HeuristicTwo extends Heuristic {
         // the starting vertex appears twice in the result path
         int n = pathResult[agent].getResultPath().size() - 2;
         // how many vertices should be removed based on the vertices covered
-        // if one agents covers 10 vertices and testPercent = 30, we will make 3 mutations (30% of 10)
+        // if one agents covers 10 vertices and testPercent = 30, we will remove 3 vertices from the agent's route (30% of 10)
         int verticesToRemove = n * percent / 100;
         int mutationsRatio = 3;
 
