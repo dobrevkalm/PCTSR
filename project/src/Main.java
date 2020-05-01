@@ -9,8 +9,7 @@ import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
-        //runGUI();
-        runResultPathTest("rank", 24, 2, 250);
+        runGUI();
     }
 
     // runs the interface
