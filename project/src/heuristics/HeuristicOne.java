@@ -13,6 +13,7 @@ public class HeuristicOne extends Heuristic {
     double distance = 0.0;
     double minHeuristic = Double.MAX_VALUE;
     List<ArrayList<Neighbor>> neighborList;
+    //fields used for experiments
     private double coefficient = Double.MIN_VALUE;
     private boolean isDistanceCoeff;
     private boolean useRank = false;

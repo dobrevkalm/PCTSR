@@ -69,6 +69,19 @@ public class PathResult {
         this.resultPath = newPlaces;
     }
 
+    public String getPathDescription() {
+        String pathDescription = "";
+        for (int i = 0; i < resultPath.size(); i++) {
+            Place p = resultPath.get(i);
+            if (i == 0 || i == resultPath.size() - 1) {
+                pathDescription += p.getShortDescription() + "\n\n";
+            } else {
+                pathDescription += p.getDescription() + "\n\n";
+            }
+        }
+        return pathDescription;
+    }
+
     public List<Place> getResultPath() {
         return resultPath;
     }

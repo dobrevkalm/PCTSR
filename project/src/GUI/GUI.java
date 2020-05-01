@@ -23,6 +23,7 @@ import model.Place;
 import reader.DataReader;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Intro to JavaFX - https://openjfx.io/openjfx-docs/#introduction
@@ -37,11 +38,12 @@ public class GUI extends Application {
     private TextField startVertexTxt;
     private TextField minProfitTxt;
     private TextField agentsNumberTxt;
-    private static Label errorMsg;
-    private static TextFlow totalResultTxt;
+    private Label errorMsg;
+    private Button saveResultsBtn;
+    private TextFlow totalResultTxt;
     private int startVertex = -1;
     private static final int FONT_SIZE = 12;
-    private  Color TEXT_COLOR = Color.rgb(31, 41, 34);
+    private Color TEXT_COLOR = Color.rgb(31, 41, 34);
     private final Color[] color = {
             Color.RED,
             Color.BLUE,
@@ -54,6 +56,9 @@ public class GUI extends Application {
             Color.BROWN,
             Color.GREY
     };
+    //fields used for writing to the file
+    private String resHeuristic = "";
+    private String resDescription = "";
 
     public void run() {
         // method from Application to set up the program as Java FX app
@@ -66,9 +71,9 @@ public class GUI extends Application {
         final String TITLE = "PCTSR";
         //prepare data
         DataReader reader = new DataReader();
-        distanceMatrix = reader.getDistanceMatrix();
-        places = reader.getAllCompanies();
-        guiUtil = new GUIUtil(places);
+        this.distanceMatrix = reader.getDistanceMatrix();
+        this.places = reader.getAllCompanies();
+        this.guiUtil = new GUIUtil(this.places);
 
         //prepare window
         // in JavaFX, the window is called Stage
@@ -104,12 +109,12 @@ public class GUI extends Application {
         wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
 
         // Bind the width/height property to the wrapper Pane
-        canvas.widthProperty().bind(wrapperPane.widthProperty());
-        canvas.heightProperty().bind(wrapperPane.heightProperty());
+        this.canvas.widthProperty().bind(wrapperPane.widthProperty());
+        this.canvas.heightProperty().bind(wrapperPane.heightProperty());
 
         // redraw when resized
-        canvas.widthProperty().addListener(event -> draw(canvas));
-        canvas.heightProperty().addListener(event -> draw(canvas));
+        this.canvas.widthProperty().addListener(event -> draw(this.canvas));
+        this.canvas.heightProperty().addListener(event -> draw(this.canvas));
         draw(canvas);
 
         return wrapperPane;
@@ -120,7 +125,7 @@ public class GUI extends Application {
         initializeTextInputs();
         VBox box = new VBox();
         createErrorMsgLabel(alignment, FONT_SIZE);
-        totalResultTxt = new TextFlow();
+        this.totalResultTxt = new TextFlow();
         box.getChildren().addAll(
                 createLabel("Starting vertex:", alignment, FONT_SIZE),
                 this.startVertexTxt,
@@ -128,11 +133,12 @@ public class GUI extends Application {
                 this.minProfitTxt,
                 createLabel("Agents number:", alignment, FONT_SIZE),
                 this.agentsNumberTxt,
-                createStartButton("HeuristicOne", "one"),
-                createStartButton("HeuristicTwo", "two"),
-                createStartButton("HeuristicThree", "three"),
-                errorMsg,
-                totalResultTxt
+                createHeuristicButton("HeuristicOne", "one"),
+                createHeuristicButton("HeuristicTwo", "two"),
+                createHeuristicButton("HeuristicThree", "three"),
+                this.errorMsg,
+                this.totalResultTxt,
+                createSaveResultsButton()
         );
 
         box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -149,10 +155,26 @@ public class GUI extends Application {
         return box;
     }
 
-    private Button createStartButton(String buttonText, String method) {
+    private Button createSaveResultsButton() {
+        this.saveResultsBtn = new Button("Save results") {{
+            setOnAction(e -> {
+                saveResultPathsToFile();
+            });
+            setPrefWidth(150);
+            //hide the button
+            setVisible(false);
+        }};
+        return this.saveResultsBtn;
+    }
+
+    private void saveResultPathsToFile() {
+        ResultsPrinter.printToFile(this.resHeuristic, this.pathResults, this.resDescription);
+    }
+
+    private Button createHeuristicButton(String buttonText, String heuristic) {
         return new Button(buttonText) {{
             setOnAction(e -> {
-                getInputAndDraw(method);
+                getInputAndDraw(heuristic);
             });
             setPrefWidth(150);
         }};
@@ -160,37 +182,49 @@ public class GUI extends Application {
 
     private void getInputAndDraw(String method) {
         //clear the error message, total distance and profit
-        errorMsg.setText("");
+        this.errorMsg.setText("");
         //clear detailed info text
-        totalResultTxt.getChildren().clear();
+        this.totalResultTxt.getChildren().clear();
         try {
             int startingV = Integer.parseInt(this.startVertexTxt.getText());
             int minProfit = Integer.parseInt(this.minProfitTxt.getText());
             int agentsNumber = Integer.parseInt(this.agentsNumberTxt.getText());
-            if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < guiUtil.getTotalProfit() - places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10) {
+            if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10) {
                 getResultPath(method, startingV, agentsNumber, minProfit);
                 System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
+                //show the save results button
+                this.saveResultsBtn.setVisible(true);
             } else {
                 //set the error message
                 String error = "Invalid input. \n";
                 if (startingV < 0 || startingV > 90) {
                     error += "Starting vertex must be a number in range 0-90.\n";
                 }
-                if (startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > guiUtil.getTotalProfit() - places[startingV].getFirmProfit())) {
-                    error += "For chosen staring point profit can't be bigger than " + (int) (guiUtil.getTotalProfit() - places[startingV].getFirmProfit()) + ".\n";
+                if (startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit())) {
+                    error += "For chosen staring point profit can't be bigger than " + (int) (this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit()) + ".\n";
                 }
                 if (agentsNumber < 0 || agentsNumber > 10) {
                     error += "Max no. of agents 10.";
                 }
-                errorMsg.setText(error);
+                this.errorMsg.setText(error);
                 System.out.println("Invalid input");
                 this.pathResults = null;
                 draw(this.canvas);
+                //hide the save results button
+                this.saveResultsBtn.setVisible(false);
+                //reset resDescription and resHeristic (variables used to print in the file)
+                this.resDescription = "";
+                this.resHeuristic = "";
             }
         } catch (NumberFormatException e) {
-            errorMsg.setText("Fill in all the fields.");
+            this.errorMsg.setText("Invalid input type. Enter only numbers.");
             e.getStackTrace();
+            //hide the save results button
+            this.saveResultsBtn.setVisible(false);
+            //reset resDescription and resHeristic (variables used to print in the file)
+            this.resDescription = "";
+            this.resHeuristic = "";
         }
     }
 
@@ -233,10 +267,10 @@ public class GUI extends Application {
     }
 
     private void createErrorMsgLabel(TextAlignment alignment, int fontSize) {
-        errorMsg = new Label("");
-        errorMsg.setTextAlignment(alignment);
-        errorMsg.setFont(new Font("Arial", fontSize - 2));
-        errorMsg.setTextFill(Color.RED);
+        this.errorMsg = new Label("");
+        this.errorMsg.setTextAlignment(alignment);
+        this.errorMsg.setFont(new Font("Arial", fontSize - 2));
+        this.errorMsg.setTextFill(Color.RED);
     }
 
 
@@ -259,11 +293,11 @@ public class GUI extends Application {
 
     private void drawPlaces(GraphicsContext gc, int width, int height) {
         final int diameter = 4;
-        if (places != null) {
-            for (int i = 0; i < places.length; i++) {
-                Place p = places[i];
-                int x = guiUtil.getPlaceXposition(p, width);
-                int y = guiUtil.getPlaceYposition(p, height);
+        if (this.places != null) {
+            for (int i = 0; i < this.places.length; i++) {
+                Place p = this.places[i];
+                int x = this.guiUtil.getPlaceXposition(p, width);
+                int y = this.guiUtil.getPlaceYposition(p, height);
                 if (i == this.startVertex) {
                     gc.setFill(Color.GREEN);
                     gc.fillOval(x, y, diameter, diameter);
@@ -278,17 +312,17 @@ public class GUI extends Application {
     private void drawPaths(GraphicsContext gc, int width, int height) {
         final int vertexRadius = 2;
         for (int i = 0; i < this.pathResults.length; i++) {
-            gc.setStroke(color[i]);
+            gc.setStroke(this.color[i]);
             List<Place> rp = this.pathResults[i].getResultPath();
             gc.beginPath();
-            int startX = guiUtil.getPlaceXposition(rp.get(0), width) + vertexRadius;
-            int startY = guiUtil.getPlaceYposition(rp.get(0), height) + vertexRadius;
+            int startX = this.guiUtil.getPlaceXposition(rp.get(0), width) + vertexRadius;
+            int startY = this.guiUtil.getPlaceYposition(rp.get(0), height) + vertexRadius;
 
             gc.moveTo(startX, startY);
             for (int j = 1; j < rp.size() - 1; j++) {
                 Place p = rp.get(j);
-                int x1 = guiUtil.getPlaceXposition(p, width) + vertexRadius;
-                int y1 = guiUtil.getPlaceYposition(p, height) + vertexRadius;
+                int x1 = this.guiUtil.getPlaceXposition(p, width) + vertexRadius;
+                int y1 = this.guiUtil.getPlaceYposition(p, height) + vertexRadius;
                 gc.lineTo(x1, y1);
             }
             gc.lineTo(startX, startY);
@@ -301,38 +335,48 @@ public class GUI extends Application {
         Heuristic h = null;
         switch (method) {
             case "one":
-                h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                h = new HeuristicOne(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+                this.resHeuristic = "HeuristicOne";
                 break;
             case "two":
-                h = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                h = new HeuristicTwo(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+                this.resHeuristic = "HeuristicTwo";
                 break;
             case "three":
-                h = new HeuristicThree(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                h = new HeuristicThree(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+                this.resHeuristic = "HeuristicThree";
                 break;
         }
         this.pathResults = h.getResultPaths();
+        //set detailed info used for GUI
         setDetailedInfo(h.getSumProfit());
+        //set info used for printing results to the file
+        this.resDescription = "Starting vertex: " + startVertex + "\n"
+                + "Minimum profit: " + minProfit + "\n"
+                + "Number of agents: " + agentsNumber + "\n"
+                + "Total profit collected: " + String.format(Locale.US, "%.2f", h.getSumProfit()) + "\n"
+                + "Total distance travelled: " + String.format(Locale.US, "%.2f", getTotalDistance()) + "\n\n";
     }
 
     private void setDetailedInfo(double sumProfit) {
         String totalInfo = "Total profit: " + String.format("%.2f", sumProfit) + "\n"
-                + "Total distance: " + String.format("%.2f", getTotalDistance()) + "\n" + "\n"
+                + "Total distance: " + String.format("%.2f", getTotalDistance()) + "\n\n"
                 + "Distance per agent:\n";
         Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
-        totalResultTxt.getChildren().add(infoTXT);
-        for (int i = 0; i < pathResults.length; i++) {
-            PathResult p = pathResults[i];
+        this.totalResultTxt.getChildren().add(infoTXT);
+        for (int i = 0; i < this.pathResults.length; i++) {
+            PathResult p = this.pathResults[i];
             String agentNo = "#" + (i + 1) + " : ";
             String text = String.format("%.2f", p.getPathLength()) + "\n";
             Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE, color[i]);
             Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
-            totalResultTxt.getChildren().addAll(t1, t2);
+            this.totalResultTxt.getChildren().addAll(t1, t2);
         }
     }
 
     private double getTotalDistance() {
         double distance = 0.0;
-        for (PathResult p : pathResults) {
+        for (PathResult p : this.pathResults) {
             distance += p.getPathLength();
         }
         return distance;

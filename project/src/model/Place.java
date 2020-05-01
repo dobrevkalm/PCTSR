@@ -47,10 +47,25 @@ public class Place implements Cloneable {
         return firmProfit;
     }
 
-    public double getRank() { return rank; }
+    public double getRank() {
+        return rank;
+    }
 
     @Override
     public String toString() {
         return "\n{> " + this.companyName + " <}";
+    }
+
+    public String getShortDescription() {
+        return "#" + this.id + "\n"
+                + this.companyName + "\n"
+                + this.address;
+    }
+
+    public String getDescription() {
+        return "#" + this.id + "\n"
+                + this.companyName + "\n"
+                + this.address + "\n"
+                + "Profit: " + this.firmProfit;
     }
 }

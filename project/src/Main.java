@@ -1,16 +1,14 @@
 import GUI.GUI;
 import experiments.Experiment;
 import experiments.HeuristicComparison;
-import experiments.HeuristicOneExperiment;
-import experiments.HeuristicTwoExperiment;
 import test.HeuristicTest;
 import test.ReaderTest;
 import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
-        //runGUI();
-        runExperiment();
+        runGUI();
+        //runExperiment();
     }
 
     // runs the interface
