@@ -21,14 +21,18 @@ public class DataReader {
     }
 
     private void readFile() throws IOException {
-
         InputStream is = DataReader.class.getResourceAsStream("/data/data.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        int rank = 100;
+
+        // these companies must be sorted based on their profit in order for the rank to make sense
         for(int i = 0; i < NUM_COMPANIES; i++) {
             // parse company data 0 - name, 1 - address, 2 - profit, 3 - latitude, 4 - longitude, 5 - distance array
             String[] company = br.readLine().split(";");
-            this.COMPANIES[i] = new Place(i, company[0], company[1], Double.parseDouble(company[2]), Double.parseDouble(company[3]), Double.parseDouble(company[4]));
+            this.COMPANIES[i] = new Place(i, company[0], company[1], Double.parseDouble(company[2]), Double.parseDouble(company[3]), Double.parseDouble(company[4]), rank);
             this.DISTANCE_MATRIX[i] = getDistanceArray(company[5]);
+            // lower the rank for the next company
+            rank--;
         }
     }
 

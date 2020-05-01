@@ -31,6 +31,10 @@ public class Neighbor {
         return heuristic;
     }
 
+    public void useRank(double rank) {
+        this.heuristic = this.distance / rank;
+    }
+
     // used for experiments
     public void setHeuristicCoefficient(double coefficient, boolean distance) {
         if (distance) {

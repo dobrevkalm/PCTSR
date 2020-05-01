@@ -15,9 +15,16 @@ public class HeuristicOne extends Heuristic {
     List<ArrayList<Neighbor>> neighborList;
     private double coefficient = Double.MIN_VALUE;
     private boolean isDistanceCoeff;
+    private boolean useRank = false;
 
     public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        this.neighborList = initializeNeighborList();
+    }
+
+    public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, boolean useRank) {
+        super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+        this.useRank = useRank;
         this.neighborList = initializeNeighborList();
     }
 
@@ -38,14 +45,20 @@ public class HeuristicOne extends Heuristic {
                 if (place.getId() != placeNeighbor.getId()) { //don't add itself
                     double distance = distanceMatrix[place.getId()][placeNeighbor.getId()];
 
+                    // place.getFirmProfit() < minProfit + 5 ?
                     if (place.getFirmProfit() != 0 || place.getId() == this.startVertex) {
-                        if (this.coefficient == Double.MIN_VALUE) {
+                        if (this.coefficient == Double.MIN_VALUE && !this.useRank) {
                             neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
                         } else {
                             // if we have the multipliers we set the coefficient
                             Neighbor neighbor = new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit());
-                            // multipliers 0 is the distance multiplier and 1 is the profit multiplier
-                            neighbor.setHeuristicCoefficient(coefficient, isDistanceCoeff);
+                            if (this.useRank) {
+                                // set heuristic parameter based on rank
+                                neighbor.useRank(place.getRank());
+                            } else {
+                                // multipliers 0 is the distance multiplier and 1 is the profit multiplier
+                                neighbor.setHeuristicCoefficient(coefficient, isDistanceCoeff);
+                            }
                             neighborList.get(place.getId()).add(neighbor);
                         }
                     }
