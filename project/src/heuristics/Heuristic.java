@@ -28,4 +28,9 @@ public abstract class Heuristic {
     public double getSumProfit() {
         return sumProfit;
     }
+
+    public String getMethodName() {
+        String name = this.getClass().getName();
+        return name.substring(name.indexOf('.') + 1);
+    }
 }

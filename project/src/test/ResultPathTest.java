@@ -1,8 +1,6 @@
 package test;
 
-import heuristics.Heuristic;
-import heuristics.HeuristicOne;
-import heuristics.HeuristicTwo;
+import heuristics.*;
 import model.PathResult;
 import model.Place;
 import reader.DataReader;
@@ -11,7 +9,7 @@ import java.util.List;
 
 public class ResultPathTest {
 
-    public void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
+    public void getResultPath(String heuristic, int startVertex, int agentsNumber, int minProfit) {
         final int ALL_PROFITS = 380;
         DataReader reader = new DataReader();
         double[][] distanceMatrix = reader.getDistanceMatrix();
@@ -19,13 +17,23 @@ public class ResultPathTest {
         if (minProfit > (ALL_PROFITS - places[startVertex].getFirmProfit())) {
             System.out.println("Not enough profit to collect");
         } else {
-            Heuristic h;
-            if (one) {
-                h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
-            } else {
-                h = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+            Heuristic h = null;
+            switch (heuristic) {
+                case "one":
+                    h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                    break;
+                case "two":
+                    h = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                    break;
+                case "three":
+                    h = new HeuristicThree(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                    break;
+                default:
+                    System.out.println("## Oops! Select which heuristic you'd like to test - [one, two, three]");
+                    System.exit(0);
             }
-            printResults(h.getClass().getName(), h.getResultPaths());
+
+            printResults(h.getMethodName(), h.getResultPaths());
         }
     }
 
@@ -47,9 +55,8 @@ public class ResultPathTest {
     }
 
     private void printResultHeader(String method) {
-        String name = method.substring(method.indexOf('.') + 1);
         System.out.println("\n########################");
-        System.out.println("> " + name + " Results <");
+        System.out.println("> " + method + " Results <");
         System.out.println("########################");
     }
 

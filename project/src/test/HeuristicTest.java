@@ -23,15 +23,15 @@ public class HeuristicTest {
             final int MAX_P = (int) (P - places[vertex].getFirmProfit());
             while (agents < A) {
                 while(profit < MAX_P) {
-                    Heuristic h1 = new HeuristicOne(matrix, places, vertex, agents, profit);
-                    Heuristic h2 = new HeuristicOne(matrix, places, vertex, agents, profit);
+                    Heuristic[] H = new Heuristic[] {
+                        new HeuristicOne(matrix, places, vertex, agents, profit),
+                        new HeuristicTwo(matrix, places, vertex, agents, profit),
+                        new HeuristicThree(matrix, places, vertex, agents, profit)
+                    };
                     System.out.printf("%n| V = %d | A = %d | P = %d |%n", vertex, agents, profit);
-                    h1.getResultPaths();
-                    System.out.println("------------------------");
-                    System.out.println("--- ### ONE DONE ### ---");
-                    h2.getResultPaths();
-                    System.out.println("--- ### TWO DONE ### ---");
-                    System.out.println("------------------------");
+                    for (Heuristic h : H) {
+                        test(h);
+                    }
                     profit += 5;
                 }
                 profit = 100;
@@ -40,5 +40,10 @@ public class HeuristicTest {
             agents = 1;
             vertex++;
         }
+    }
+
+    private void test(Heuristic h) {
+        h.getResultPaths();
+        System.out.println("--> " + h.getMethodName() + " DONE <---");
     }
 }
