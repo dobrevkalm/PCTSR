@@ -159,6 +159,7 @@ public class GUI extends Application {
         this.saveResultsBtn = new Button("Save results") {{
             setOnAction(e -> {
                 saveResultPathsToFile();
+                setText("Saved");
             });
             setPrefWidth(150);
             //hide the button
@@ -190,6 +191,8 @@ public class GUI extends Application {
             int minProfit = Integer.parseInt(this.minProfitTxt.getText());
             int agentsNumber = Integer.parseInt(this.agentsNumberTxt.getText());
             if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10) {
+                // reset the save button
+                this.saveResultsBtn.setText("Save results");
                 getResultPath(method, startingV, agentsNumber, minProfit);
                 System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
