@@ -59,9 +59,7 @@ public class HeuristicOneExperiment extends Experiment {
 
     private void calculate(int j, int desiredProfit, int agent, double coeff, boolean isDistanceCoeff) {
         int startV = START_VERTICES[j];
-        Heuristic h;
-        // init heuristic method
-        h = new HeuristicOne(distanceMatrix, places, startV, agent, desiredProfit, coeff, isDistanceCoeff);
+        Heuristic h = new HeuristicOne(distanceMatrix, places, startV, agent, desiredProfit, coeff, isDistanceCoeff);
         calculateDistanceResults(h, j);
     }
 }

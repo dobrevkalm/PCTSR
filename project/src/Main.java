@@ -9,7 +9,8 @@ import test.ResultPathTest;
 
 public class Main {
     public static void main(String[] args) {
-        runGUI();
+        //runGUI();
+        runExperiment();
     }
 
     // runs the interface

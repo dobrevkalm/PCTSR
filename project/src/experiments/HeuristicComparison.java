@@ -1,8 +1,6 @@
 package experiments;
 
-import heuristics.Heuristic;
-import heuristics.HeuristicOne;
-import heuristics.HeuristicTwo;
+import heuristics.*;
 import model.PathResult;
 
 public class HeuristicComparison extends Experiment {
@@ -21,15 +19,16 @@ public class HeuristicComparison extends Experiment {
         warmUp();
 
         // run with HeuristicOne and Two
-        runExperiment(true);
-        runExperiment(false);
+        runExperiment("one");
+        runExperiment("two");
+        runExperiment("three");
 
         // close the print writer
         endExperiment();
     }
 
     // true for HeuristicOne, false for HeuristicTwo
-    private void runExperiment(boolean method) {
+    private void runExperiment(String method) {
         for (int agent : AGENTS) {
             for (int profit : PROFITS) {
                 for (int startV : START_VERTICES) {
@@ -46,7 +45,7 @@ public class HeuristicComparison extends Experiment {
                     }
 
                     // print the results on the output file
-                    printRow(String.format("%s,%d,%d,%.2f,%.2f", (method ? "one" : "two"), agent, profit, (time / NUM_V), distance));
+                    printRow(String.format("%s,%d,%d,%.2f,%.2f", method, agent, profit, (time / NUM_V), distance));
 
                     // reset the two result arrays
                     resetResultArrays();
@@ -55,14 +54,21 @@ public class HeuristicComparison extends Experiment {
         }
     }
 
-    private void calculateResults(boolean method, int startV, int agent, int profit, int resultIndex) {
-        Heuristic h;
+    private void calculateResults(String method, int startV, int agent, int profit, int resultIndex) {
+        Heuristic h = null;
         // init heuristic method
-        if (method) {
-            h = new HeuristicOne(distanceMatrix, places, startV, agent, profit);
-        } else {
-            h = new HeuristicTwo(distanceMatrix, places, startV, agent, profit);
+        switch (method) {
+            case "one":
+                h = new HeuristicOne(distanceMatrix, places, startV, agent, profit);
+                break;
+            case "two":
+                h = new HeuristicTwo(distanceMatrix, places, startV, agent, profit);
+                break;
+            case "three":
+                h = new HeuristicThree(distanceMatrix, places, startV, agent, profit);
+                break;
         }
+
         getTimeAndDistanceResults(h, resultIndex);
     }
 
