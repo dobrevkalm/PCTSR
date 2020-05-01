@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeuristicOne extends Heuristic {
-    private int minHeuristicId = 0;
-    private int availablePlaces = 0;
-    private double distance = 0.0;
-    private double minHeuristic = Double.MAX_VALUE;
-    private List<ArrayList<Neighbor>> neighborList;
+    int minHeuristicId = 0;
+    int availablePlaces = 0;
+    double distance = 0.0;
+    double minHeuristic = Double.MAX_VALUE;
+    List<ArrayList<Neighbor>> neighborList;
     private double coefficient = Double.MIN_VALUE;
     private boolean isDistanceCoeff;
 
@@ -90,7 +90,7 @@ public class HeuristicOne extends Heuristic {
         return pathResult;
     }
 
-    private void connectAndShortenGeneratedPath() {
+    void connectAndShortenGeneratedPath() {
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i].getResultPath().add(places[startVertex]);
             pathResult[i].increasePathLength(distanceMatrix[startVertex][pathResult[i].getActualPlaceID()]);
@@ -101,12 +101,12 @@ public class HeuristicOne extends Heuristic {
         }
     }
 
-    private boolean updateSumProfit() {
+    boolean updateSumProfit() {
         sumProfit += places[minHeuristicId].getFirmProfit();
         return sumProfit >= minProfit;
     }
 
-    private void updatePathResult(int agentIndex) {
+    void updatePathResult(int agentIndex) {
         pathResult[agentIndex].setActualPlaceID(minHeuristicId);
         pathResult[agentIndex].increasePathLength(distance);
         pathResult[agentIndex].getResultPath().add(places[minHeuristicId]);
@@ -122,7 +122,7 @@ public class HeuristicOne extends Heuristic {
         }
     }
 
-    private void initializeAgentsStartingVertex() {
+    void initializeAgentsStartingVertex() {
         // add the starting vertex for all the agents
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i] = new PathResult(distanceMatrix);
