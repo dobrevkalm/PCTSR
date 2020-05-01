@@ -1,8 +1,6 @@
 package GUI;
 
-import heuristics.Heuristic;
-import heuristics.HeuristicOne;
-import heuristics.HeuristicTwo;
+import heuristics.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -102,7 +100,7 @@ public class GUI extends Application {
         Pane wrapperPane = new Pane();
         this.canvas = new Canvas();
         wrapperPane.getChildren().add(canvas);
-        //add background image
+        //add background image (this shows as an error in IntelliJ, but it's fine)
         wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
 
         // Bind the width/height property to the wrapper Pane
@@ -130,8 +128,9 @@ public class GUI extends Application {
                 this.minProfitTxt,
                 createLabel("Agents number:", alignment, FONT_SIZE),
                 this.agentsNumberTxt,
-                createStartButton("HeuristicOne", true),
-                createStartButton("HeuristicTwo", false),
+                createStartButton("HeuristicOne", "one"),
+                createStartButton("HeuristicTwo", "two"),
+                createStartButton("HeuristicThree", "three"),
                 errorMsg,
                 totalResultTxt
         );
@@ -140,7 +139,8 @@ public class GUI extends Application {
         box.setSpacing(8);
         List<Node> children = box.getChildren();
         for (int i = 0; i < children.size(); i++) {
-            if (i % 2 == 0) {
+            // only set the top margin for the input fields
+            if (i % 2 == 0 && i < 7) {
                 box.setMargin(children.get(i), new Insets(20, 10, 0, 5));
             } else {
                 box.setMargin(children.get(i), new Insets(0, 10, 0, 5));
@@ -149,16 +149,16 @@ public class GUI extends Application {
         return box;
     }
 
-    private Button createStartButton(String buttonText, boolean one) {
+    private Button createStartButton(String buttonText, String method) {
         return new Button(buttonText) {{
             setOnAction(e -> {
-                getInputAndDraw(one);
+                getInputAndDraw(method);
             });
             setPrefWidth(150);
         }};
     }
 
-    private void getInputAndDraw(boolean one) {
+    private void getInputAndDraw(String method) {
         //clear the error message, total distance and profit
         errorMsg.setText("");
         //clear detailed info text
@@ -168,8 +168,8 @@ public class GUI extends Application {
             int minProfit = Integer.parseInt(this.minProfitTxt.getText());
             int agentsNumber = Integer.parseInt(this.agentsNumberTxt.getText());
             if (startingV >= 0 && startingV < 91 && minProfit > 0.0 && minProfit < guiUtil.getTotalProfit() - places[startingV].getFirmProfit() && agentsNumber > 0 && agentsNumber <= 10) {
-                getResultPath(one, startingV, agentsNumber, minProfit);
-                System.out.println(one + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
+                getResultPath(method, startingV, agentsNumber, minProfit);
+                System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
             } else {
                 //set the error message
@@ -296,13 +296,19 @@ public class GUI extends Application {
         }
     }
 
-    private void getResultPath(boolean one, int startVertex, int agentsNumber, int minProfit) {
+    private void getResultPath(String method, int startVertex, int agentsNumber, int minProfit) {
         this.startVertex = startVertex;
-        Heuristic h;
-        if (one) {
-            h = new HeuristicOne(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
-        } else {
-            h = new HeuristicTwo(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+        Heuristic h = null;
+        switch (method) {
+            case "one":
+                h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                break;
+            case "two":
+                h = new HeuristicTwo(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                break;
+            case "three":
+                h = new HeuristicThree(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                break;
         }
         this.pathResults = h.getResultPaths();
         setDetailedInfo(h.getSumProfit());

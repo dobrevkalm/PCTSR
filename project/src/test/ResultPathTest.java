@@ -17,8 +17,9 @@ public class ResultPathTest {
         if (minProfit > (ALL_PROFITS - places[startVertex].getFirmProfit())) {
             System.out.println("Not enough profit to collect");
         } else {
+            String method = heuristic.toLowerCase();
             Heuristic h = null;
-            switch (heuristic) {
+            switch (method) {
                 case "one":
                     h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
                     break;
