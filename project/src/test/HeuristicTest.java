@@ -22,11 +22,12 @@ public class HeuristicTest {
         while (vertex < V) {
             final int MAX_P = (int) (P - places[vertex].getFirmProfit());
             while (agents < A) {
-                while(profit < MAX_P) {
-                    Heuristic[] H = new Heuristic[] {
-                        new HeuristicOne(matrix, places, vertex, agents, profit),
-                        new HeuristicTwo(matrix, places, vertex, agents, profit),
-                        new HeuristicThree(matrix, places, vertex, agents, profit)
+                while (profit < MAX_P) {
+                    Heuristic[] H = new Heuristic[]{
+                            new HeuristicOne(matrix, places, vertex, agents, profit),
+                            new HeuristicTwo(matrix, places, vertex, agents, profit),
+                            new HeuristicThree(matrix, places, vertex, agents, profit),
+                            new HeuristicFour(matrix, places, vertex, agents, profit)
                     };
                     System.out.printf("%n| V = %d | A = %d | P = %d |%n", vertex, agents, profit);
                     for (Heuristic h : H) {

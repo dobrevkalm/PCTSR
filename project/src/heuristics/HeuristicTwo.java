@@ -73,7 +73,7 @@ public class HeuristicTwo extends Heuristic {
             }
         }
 
-        if(besti != -1) {
+        if (besti != -1) {
             double decreasedProfit = pathResult[k].getResultPath().get(besti).getFirmProfit();
             pathResult[k].increasePathLength(-minusLength);
             pathResult[k].increaseActualProfit(-decreasedProfit);
@@ -141,7 +141,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private void performMutations() {
+    void performMutations() {
         double previousMinLength = 10000000000.0;
         for (int i = 0; i < agentsNumber; i++) {
             previousMinLength += pathResult[i].getPathLength();
@@ -163,7 +163,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private double generateMutations(int percent, double previousMinLength) {
+    double generateMutations(int percent, double previousMinLength) {
         for (int agent = 0; agent < agentsNumber; agent++) {
             generateAgentRouteMutation(agent, percent);
         }
@@ -194,7 +194,7 @@ public class HeuristicTwo extends Heuristic {
         return previousMin;
     }
 
-    private void generateAgentRouteMutation(int agent, int percent) {
+    void generateAgentRouteMutation(int agent, int percent) {
         // the starting vertex appears twice in the result path
         int n = pathResult[agent].getResultPath().size() - 2;
         // how many vertices should be removed based on the vertices covered
@@ -217,7 +217,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private void savePreviousRoute() {
+    void savePreviousRoute() {
         for (int i = 0; i < agentsNumber; i++) {
             List<Place> currrentPath = pathResult[i].getResultPath();
             // save current result path, profit and length in the previousMinPlaces, previousMaxProfit, previousMinLength
@@ -232,7 +232,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    private void updateAgentsPathResult(boolean refresh) {
+    void updateAgentsPathResult(boolean refresh) {
         for (int i = 0; i < agentsNumber; i++) {
             List<Place> previousPlaces = pathResult[i].getPreviousMinPlaces();
             // revert resultPath, actualProfit and pathLength to the previous (better) values
@@ -242,16 +242,16 @@ public class HeuristicTwo extends Heuristic {
             pathResult[i].setActualProfit(previousProfit);
             pathResult[i].setPathLength(previousLength);
             // adjust visited[] array to mirror actual current state
-             if (refresh) {
-                 refreshVisitedVerticesArray();
-             }
+            if (refresh) {
+                refreshVisitedVerticesArray();
+            }
         }
     }
 
     private void shortenRoutes() {
         for (int i = 0; i < agentsNumber; i++) {
             boolean useOpt2 = true;
-            while (useOpt2){
+            while (useOpt2) {
                 useOpt2 = pathResult[i].opt2();
             }
         }

@@ -136,6 +136,7 @@ public class GUI extends Application {
                 createHeuristicButton("HeuristicOne", "one"),
                 createHeuristicButton("HeuristicTwo", "two"),
                 createHeuristicButton("HeuristicThree", "three"),
+                createHeuristicButton("HeuristicFour", "four"),
                 this.errorMsg,
                 this.totalResultTxt,
                 createSaveResultsButton()
@@ -147,7 +148,7 @@ public class GUI extends Application {
         for (int i = 0; i < children.size(); i++) {
             // only set the top margin for the input fields
             if (i % 2 == 0 && i < 7) {
-                box.setMargin(children.get(i), new Insets(20, 10, 0, 5));
+                box.setMargin(children.get(i), new Insets(15, 10, 0, 5));
             } else {
                 box.setMargin(children.get(i), new Insets(0, 10, 0, 5));
             }
@@ -182,7 +183,7 @@ public class GUI extends Application {
         }};
     }
 
-    private void getInputAndDraw(String method) {
+    private void getInputAndDraw(String heuristic) {
         //clear the error message, total distance and profit
         this.errorMsg.setText("");
         //clear detailed info text
@@ -195,8 +196,8 @@ public class GUI extends Application {
                 // reset the save button
                 this.saveResultsBtn.setDisable(false);
                 this.saveResultsBtn.setText("Save results");
-                getResultPath(method, startingV, agentsNumber, minProfit);
-                System.out.println(method + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
+                getResultPath(heuristic, startingV, agentsNumber, minProfit);
+                System.out.println(heuristic + ", startVertex " + startingV + ", agents " + agentsNumber + " minPof: " + minProfit);
                 draw(this.canvas);
                 //show the save results button
                 this.saveResultsBtn.setVisible(true);
@@ -335,10 +336,10 @@ public class GUI extends Application {
         }
     }
 
-    private void getResultPath(String method, int startVertex, int agentsNumber, int minProfit) {
+    private void getResultPath(String heuristic, int startVertex, int agentsNumber, int minProfit) {
         this.startVertex = startVertex;
         Heuristic h = null;
-        switch (method) {
+        switch (heuristic) {
             case "one":
                 h = new HeuristicOne(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
                 this.resHeuristic = "HeuristicOne";
@@ -350,6 +351,10 @@ public class GUI extends Application {
             case "three":
                 h = new HeuristicThree(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
                 this.resHeuristic = "HeuristicThree";
+                break;
+            case "four":
+                h = new HeuristicFour(this.distanceMatrix, this.places, startVertex, agentsNumber, minProfit);
+                this.resHeuristic = "HeuristicFour";
                 break;
         }
         this.pathResults = h.getResultPaths();

@@ -13,7 +13,7 @@ public class HeuristicComparison extends Experiment {
 
     public void run() {
         // print the header row for the csv
-        printRow(String.format("%s,%s,%s,%s,%s", "method", "agents", "profit", "time", "distance"));
+        printRow(String.format("%s,%s,%s,%s,%s", "heuristic", "agents", "profit", "time", "distance"));
 
         // warm up the compiler
         warmUp();
@@ -22,13 +22,13 @@ public class HeuristicComparison extends Experiment {
         runExperiment("one");
         runExperiment("two");
         runExperiment("three");
+        runExperiment("four");
 
         // close the print writer
         endExperiment();
     }
 
-    // true for HeuristicOne, false for HeuristicTwo
-    private void runExperiment(String method) {
+    private void runExperiment(String heuristic) {
         for (int agent : AGENTS) {
             for (int profit : PROFITS) {
                 for (int startV : START_VERTICES) {
@@ -36,7 +36,7 @@ public class HeuristicComparison extends Experiment {
                     System.out.printf("@@@ RUN -> %d <> %d <> %d%n", agent, profit, startV);
 
                     int resultIndex = 0;
-                    calculateResults(method, startV, agent, profit, resultIndex);
+                    calculateResults(heuristic, startV, agent, profit, resultIndex);
 
                     double distance = calculateAverageDistance();
                     double time = 0d;
@@ -45,7 +45,7 @@ public class HeuristicComparison extends Experiment {
                     }
 
                     // print the results on the output file
-                    printRow(String.format("%s,%d,%d,%.2f,%.2f", method, agent, profit, (time / NUM_V), distance));
+                    printRow(String.format("%s,%d,%d,%.2f,%.2f", heuristic, agent, profit, (time / NUM_V), distance));
 
                     // reset the two result arrays
                     resetResultArrays();
@@ -54,10 +54,10 @@ public class HeuristicComparison extends Experiment {
         }
     }
 
-    private void calculateResults(String method, int startV, int agent, int profit, int resultIndex) {
+    private void calculateResults(String heuristic, int startV, int agent, int profit, int resultIndex) {
         Heuristic h = null;
         // init heuristic method
-        switch (method) {
+        switch (heuristic) {
             case "one":
                 h = new HeuristicOne(distanceMatrix, places, startV, agent, profit);
                 break;
@@ -66,6 +66,9 @@ public class HeuristicComparison extends Experiment {
                 break;
             case "three":
                 h = new HeuristicThree(distanceMatrix, places, startV, agent, profit);
+                break;
+            case "four":
+                h = new HeuristicFour(distanceMatrix, places, startV, agent, profit);
                 break;
         }
 

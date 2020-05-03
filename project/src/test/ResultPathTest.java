@@ -32,8 +32,11 @@ public class ResultPathTest {
                 case "rank":
                     h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit, true);
                     break;
+                case "four":
+                    h = new HeuristicFour(distanceMatrix, places, startVertex, agentsNumber, minProfit);
+                    break;
                 default:
-                    System.out.println("## Oops! Select which heuristic you'd like to test - [one, two, three]");
+                    System.out.println("## Oops! Select which heuristic you'd like to test - [one, two, three, four, rank]");
                     System.exit(0);
             }
 
