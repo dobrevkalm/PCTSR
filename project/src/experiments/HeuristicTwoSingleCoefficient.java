@@ -10,7 +10,7 @@ public class HeuristicTwoSingleCoefficient extends HeuristicTwoExperiment {
 
     @Override
     void runExperiment() {
-        for (int agents = 1; agents <= 5; agents += 2) {
+        for (int agents = 1; agents <= 7; agents += 2) {
             switch (coefficient) {
                 case "kmax":
                     runKmax(agents);
