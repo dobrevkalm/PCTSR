@@ -4,8 +4,8 @@ import test.*;
 
 public class Main {
     public static void main(String[] args) {
-        runGUI();
-        //runExperiment();
+        //runGUI();
+        runExperiment();
     }
 
     // runs the interface
@@ -15,7 +15,7 @@ public class Main {
     }
 
     private static void runExperiment() {
-        Experiment e = new HeuristicTwoSingleCoefficient("h2_ratio.csv", "ratio");
+        Experiment e = new HeuristicComparison("hc.csv");
         e.run();
     }
 
