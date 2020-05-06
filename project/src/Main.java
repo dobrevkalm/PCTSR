@@ -1,9 +1,6 @@
 import GUI.GUI;
-import experiments.Experiment;
-import experiments.HeuristicComparison;
-import test.HeuristicTest;
-import test.ReaderTest;
-import test.ResultPathTest;
+import experiments.*;
+import test.*;
 
 public class Main {
     public static void main(String[] args) {

@@ -31,25 +31,26 @@ public class HeuristicComparison extends Experiment {
     private void runExperiment(String heuristic) {
         for (int agent : AGENTS) {
             for (int profit : PROFITS) {
-                for (int startV : START_VERTICES) {
-                    // indicate what's running
-                    System.out.printf("@@@ RUN -> %d <> %d <> %d%n", agent, profit, startV);
+                // indicate what's running
+                System.out.printf("@@@ RUN -> %d <> %d <> %s%n", agent, profit, heuristic);
 
-                    int resultIndex = 0;
-                    calculateResults(heuristic, startV, agent, profit, resultIndex);
+                for (int i = 0; i < NUM_V; i++) {
+                    int startV = START_VERTICES[i];
 
-                    double distance = calculateAverageDistance();
-                    double time = 0d;
-                    for (double timeRes : timeResults) {
-                        time += timeRes;
-                    }
-
-                    // print the results on the output file
-                    printRow(String.format("%s,%d,%d,%.2f,%.2f", heuristic, agent, profit, (time / NUM_V), distance));
-
-                    // reset the two result arrays
-                    resetResultArrays();
+                    calculateResults(heuristic, startV, agent, profit, i);
                 }
+
+                double distance = calculateAverageDistance();
+                double time = 0d;
+                for (double timeRes : timeResults) {
+                    time += timeRes;
+                }
+
+                // print the results on the output file
+                printRow(String.format("%s,%d,%d,%.2f,%.2f", heuristic, agent, profit, (time / NUM_V), distance));
+
+                // reset the two result arrays
+                resetResultArrays();
             }
         }
     }
