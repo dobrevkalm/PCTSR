@@ -4,8 +4,8 @@ import test.*;
 
 public class Main {
     public static void main(String[] args) {
-        runGUI();
-        //runExperiment();
+        //runGUI();
+        runExperiment();
     }
 
     // runs the interface
@@ -16,10 +16,19 @@ public class Main {
 
     // to run an experiment
     private static void runExperiment() {
-        //Experiment e = new HeuristicOneExperiment("h1.csv");
-        //Experiment e = new HeuristicTwoExperiment("h2.csv");
-        Experiment e = new HeuristicComparison("hc.csv");
-        e.run();
+        // comment/uncomment the experiments you'd like to run
+        Experiment[] experiments = new Experiment[] {
+                //new HeuristicOneExperiment("h1.csv"),
+                //new HeuristicOneExperiment("h1.csv"),
+                //new HeuristicComparison("hc.csv"),
+                new HeuristicTwoSingleCoefficient("h2_kmax.csv", "kmax"),
+                new HeuristicTwoSingleCoefficient("h2_percent.csv", "percent"),
+                new HeuristicTwoSingleCoefficient("h2_ratio.csv", "ratio")
+        };
+
+        for (Experiment e : experiments) {
+            e.run();
+        }
     }
 
     /**
