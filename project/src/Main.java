@@ -1,14 +1,11 @@
 import GUI.GUI;
-import experiments.Experiment;
-import experiments.HeuristicComparison;
-import test.HeuristicTest;
-import test.ReaderTest;
-import test.ResultPathTest;
+import experiments.*;
+import test.*;
 
 public class Main {
     public static void main(String[] args) {
-        runGUI();
-        //runExperiment();
+        //runGUI();
+        runExperiment();
     }
 
     // runs the interface
@@ -17,10 +14,7 @@ public class Main {
         gui.run();
     }
 
-    // to run an experiment
     private static void runExperiment() {
-        //Experiment e = new HeuristicOneExperiment("h1.csv");
-        //Experiment e = new HeuristicTwoExperiment("h2.csv");
         Experiment e = new HeuristicComparison("hc.csv");
         e.run();
     }
