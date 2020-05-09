@@ -52,20 +52,26 @@ public class HeuristicTwo extends Heuristic {
         int besti = -1;
         double minusLength = 0.0;
 
-        // iterate through vertices
+        // iterate through vertices of pathResult to find one to be removed
         for (int i = 1; i < n - 1; i++) {
             int previousVertexId = pathResult[k].getResultPath().get(i - 1).getId();
             int iVertexId = pathResult[k].getResultPath().get(i).getId();
             int nextVertexId = pathResult[k].getResultPath().get(i + 1).getId();
+            // minus - how much distance will shorten when removing vertex i
             double minus = distanceMatrix[previousVertexId][iVertexId] + distanceMatrix[iVertexId][nextVertexId];
+            // plus - how much distance needs to be added after removal of vertex i to close the cycle
+            // (connect vertex i-1 with vertex i+1)
             double plus = distanceMatrix[previousVertexId][nextVertexId];
 
             double minusProfit = pathResult[k].getResultPath().get(i).getFirmProfit();
 
+            // find a vertex that will shorten the distance travelled by a sale representative the most
+            // while losing the least profit
             if (!best && (minus - plus) / minusProfit > bestH) {
                 bestH = (minus - plus) / minusProfit;
                 besti = i;
                 minusLength = minus - plus;
+                // find the most profitable vertex in the current sales representative list of vertices to visit
             } else if (best && minusProfit > bestH) {
                 bestH = minusProfit;
                 besti = i;
