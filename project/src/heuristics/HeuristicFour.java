@@ -21,9 +21,9 @@ public class HeuristicFour extends HeuristicTwo {
         Random random = new Random();
         // the number of mutations
         int kmax = 10;
-        int percent = random.nextInt(80);
 
         for (int k = 0; k < kmax; k++) {
+            int percent = random.nextInt(80);
             previousMinLength = generateMutations(percent, previousMinLength);
         }
     }
