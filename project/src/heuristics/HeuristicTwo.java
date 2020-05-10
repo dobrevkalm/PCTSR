@@ -156,15 +156,16 @@ public class HeuristicTwo extends Heuristic {
         Random random = new Random();
         // the number of mutations
         int kmax = 10;
-        int percent = random.nextInt(80);
-
-        // for experiments
-        if (this.testKmax != -1 && this.testPercent != -1) {
-            kmax = this.testKmax;
-            percent = this.testPercent;
-        }
 
         for (int k = 0; k < kmax; k++) {
+            int percent = random.nextInt(80);
+
+            // for experiments
+            if (this.testKmax != -1 && this.testPercent != -1) {
+                kmax = this.testKmax;
+                percent = this.testPercent;
+            }
+            
             previousMinLength = generateMutations(percent, previousMinLength);
         }
     }
