@@ -22,7 +22,7 @@ public abstract class Experiment {
     Place[] places = reader.getAllCompanies();
     double[][] distanceMatrix = reader.getDistanceMatrix();
     // number of agents to experiment with
-    final int[] AGENTS = new int[]{ 1, 2, 3, 4, 6, 8, 10 };
+    final int[] AGENTS = new int[]{ 1, 2, 4, 8, 10 };
     // the number of vertices
     private final int NUM_VERTICES = 91;
     // the different amount of profit we will be looking for when making an experimental run

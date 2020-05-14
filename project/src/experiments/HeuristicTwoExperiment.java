@@ -23,13 +23,15 @@ public class HeuristicTwoExperiment extends Experiment {
         endExperiment();
     }
 
-    void runExperiment() {
+    private void runExperiment() {
         for (int agents : AGENTS) {
-            for (int kmax = 1; kmax <= 15; kmax += 2) {
+            for (int kmax = 1; kmax <= 20; kmax += 2) {
                 for (int percent = 10; percent <= 100; percent += 10) {
                     for (int m = 1; m <= 10; m++) {
-                        // thank you java for making us do this due to your wonderful work with doubles -.-
+                        // thank you java for making us do this -.-
                         double mutationsRatio = m / 10d;
+                        // indicate what is running
+                        System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
                         // run experiments with the different profits using the above coefficients
                         runCoefficientsExperiments(agents, kmax, percent, mutationsRatio);
                     }
@@ -38,11 +40,9 @@ public class HeuristicTwoExperiment extends Experiment {
         }
     }
 
-    void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
-        for (int i = 0; i < PROFITS.length; i += 3) {
+    private void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
+        for (int i = 0; i < PROFITS.length; i += 5) {
             int profit = PROFITS[i];
-            // indicate what is running
-            System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f <> %d%n", agents, kmax, percent, mutationsRatio, profit);
 
             calculateResults(agents, profit, kmax, percent, mutationsRatio);
 
