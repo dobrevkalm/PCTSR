@@ -6,6 +6,8 @@ import heuristics.HeuristicOne;
 import java.util.Locale;
 
 public class HeuristicOneExperiment extends Experiment {
+    // -1 is distance only (no profit)
+    // then we start with (1/32 * distance)/profit, (1/16 * distance)/profit, (1/8 * distance)/profit
     private final double[] DISTANCE_MULTIPLIER = new double[]{-1.0, 0.03125, 0.0625, 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0};
 
     public HeuristicOneExperiment(String fileName) {

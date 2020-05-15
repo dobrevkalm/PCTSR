@@ -153,12 +153,12 @@ public class HeuristicTwo extends Heuristic {
             previousMinLength += pathResult[i].getPathLength();
         }
 
-        Random random = new Random();
+        Random random = new Random(741852963);
         // the number of mutations
         int kmax = 10;
 
         // for experiments
-        if (this.testKmax != -1 && this.testPercent != -1) {
+        if (this.testKmax != -1) {
             kmax = this.testKmax;
         }
 
@@ -209,19 +209,29 @@ public class HeuristicTwo extends Heuristic {
         // how many vertices should be removed based on the vertices covered
         // if one agents covers 10 vertices and testPercent = 30, we will remove 3 vertices from the agent's route (30% of 10)
         int verticesToRemove = n * percent / 100;
-        int mutationsRatio = 3;
+        // randomly choose whether to remove the best vertex from the route
+        Random rnd = new Random();
+        boolean removeBest = rnd.nextBoolean();
 
         // used for experiments
         if (this.testMutationsRatio != -1) {
             // what part of the remove mutations should be done with removing the best vertex
-            mutationsRatio = (int) (this.testMutationsRatio * verticesToRemove);
-        }
+            int mutationsRatio = (int) (this.testMutationsRatio * verticesToRemove);
 
-        for (int i = 0; i < verticesToRemove; i++) {
-            if (i < mutationsRatio) {
-                remove(agent, true);
-            } else {
-                remove(agent, false);
+            for (int i = 0; i < verticesToRemove; i++) {
+                if (i < mutationsRatio) {
+                    remove(agent, true);
+                } else {
+                    remove(agent, false);
+                }
+            }
+        } else {
+            for (int i = 0; i < verticesToRemove; i++) {
+                if (removeBest) {
+                    remove(agent, true);
+                } else {
+                    remove(agent, false);
+                }
             }
         }
     }

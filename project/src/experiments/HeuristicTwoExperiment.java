@@ -25,22 +25,26 @@ public class HeuristicTwoExperiment extends Experiment {
 
     private void runExperiment() {
         for (int agents : AGENTS) {
-            for (int kmax = 1; kmax <= 20; kmax += 2) {
-                for (int percent = 10; percent <= 100; percent += 10) {
-                    for (int m = 1; m <= 10; m++) {
-                        // thank you java for making us do this -.-
-                        double mutationsRatio = m / 10d;
-                        // indicate what is running
-                        System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
-                        // run experiments with the different profits using the above coefficients
+            int kmax = 20;
+            for (int percent = 0; percent <= 100; percent += 10) {
+                for (int m = 1; m <= 10; m++) {
+                    // thank you java for making us do this -.-
+                    double mutationsRatio = m / 10d;
+                    // indicate what is running
+                    System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
+                    // run experiments with the different profits using the above coefficients
+                    if (percent > 0) {
                         runCoefficientsExperiments(agents, kmax, percent, mutationsRatio);
+                    } else {
+                        // using percent = -1, HeuristicTwo will use the default random
+                        runCoefficientsExperiments(agents, kmax, -1, mutationsRatio);
                     }
                 }
             }
         }
     }
 
-    private void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
+    void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
         for (int i = 0; i < PROFITS.length; i += 5) {
             int profit = PROFITS[i];
 
@@ -56,7 +60,7 @@ public class HeuristicTwoExperiment extends Experiment {
         }
     }
 
-    private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio) {
+    void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {
             int startV = START_VERTICES[i];

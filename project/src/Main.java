@@ -5,7 +5,6 @@ import test.*;
 public class Main {
     public static void main(String[] args) {
         runGUI();
-        //runExperiment();
     }
 
     // runs the interface
@@ -15,7 +14,7 @@ public class Main {
     }
 
     private static void runExperiment() {
-        Experiment e = new HeuristicComparison("hc.csv");
+        Experiment e = new HeuristicOneExperiment("name_me.csv");
         e.run();
     }
 
