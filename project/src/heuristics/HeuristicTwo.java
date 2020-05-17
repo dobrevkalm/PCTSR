@@ -227,11 +227,7 @@ public class HeuristicTwo extends Heuristic {
             }
         } else {
             for (int i = 0; i < verticesToRemove; i++) {
-                if (removeBest) {
-                    remove(agent, true);
-                } else {
-                    remove(agent, false);
-                }
+                remove(agent, removeBest);
             }
         }
     }
