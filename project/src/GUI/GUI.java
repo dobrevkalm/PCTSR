@@ -35,14 +35,24 @@ public class GUI extends Application {
     private Place[] places;
     private GUIUtil guiUtil;
     private PathResult[] pathResults;
+    // fields needed to store for the interactive panel information (text inputs, error messages, results)
     private TextField startVertexTxt;
     private TextField minProfitTxt;
     private TextField agentsNumberTxt;
     private Label errorMsg;
-    private Button saveResultsBtn;
-    private TextFlow totalResultTxt;
     private int startVertex = -1;
-    private static final int FONT_SIZE = 12;
+    private TextFlow totalResultTxt;
+    //button to save results to the file
+    private Button saveResultsBtn;
+    //fields used for writing to the file
+    private String resHeuristic = "";
+    private String resDescription = "";
+    //font related settings
+    private final int FONT_SIZE_HEADER = 22;
+    private final int FONT_SIZE_FOOTER = 14;
+    private final int FONT_SIZE_BODY = 13;
+    private final String FONT_NAME = "Corbel Light";
+    //color settings
     private Color TEXT_COLOR = Color.rgb(31, 41, 34);
     private final Color[] color = {
             Color.RED,
@@ -56,9 +66,9 @@ public class GUI extends Application {
             Color.BROWN,
             Color.GREY
     };
-    //fields used for writing to the file
-    private String resHeuristic = "";
-    private String resDescription = "";
+    private final Color CENTRAL_PANEL_COLOR = Color.rgb(255, 255, 255);
+    private final Color LEFT_PANEL_COLOR = Color.rgb(242, 242, 242);
+    private final Color HEADCOLOR = Color.rgb(115, 115, 115);
 
     public void run() {
         // method from Application to set up the program as Java FX app
@@ -90,11 +100,11 @@ public class GUI extends Application {
         // the layouts are called panes. This is a default layout from JavaFX - https://docs.oracle.com/javafx/2/layout/builtin_layouts.htm
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(10));
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(225, 229, 204), CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setBackground(new Background(new BackgroundFill(this.CENTRAL_PANEL_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // set the layout sections
-        pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", 22));
-        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", FONT_SIZE));
+        pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", FONT_SIZE_HEADER));
+        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", FONT_SIZE_FOOTER));
         pane.setLeft(getInteractionPanel());
         pane.setCenter(getMainCanvas());
 
@@ -103,11 +113,12 @@ public class GUI extends Application {
 
     private Pane getMainCanvas() {
         Pane wrapperPane = new Pane();
-        this.canvas = new Canvas();
-        wrapperPane.getChildren().add(canvas);
-        //add background image (this shows as an error in IntelliJ, but it's fine)
+        //add background image
         wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
 
+        //add canvas
+        this.canvas = new Canvas();
+        wrapperPane.getChildren().add(canvas);
         // Bind the width/height property to the wrapper Pane
         this.canvas.widthProperty().bind(wrapperPane.widthProperty());
         this.canvas.heightProperty().bind(wrapperPane.heightProperty());
@@ -124,14 +135,14 @@ public class GUI extends Application {
         final TextAlignment alignment = TextAlignment.LEFT;
         initializeTextInputs();
         VBox box = new VBox();
-        createErrorMsgLabel(alignment, FONT_SIZE);
+        createErrorMsgLabel(alignment, FONT_SIZE_BODY);
         this.totalResultTxt = new TextFlow();
         box.getChildren().addAll(
-                createLabel("Starting vertex:", alignment, FONT_SIZE),
+                createLabel("Starting vertex:", alignment, FONT_SIZE_BODY),
                 this.startVertexTxt,
-                createLabel("Desired profit:", alignment, FONT_SIZE),
+                createLabel("Desired profit (bn. DKK):", alignment, FONT_SIZE_BODY),
                 this.minProfitTxt,
-                createLabel("Agents number:", alignment, FONT_SIZE),
+                createLabel("Number of agents:", alignment, FONT_SIZE_BODY),
                 this.agentsNumberTxt,
                 createHeuristicButton("HeuristicOne", "one"),
                 createHeuristicButton("HeuristicTwo", "two"),
@@ -142,13 +153,13 @@ public class GUI extends Application {
                 createSaveResultsButton()
         );
 
-        box.setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 204, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+        box.setBackground(new Background(new BackgroundFill(this.LEFT_PANEL_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         box.setSpacing(8);
         List<Node> children = box.getChildren();
         for (int i = 0; i < children.size(); i++) {
             // only set the top margin for the input fields
             if (i % 2 == 0 && i < 7) {
-                box.setMargin(children.get(i), new Insets(15, 10, 0, 5));
+                box.setMargin(children.get(i), new Insets(8, 10, 0, 5));
             } else {
                 box.setMargin(children.get(i), new Insets(0, 10, 0, 5));
             }
@@ -164,6 +175,7 @@ public class GUI extends Application {
                 setDisable(true);
             });
             setPrefWidth(150);
+            setFont(new Font(FONT_NAME, FONT_SIZE_BODY));
             //hide the button
             setVisible(false);
         }};
@@ -180,6 +192,7 @@ public class GUI extends Application {
                 getInputAndDraw(heuristic);
             });
             setPrefWidth(150);
+            setFont(new Font(FONT_NAME, FONT_SIZE_BODY));
         }};
     }
 
@@ -246,11 +259,12 @@ public class GUI extends Application {
     // creates a node that contains a text box
     private HBox getHorizontalTextBox(String text, int fontSize) {
         Label label = createLabel(text, TextAlignment.CENTER, fontSize);
+        label.setTextFill(CENTRAL_PANEL_COLOR);
         return new HBox() {{
             getChildren().add(label);
             setMargin(getChildren().get(0), new Insets(5));
             setAlignment(Pos.CENTER);
-            setBackground(new Background(new BackgroundFill(Color.gray(0.8, 0.5), CornerRadii.EMPTY, Insets.EMPTY)));
+            setBackground(new Background(new BackgroundFill(HEADCOLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         }};
     }
 
@@ -258,7 +272,7 @@ public class GUI extends Application {
     private Label createLabel(String text, TextAlignment alignment, int fontSize) {
         return new Label(text) {{
             setTextAlignment(alignment);
-            setFont(new Font("Arial", fontSize));
+            setFont(new Font(FONT_NAME, fontSize));
             setTextFill(TEXT_COLOR);
         }};
     }
@@ -267,7 +281,7 @@ public class GUI extends Application {
     private Text createText(String text, TextAlignment alignment, int fontSize, Color color) {
         return new Text(text) {{
             setTextAlignment(alignment);
-            setFont(new Font("Arial", fontSize));
+            setFont(new Font(FONT_NAME, fontSize));
             setFill(color);
         }};
     }
@@ -369,17 +383,22 @@ public class GUI extends Application {
     }
 
     private void setDetailedInfo(double sumProfit) {
-        String totalInfo = "Total profit: " + String.format("%.2f", sumProfit) + "\n"
-                + "Total distance: " + String.format("%.2f", getTotalDistance()) + "\n\n"
+        String totalInfo = "Total profit (bn. DKK): " + String.format("%.2f", sumProfit) + "\n"
+                + "Total distance (m): " + String.format("%.2f", getTotalDistance()) + "\n\n"
                 + "Distance per agent:\n";
-        Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
+        Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE_BODY, Color.BLACK);
         this.totalResultTxt.getChildren().add(infoTXT);
         for (int i = 0; i < this.pathResults.length; i++) {
             PathResult p = this.pathResults[i];
             String agentNo = "#" + (i + 1) + " : ";
-            String text = String.format("%.2f", p.getPathLength()) + "\n";
-            Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE, color[i]);
-            Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE, TEXT_COLOR);
+            String text;
+            if(i != pathResults.length -1) {
+                text = String.format("%.2f", p.getPathLength()) + "\n";
+            } else {
+                text = String.format("%.2f", p.getPathLength());
+            }
+            Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE_BODY, color[i]);
+            Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE_BODY, Color.BLACK);
             this.totalResultTxt.getChildren().addAll(t1, t2);
         }
     }
