@@ -7,16 +7,14 @@ public class Place implements Cloneable {
     private double latitude;
     private double longitude;
     private double firmProfit;
-    private double rank;
 
-    public Place(int id, String companyName, String address, double firmProfit, double latitude, double longitude, double rank) {
+    public Place(int id, String companyName, String address, double firmProfit, double latitude, double longitude) {
         this.id = id;
         this.companyName = companyName;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.firmProfit = firmProfit;
-        this.rank = rank;
     }
 
     /**
@@ -45,10 +43,6 @@ public class Place implements Cloneable {
 
     public double getFirmProfit() {
         return firmProfit;
-    }
-
-    public double getRank() {
-        return rank;
     }
 
     @Override
