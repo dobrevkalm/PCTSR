@@ -5,44 +5,14 @@ import heuristics.HeuristicTwo;
 
 import java.util.Locale;
 
-public class HeuristicTwoExperiment extends Experiment {
+public abstract class HeuristicTwoExperiment extends Experiment {
 
     public HeuristicTwoExperiment(String fileName) {
         super(fileName);
     }
 
     @Override
-    public void run() {
-        // header row
-        printRow(String.format("%s,%s,%s,%s,%s,%s", "agents", "kmax", "percent", "ratio", "profit", "distance"));
-        // warm java
-        warmUp();
-        // run experiment
-        runExperiment();
-        // close the writer and end the experiment
-        endExperiment();
-    }
-
-    private void runExperiment() {
-        for (int agents : AGENTS) {
-            int kmax = 20;
-            for (int percent = 0; percent <= 100; percent += 10) {
-                for (int m = 1; m <= 10; m++) {
-                    // thank you java for making us do this -.-
-                    double mutationsRatio = m / 10d;
-                    // indicate what is running
-                    System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
-                    // run experiments with the different profits using the above coefficients
-                    if (percent > 0) {
-                        runCoefficientsExperiments(agents, kmax, percent, mutationsRatio);
-                    } else {
-                        // using percent = -1, HeuristicTwo will use the default random
-                        runCoefficientsExperiments(agents, kmax, -1, mutationsRatio);
-                    }
-                }
-            }
-        }
-    }
+    public abstract void run();
 
     void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
         for (int i = 0; i < PROFITS.length; i += 5) {
