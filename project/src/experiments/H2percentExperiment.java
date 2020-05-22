@@ -20,7 +20,7 @@ public class H2percentExperiment extends HeuristicTwoExperiment {
 
     private void runPercentExperiment() {
         for (int agents : AGENTS) {
-            int kmax = 20;
+            int kmax = -1;
             for (int percent = 0; percent <= 100; percent += 5) {
                 double mutationsRatio = -1;
                 // indicate what is running

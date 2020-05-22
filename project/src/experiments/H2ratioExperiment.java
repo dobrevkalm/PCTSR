@@ -20,7 +20,7 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
 
     private void runRatioExperiment() {
         for (int agents : AGENTS) {
-            int kmax = 20;
+            int kmax = -1;
             int percent = -1;
             for (int m = 0; m <= 10; m++) {
                 // thank you java for making us do this -.-
