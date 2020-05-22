@@ -24,7 +24,7 @@ public class H2percentExperiment extends HeuristicTwoExperiment {
                 // indicate what is running
                 System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent > 0 ? -1 : percent, mutationsRatio);
                 // run experiments with the different profits using the above coefficients
-                runCoefficientsExperiments(agents, kmax, percent, mutationsRatio);
+                runCoefficientsExperiments(agents, kmax, percent, mutationsRatio, 10);
             }
         }
     }

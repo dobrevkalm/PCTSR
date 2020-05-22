@@ -33,4 +33,10 @@ public abstract class Heuristic {
         String name = this.getClass().getName();
         return name.substring(name.indexOf('.') + 1);
     }
+
+    public void resetResults() {
+        visited = new boolean[places.length];
+        pathResult = new PathResult[this.agentsNumber];
+        sumProfit = 0.0;
+    }
 }
