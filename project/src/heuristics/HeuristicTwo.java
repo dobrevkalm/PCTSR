@@ -155,7 +155,11 @@ public class HeuristicTwo extends Heuristic {
 
         Random random = new Random(741852963);
         // the number of mutations
-        int kmax = 10;
+        int kmax = 25;
+
+        if (agentsNumber > 3) {
+            kmax = 35;
+        }
 
         // for experiments
         if (this.testKmax != -1) {
