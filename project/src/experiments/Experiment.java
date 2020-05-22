@@ -1,8 +1,6 @@
 package experiments;
 
 import heuristics.Heuristic;
-import heuristics.HeuristicOne;
-import heuristics.HeuristicTwo;
 import model.PathResult;
 import model.Place;
 import reader.DataReader;
@@ -14,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Random;
 
 public abstract class Experiment {
     private static PrintWriter writer;
@@ -106,28 +103,5 @@ public abstract class Experiment {
             routeDistance += res.getPathLength();
         }
         distanceResults[index] = routeDistance;
-    }
-
-    // just used to warm up the compiler before running the actual experiments
-    void warmUp() {
-        Random rnd = new Random(12345678);
-        // tmp double used to collect and print the results in order to make sure they get computed
-        int tmp1 = 0, tmp2 = 0;
-
-        for (int i = 0; i < 100; i++) {
-            int profit = rnd.nextInt(290);
-            int startV = rnd.nextInt(90);
-            Heuristic h = new HeuristicOne(distanceMatrix, places, startV, (i+1) * 2, profit);
-            PathResult[] results = h.getResultPaths();
-            for (PathResult res : results) {
-                tmp1 += res.getPathLength();
-            }
-            h = new HeuristicTwo(distanceMatrix, places, startV, (i+1) * 2, profit);
-            results = h.getResultPaths();
-            for (PathResult res : results) {
-                tmp2 += res.getPathLength();
-            }
-        }
-        System.out.printf("Warmed up > %d <> %d <%n%n", tmp1, tmp2);
     }
 }

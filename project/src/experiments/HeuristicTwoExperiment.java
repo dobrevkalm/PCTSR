@@ -2,12 +2,13 @@ package experiments;
 
 import heuristics.Heuristic;
 import heuristics.HeuristicTwo;
+import model.PathResult;
 
 import java.util.Locale;
 
 public abstract class HeuristicTwoExperiment extends Experiment {
 
-    public HeuristicTwoExperiment(String fileName) {
+    HeuristicTwoExperiment(String fileName) {
         super(fileName);
     }
 
@@ -37,5 +38,28 @@ public abstract class HeuristicTwoExperiment extends Experiment {
             Heuristic h = new HeuristicTwo(distanceMatrix, places, startV, agents, profit, kmax, percent, mutationsRatio);
             calculateDistanceResults(h, i);
         }
+    }
+
+    @Override
+    void calculateDistanceResults(Heuristic h, int index) {
+        final int trialRuns = 10;
+        double[] routeDistanceResults = new double[trialRuns];
+
+        for (int i = 0; i < trialRuns; i++) {
+            PathResult[] resultPath = h.getResultPaths();
+            // sum the total path length
+            double routeDistance = 0d;
+            for (PathResult res : resultPath) {
+                routeDistance += res.getPathLength();
+            }
+            routeDistanceResults[i] = routeDistance;
+        }
+
+        double averageDistance = 0d;
+        for (double distance : routeDistanceResults) {
+            averageDistance += distance;
+        }
+
+        distanceResults[index] = averageDistance / trialRuns;
     }
 }

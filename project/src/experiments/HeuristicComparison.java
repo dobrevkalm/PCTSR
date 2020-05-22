@@ -15,9 +15,6 @@ public class HeuristicComparison extends Experiment {
         // print the header row for the csv
         printRow(String.format("%s,%s,%s,%s,%s", "heuristic", "agents", "profit", "time", "distance"));
 
-        // warm up the compiler
-        warmUp();
-
         // run with HeuristicOne and Two
         runExperiment("one");
         runExperiment("two");

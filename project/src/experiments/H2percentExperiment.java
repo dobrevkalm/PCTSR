@@ -10,8 +10,6 @@ public class H2percentExperiment extends HeuristicTwoExperiment {
     public void run() {
         // header row
         printRow(String.format("%s,%s,%s,%s,%s,%s", "agents", "kmax", "percent", "ratio", "profit", "distance"));
-        // warm java
-        warmUp();
         // run experiment
         runPercentExperiment();
         // close the writer and end the experiment
