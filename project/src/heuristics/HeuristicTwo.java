@@ -153,16 +153,16 @@ public class HeuristicTwo extends Heuristic {
             previousMinLength += pathResult[i].getPathLength();
         }
 
-        Random random = new Random(741852963);
+        Random random = new Random();
         // the number of mutations
         int kmax = 25;
-
         if (agentsNumber > 3) {
             kmax = 35;
         }
 
         // for experiments
         if (this.testKmax != -1) {
+            random = new Random(741852963);
             kmax = this.testKmax;
         }
 
