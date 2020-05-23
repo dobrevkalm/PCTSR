@@ -5,20 +5,20 @@ import model.PathResult;
 import model.Place;
 import reader.DataReader;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ResultPathTest {
 
     public void getResultPath(String heuristic, int startVertex, int agentsNumber, int minProfit) {
-        final int ALL_PROFITS = 380;
-        DataReader reader = new DataReader();
-        double[][] distanceMatrix = reader.getDistanceMatrix();
-        Place[] places = reader.getAllCompanies();
-        if (minProfit > (ALL_PROFITS - places[startVertex].getFirmProfit())) {
-            System.out.println("Not enough profit to collect");
-        } else {
-            String method = heuristic.toLowerCase();
+        String method = heuristic.toLowerCase();
+
+        if (validateInput(method, startVertex, agentsNumber, minProfit)) {
+            DataReader reader = new DataReader();
+            double[][] distanceMatrix = reader.getDistanceMatrix();
+            Place[] places = reader.getAllCompanies();
             Heuristic h = null;
+
             switch (method) {
                 case "one":
                     h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit);
@@ -29,19 +29,26 @@ public class ResultPathTest {
                 case "three":
                     h = new HeuristicThree(distanceMatrix, places, startVertex, agentsNumber, minProfit);
                     break;
-                case "rank":
-                    h = new HeuristicOne(distanceMatrix, places, startVertex, agentsNumber, minProfit, true);
-                    break;
                 case "four":
                     h = new HeuristicFour(distanceMatrix, places, startVertex, agentsNumber, minProfit);
                     break;
-                default:
-                    System.out.println("## Oops! Select which heuristic you'd like to test - [one, two, three, four, rank]");
-                    System.exit(0);
             }
 
-            printResults(h.getMethodName(), h.getResultPaths());
+            if (h != null) {
+                printResults(h.getMethodName(), h.getResultPaths());
+            }
+        } else {
+            System.out.println("## Wrong input ##");
+            System.exit(0);
         }
+    }
+
+    private boolean validateInput(String method, int startVertex, int agentsNumber, int minProfit) {
+        String[] heuristics = new String[] { "one", "two", "three", "four" };
+        return Arrays.asList(heuristics).contains(method) &&
+                (startVertex >= 0 && startVertex <= 90) &&
+                (agentsNumber > 0 && agentsNumber <= 10) &&
+                (minProfit >= 5 && minProfit < 300);
     }
 
     private void printResults(String method, PathResult[] results) {

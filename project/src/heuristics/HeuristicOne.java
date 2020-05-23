@@ -15,16 +15,9 @@ public class HeuristicOne extends Heuristic {
     List<ArrayList<Neighbor>> neighborList;
     //fields used for experiments
     private double coefficient = Double.MIN_VALUE;
-    private boolean useRank = false;
 
     public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
-        this.neighborList = initializeNeighborList();
-    }
-
-    public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, boolean useRank) {
-        super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
-        this.useRank = useRank;
         this.neighborList = initializeNeighborList();
     }
 
@@ -45,18 +38,13 @@ public class HeuristicOne extends Heuristic {
                     double distance = distanceMatrix[place.getId()][placeNeighbor.getId()];
 
                     if (place.getFirmProfit() != 0 || place.getId() == this.startVertex) {
-                        if (this.coefficient == Double.MIN_VALUE && !this.useRank) {
+                        if (this.coefficient == Double.MIN_VALUE) {
                             neighborList.get(place.getId()).add(new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit()));
                         } else {
                             // if we have the multipliers we set the coefficient
                             Neighbor neighbor = new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit());
-                            if (this.useRank) {
-                                // set heuristic parameter based on rank
-                                neighbor.useRank(place.getRank());
-                            } else {
-                                // set heuristic and its coefficient
-                                neighbor.setHeuristicCoefficient(coefficient);
-                            }
+                            // set heuristic and its coefficient
+                            neighbor.setHeuristicCoefficient(coefficient);
                             neighborList.get(place.getId()).add(neighbor);
                         }
                     }
