@@ -2,7 +2,10 @@ package experiments;
 
 public class H2ratioExperiment extends HeuristicTwoExperiment {
 
-    public H2ratioExperiment (String filename) {
+    private final int[] AGENTS = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private final int NUM_RUNS = 10;
+
+    public H2ratioExperiment(String filename) {
         super(filename);
     }
 
@@ -30,7 +33,7 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
                 // indicate what is running
                 System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
                 // run experiments with the different profits using the above coefficients
-                runCoefficientsExperiments(agents, kmax, percent, mutationsRatio, 10);
+                runCoefficientsExperiments(agents, kmax, percent, mutationsRatio, NUM_RUNS);
             }
         }
     }
