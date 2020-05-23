@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeuristicOne extends Heuristic {
+    // the smalles coefficient h = distance/profit
     int minHeuristicId = 0;
     int availablePlaces = 0;
     double distance = 0.0;
     double minHeuristic = Double.MAX_VALUE;
     List<ArrayList<Neighbor>> neighborList;
-    //fields used for experiments
+    // fields used for experiments
     private double coefficient = Double.MIN_VALUE;
 
     public HeuristicOne(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
@@ -29,6 +30,7 @@ public class HeuristicOne extends Heuristic {
         this.neighborList = initializeNeighborList();
     }
 
+    // initialize list of neighbors for each vertex. Will add all the vertices and compute their heuristic h
     private List<ArrayList<Neighbor>> initializeNeighborList() {
         List<ArrayList<Neighbor>> neighborList = new ArrayList<>(places.length);
         for (Place place : places) {
@@ -54,6 +56,7 @@ public class HeuristicOne extends Heuristic {
         return neighborList;
     }
 
+    // computes and returns the route of each sales representative
     public PathResult[] getResultPaths() {
         initializeAgentsStartingVertex();
 
@@ -70,6 +73,8 @@ public class HeuristicOne extends Heuristic {
 
                 if (availablePlaces == 0) break;
                 availablePlaces = 0;
+
+                // update the route of the current agent
                 updatePathResult(i);
 
                 //set added vertex as visited
@@ -89,10 +94,12 @@ public class HeuristicOne extends Heuristic {
         return pathResult;
     }
 
+    // apply the 2opt algorithm on each agent's routes in order to imrove them
     void connectAndShortenGeneratedPath() {
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i].getResultPath().add(places[startVertex]);
             pathResult[i].increasePathLength(distanceMatrix[startVertex][pathResult[i].getActualPlaceID()]);
+            // will try to optimize the route as long as improvement is made
             boolean useOpt2 = true;
             while (useOpt2) {
                 useOpt2 = pathResult[i].opt2();
@@ -100,18 +107,25 @@ public class HeuristicOne extends Heuristic {
         }
     }
 
+    // update the total profit collected and check if it's enough
     boolean updateSumProfit() {
         sumProfit += places[minHeuristicId].getFirmProfit();
         return sumProfit >= minProfit;
     }
 
+    // update the PathResult parameters for selected agent
     void updatePathResult(int agentIndex) {
+        // update current position (vertex)
         pathResult[agentIndex].setActualPlaceID(minHeuristicId);
+        // update the route length
         pathResult[agentIndex].increasePathLength(distance);
+        // add the vertex to teh resultPath
         pathResult[agentIndex].getResultPath().add(places[minHeuristicId]);
+        // update the profit collected by the agent
         pathResult[agentIndex].increaseActualProfit(places[minHeuristicId].getFirmProfit());
     }
 
+    // find the best non-visited vertex based on our heuristic parameter h (the one with smallest h = distance/profit)
     private void findNonVisitedVertex(Neighbor neighbor) {
         if (neighbor.getProfit() != 0 && !visited[neighbor.getId()] && neighbor.getHeuristic() < minHeuristic) {
             minHeuristic = neighbor.getHeuristic();
@@ -121,11 +135,14 @@ public class HeuristicOne extends Heuristic {
         }
     }
 
+    // initialize each agent's ResultPath
     void initializeAgentsStartingVertex() {
         // add the starting vertex for all the agents
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i] = new PathResult(distanceMatrix);
+            // add starting vertex to the path
             pathResult[i].getResultPath().add(places[startVertex]);
+            // set starting vertex as currect location
             pathResult[i].setActualPlaceID(startVertex);
         }
     }

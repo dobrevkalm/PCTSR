@@ -19,7 +19,7 @@ The simple grapgic user interface allows the user to enter starting vertex (the 
 
 **Then choose what to run:**
  - java Main - *run the GUI*
- - java Main -t - *run tests*
+ - java -ea Main -t - *run tests (remember -ea to enable assertions)*
  - java Main -rp - *compute a tour and output it on the console (without the GUI)*
  - java Main -e - *run all the experiments (results are saved to .csv files)*
 

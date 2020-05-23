@@ -47,6 +47,8 @@ public class DataReader {
         return distanceArray;
     }
 
+    // due to the usage of distances from the real road network, distance from company A to company B is not always the same as the one from B to A
+    // we need our graph to be symmetric, thus, if such case occurs, we take the average between the two 
     private void makeMatrixSymmetric() {
         for(int i=0; i<DISTANCE_MATRIX.length; i++) {
             for(int j=0; j<DISTANCE_MATRIX.length; j++){
@@ -59,9 +61,8 @@ public class DataReader {
         }
     }
 
-    /**
-     * GETTERS
-     */
+    // GETTERS
+    
     public double[][] getDistanceMatrix() {
         return this.DISTANCE_MATRIX;
     }

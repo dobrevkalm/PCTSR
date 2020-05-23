@@ -19,6 +19,7 @@ public class ResultsPrinter {
 
     public static void printToFile(String heuristic, PathResult[] pathResults, String resDescription) {
         Charset CHARSET = StandardCharsets.UTF_8;
+        // used to produce unique name for each file
         String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH.mm.ss").format(new Date());
         String filename = heuristic + " " + timeStamp + ".txt";
         Path RES_FILE = Paths.get(filename);

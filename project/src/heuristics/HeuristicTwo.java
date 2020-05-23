@@ -45,7 +45,7 @@ public class HeuristicTwo extends Heuristic {
         return pathResult;
     }
 
-    // k is the agent number
+    // The Local Search Remove operation (k is the agent number)
     private void remove(int k, boolean best) {
         int n = pathResult[k].getResultPath().size();
         double bestH = -1.0;
@@ -90,6 +90,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // Local Search Insert operation
     private double insert(int k) {
         int n = pathResult[k].getResultPath().size();
         double bestH = -1.0;
@@ -122,20 +123,25 @@ public class HeuristicTwo extends Heuristic {
         }
 
         double profitIncrease = 0.0;
+        // if there is no vertex to be inserted, just return 0 as incresed profit
         if (besti == -1) {
             return profitIncrease;
         }
 
+        // save the vertex to add to the route
         Place placeToInsert = places[besti];
         profitIncrease = placeToInsert.getFirmProfit();
+        // update the PathResult of the current agent
         pathResult[k].increasePathLength(plusLength);
         pathResult[k].increaseActualProfit(profitIncrease);
         pathResult[k].getResultPath().add(bestj, placeToInsert);
+        // add the newly inserted verted to the list of visited
         visited[besti] = true;
 
         return profitIncrease;
     }
 
+    // when performing mutations to the routes, refresh the visited vertices based on the new route
     private void refreshVisitedVerticesArray() {
         this.visited = new boolean[this.places.length];
         for (int i = 0; i < agentsNumber; i++) {
@@ -147,7 +153,9 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // performs mutation to an existing route in order to try and improve it
     void performMutations() {
+        // ensure that the first route created will be overwritten with one of the routes created by mutations
         double previousMinLength = 10000000000.0;
         for (int i = 0; i < agentsNumber; i++) {
             previousMinLength += pathResult[i].getPathLength();
@@ -167,6 +175,7 @@ public class HeuristicTwo extends Heuristic {
         }
 
         for (int k = 0; k < kmax; k++) {
+            // randomly modify 0 to 80% of the route (determined by experiments)
             int percent = random.nextInt(80);
             // while conducting an experiment, overwrite the percent value with the tested value
             if (this.testPercent != -1) {
@@ -176,6 +185,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // perform the mutations for all the agents
     double generateMutations(int percent, double previousMinLength) {
         for (int agent = 0; agent < agentsNumber; agent++) {
             generateAgentRouteMutation(agent, percent);
@@ -207,6 +217,7 @@ public class HeuristicTwo extends Heuristic {
         return previousMin;
     }
 
+    // perform mutation to a single agent's route
     void generateAgentRouteMutation(int agent, int percent) {
         // the starting vertex appears twice in the result path
         int n = pathResult[agent].getResultPath().size() - 2;
@@ -236,6 +247,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // save each sales representative's old route upon successful mutation
     void savePreviousRoute() {
         for (int i = 0; i < agentsNumber; i++) {
             List<Place> currrentPath = pathResult[i].getResultPath();
@@ -251,6 +263,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // update each sales representatives ResultPath after performing mutations
     void updateAgentsPathResult(boolean refresh) {
         for (int i = 0; i < agentsNumber; i++) {
             List<Place> previousPlaces = pathResult[i].getPreviousMinPlaces();
@@ -267,6 +280,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // shorten each sales representative's route using the 2opt algorithm
     private void shortenRoutes() {
         for (int i = 0; i < agentsNumber; i++) {
             boolean useOpt2 = true;
@@ -276,6 +290,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // insert a vertex to each agent's route via Local Search Insert operation until the desired profit is collected
     private void gatherProfitPerAgent() {
         while (sumProfit < minProfit) {
             for (int i = 0; i < agentsNumber; i++) {
@@ -285,6 +300,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
+    // initializes the PathResult for each agent, adding the starting vertex to the route twice (start and end)
     private void initializeAgentsStartingVertex() {
         for (int i = 0; i < agentsNumber; i++) {
             pathResult[i] = new PathResult(distanceMatrix);

@@ -16,7 +16,9 @@ import java.nio.file.Paths;
 public abstract class Experiment {
     private static PrintWriter writer;
     private DataReader reader = new DataReader();
+    // all companies and their info
     Place[] places = reader.getAllCompanies();
+    // distances between companies
     double[][] distanceMatrix = reader.getDistanceMatrix();
     // number of agents to experiment with
     final int[] AGENTS = new int[]{ 1, 2, 4, 8, 10 };
@@ -29,7 +31,7 @@ public abstract class Experiment {
     // to store our distance results for each experimental run; we will have as many results as the number of starting vertices
     double[] distanceResults = new double[NUM_VERTICES];
 
-    // the result file is the name of the output file, e.g. results.csv
+    // resultFile is the name of the output file, e.g. results.csv
     Experiment(String resultFile) {
         init(resultFile);
         initProfitArray();
@@ -102,6 +104,7 @@ public abstract class Experiment {
         for (PathResult res : resultPath) {
             routeDistance += res.getPathLength();
         }
+        // index is the index of the current starting vertex
         distanceResults[index] = routeDistance;
     }
 }

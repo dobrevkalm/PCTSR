@@ -1,6 +1,6 @@
 package model;
 
-public class Place implements Cloneable {
+public class Place {
     private int id;
     private String companyName;
     private String address;
@@ -17,9 +17,7 @@ public class Place implements Cloneable {
         this.firmProfit = firmProfit;
     }
 
-    /**
-     * GETTERS
-     */
+    // GETTERS
 
     public int getId() {
         return id;

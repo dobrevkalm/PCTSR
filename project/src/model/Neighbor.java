@@ -4,13 +4,15 @@ public class Neighbor {
     private int id;
     private double distance;
     private double profit;
+    // the heuristic parameter based on which vertices will be selected when inserting into a path
     private double heuristic;
 
     public Neighbor(int id, double distance, double profit) {
         this.id = id;
         this.distance = distance;
         this.profit = profit;
-        if (profit != 0) this.heuristic = (distance * 2) / profit;
+        // determined via experiment
+        if (profit != 0) this.heuristic = distance / profit;
     }
 
     // GETTERS

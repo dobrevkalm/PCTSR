@@ -11,7 +11,7 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
 
     @Override
     public void run() {
-        // header row
+        // header row of the CSV file
         printRow(String.format("%s,%s,%s,%s,%s,%s", "agents", "kmax", "percent", "ratio", "profit", "distance"));
         // run experiment
         runRatioExperiment();
@@ -24,8 +24,8 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
             int kmax = -1;
             int percent = -1;
             for (int m = 0; m <= 10; m++) {
+                // mutations ratio = -1 means that we will use random to determine whether to remove the best vertex in the route or not
                 double mutationsRatio = -1.0;
-
                 if (m > 0) {
                     // thank you Java for doing this to us -.-
                     mutationsRatio = m / 10d;

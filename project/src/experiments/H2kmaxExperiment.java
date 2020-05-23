@@ -15,7 +15,7 @@ public class H2kmaxExperiment extends HeuristicTwoExperiment {
 
     @Override
     public void run() {
-        // header row
+        // print header row of the csv file
         printRow(String.format("%s,%s,%s,%s,%s,%s", "agents", "kmax", "percent", "ratio", "profit", "distance"));
         // run experiment
         runKmaxExperiment();

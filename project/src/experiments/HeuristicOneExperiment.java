@@ -15,10 +15,11 @@ public class HeuristicOneExperiment extends Experiment {
     }
 
     public void run() {
+        // print header row of the CSV file
         printRow(String.format("%s,%s,%s,%s,%s", "coefficient", "agentNo", "coefficientVal", "desiredProfit", "distanceRes"));
-
+        // run the experiment
         runExperiment(DISTANCE_MULTIPLIER);
-
+        // close the print writer and end the experiment
         endExperiment();
     }
 

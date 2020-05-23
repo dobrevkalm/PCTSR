@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PathResult {
+    // list with all the visited companies from an sales representative
     private List<Place> resultPath;
+    // length of the sales representative's route
     private double pathLength;
+    // the collected profit
     private double actualProfit;
+    // the vertex the sales representative is currently on
     private int actualPlaceID;
+    // distanes based on the starting point
     private double[][] neighborsMatrix;
 
     // for HeuristicTwo
@@ -25,6 +30,7 @@ public class PathResult {
 
     }
 
+    // the 2opt algorithm for improving a route
     public boolean opt2() {
         double minus, plus;
         int n = this.resultPath.size();
@@ -82,10 +88,7 @@ public class PathResult {
         return pathDescription;
     }
 
-    /**
-     * HELPER FUNCTIONS
-     * GETTERS & SETTERS
-     */
+    // HELPER FUNCTIONS. GETTERS & SETTERS
 
     public List<Place> getResultPath() {
         return resultPath;

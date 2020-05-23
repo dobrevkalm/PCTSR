@@ -5,6 +5,14 @@ import model.Place;
 import java.util.List;
 import java.util.Random;
 
+/**
+    This class extends the logic and the computations from HeuristicTwo.
+
+    The difference is in the way we add vertices when performing the modifications on the routes.
+    Instead of adding to the same agent when performing a mutation, after removing a vertex,
+    we consider all the sales representatives for the following addition, instead of adding back to agent we removed from.
+ */
+
 public class HeuristicFour extends HeuristicTwo {
 
     public HeuristicFour(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {

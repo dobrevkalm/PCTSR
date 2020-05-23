@@ -28,7 +28,6 @@ public class Main {
                 }
                 default:
                     wrongArgument();
-                    System.exit(0);
             }
         }
     }
@@ -91,8 +90,7 @@ public class Main {
                 break;
             }
             default:
-                System.out.println("Wrong experiment selected!\nAvailable: [1, 2, 3, 4, 5, 6]");
-                System.exit(0);
+                wrongArgument();
         }
 
         e.run();
@@ -123,15 +121,23 @@ public class Main {
 
     // general tests for the two solutions and the data reader
     private static void runGeneralTests() {
-        HeuristicTest ht = new HeuristicTest();
-        ht.runTests();
-        ReaderTest rt = new ReaderTest();
-        rt.runTests();
+        Scanner sc = new Scanner(System.in);
+        System.out.println(" - In order to get correct test result, you need to run the program with assertions enabled.\nWas it ran correctly? [y/N]");
+        String input = sc.nextLine();
+        if (input.toLowerCase().contains("y")) {
+            HeuristicTest ht = new HeuristicTest();
+            ht.runTests();
+            ReaderTest rt = new ReaderTest();
+            rt.runTests();
+        } else {
+            System.out.println("## Please re-run using '-ea' tag, e.g. java -ea Main -t");
+        }
     }
 
     private static void wrongArgument() {
         System.out.println("## Wrong argument entered ##");
         System.out.println("## Available arguments: [-t, -rp, -e, -e {number} ##");
         System.out.println("## Visit https://github.com/dobrevkalm/PCTSR for more info ##");
+        System.exit(0);
     }
 }

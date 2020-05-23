@@ -31,6 +31,7 @@ public abstract class HeuristicTwoExperiment extends Experiment {
         }
     }
 
+    // allows performing multiple runs per starting vertex in order to take the average when using random
     void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
         for (int i = 0; i < PROFITS.length; i += 5) {
             int profit = PROFITS[i];
@@ -55,6 +56,7 @@ public abstract class HeuristicTwoExperiment extends Experiment {
         }
     }
 
+    // allows performing multiple runs per starting vertex in order to take the average when using random
     private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {

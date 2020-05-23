@@ -19,6 +19,7 @@ public class HeuristicTest {
         // we have 91 companies so we should not need more than 10 agents...
         final int A = 10;
 
+        // we want to run each heuristic solution from each starting vertex, with different number of agents and different profit to be collected
         while (vertex < V) {
             final int MAX_P = (int) (P - places[vertex].getFirmProfit());
             while (agents < A) {
@@ -29,22 +30,18 @@ public class HeuristicTest {
                             new HeuristicThree(matrix, places, vertex, agents, profit),
                             new HeuristicFour(matrix, places, vertex, agents, profit)
                     };
-                    System.out.printf("%n| V = %d | A = %d | P = %d |%n", vertex, agents, profit);
+
                     for (Heuristic h : H) {
-                        test(h);
+                        h.getResultPaths();
                     }
                     profit += 5;
                 }
                 profit = 100;
                 agents++;
             }
+            System.out.printf("%n| VERTEX %d DONE |%n", vertex);
             agents = 1;
             vertex++;
         }
-    }
-
-    private void test(Heuristic h) {
-        h.getResultPaths();
-        System.out.println("--> " + h.getMethodName() + " DONE <---");
     }
 }

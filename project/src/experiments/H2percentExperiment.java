@@ -8,7 +8,7 @@ public class H2percentExperiment extends HeuristicTwoExperiment {
 
     @Override
     public void run() {
-        // header row
+        // header row of the csv result file
         printRow(String.format("%s,%s,%s,%s,%s,%s", "agents", "kmax", "percent", "ratio", "profit", "distance"));
         // run experiment
         runPercentExperiment();
