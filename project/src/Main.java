@@ -43,8 +43,8 @@ public class Main {
                 new HeuristicOneExperiment("heuristic_one.csv"),
                 new H2kmaxExperiment("heuristic_two_kmax_random.csv", true),
                 new H2kmaxExperiment("heuristic_two_kmax_fixedRatio.csv", false),
-                new H2percentExperiment("heuristic_two_percent.csv"),
                 new H2ratioExperiment("heuristic_two_ratio.csv"),
+                new H2percentExperiment("heuristic_two_percent.csv"),
                 new HeuristicComparison("heuristic_comparison.csv")
         };
 
@@ -75,13 +75,13 @@ public class Main {
                 break;
             }
             case 4: {
-                fileName = "h_two_percent_" + timeStamp + ".csv";
-                e = new H2percentExperiment(fileName);
+                fileName = "h_two_ratio_" + timeStamp + ".csv";
+                e = new H2ratioExperiment(fileName);
                 break;
             }
             case 5: {
-                fileName = "h_two_ratio_" + timeStamp + ".csv";
-                e = new H2ratioExperiment(fileName);
+                fileName = "h_two_percent_" + timeStamp + ".csv";
+                e = new H2percentExperiment(fileName);
                 break;
             }
             case 6: {
