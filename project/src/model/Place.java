@@ -50,13 +50,13 @@ public class Place implements Cloneable {
         return "\n{> " + this.companyName + " <}";
     }
 
-    public String getShortDescription() {
+    String getShortDescription() {
         return "#" + this.id + "\n"
                 + this.companyName + "\n"
                 + this.address;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return "#" + this.id + "\n"
                 + this.companyName + "\n"
                 + this.address + "\n"

@@ -10,7 +10,7 @@ public class PathResult {
     private int actualPlaceID;
     private double[][] neighborsMatrix;
 
-    //second solution
+    // for HeuristicTwo
     private double previousMinLength;
     private List<Place> previousMinPlaces;
     private double previousMaxProfit;
@@ -81,6 +81,11 @@ public class PathResult {
         }
         return pathDescription;
     }
+
+    /**
+     * HELPER FUNCTIONS
+     * GETTERS & SETTERS
+     */
 
     public List<Place> getResultPath() {
         return resultPath;

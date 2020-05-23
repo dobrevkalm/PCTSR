@@ -44,7 +44,7 @@ public class HeuristicOne extends Heuristic {
                             // if we have the multipliers we set the coefficient
                             Neighbor neighbor = new Neighbor(placeNeighbor.getId(), distance, placeNeighbor.getFirmProfit());
                             // set heuristic and its coefficient
-                            neighbor.setHeuristicCoefficient(coefficient);
+                            neighbor.setHeuristicCoefficient(this.coefficient);
                             neighborList.get(place.getId()).add(neighbor);
                         }
                     }

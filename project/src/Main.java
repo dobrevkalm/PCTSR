@@ -42,7 +42,8 @@ public class Main {
     private static void runAllExperiments() {
         Experiment[] experiments = new Experiment[] {
                 new HeuristicOneExperiment("heuristic_one.csv"),
-                new H2kmaxExperiment("heuristic_two_kmax.csv"),
+                new H2kmaxExperiment("heuristic_two_kmax_random.csv", true),
+                new H2kmaxExperiment("heuristic_two_kmax_fixedRatio.csv", false),
                 new H2percentExperiment("heuristic_two_percent.csv"),
                 new H2ratioExperiment("heuristic_two_ratio.csv"),
                 new HeuristicComparison("heuristic_comparison.csv")
@@ -65,27 +66,32 @@ public class Main {
                 break;
             }
             case 2: {
-                fileName = "h_two_kmax_" + timeStamp + ".csv";
-                e = new H2kmaxExperiment(fileName);
+                fileName = "h_two_kmax_rand_" + timeStamp + ".csv";
+                e = new H2kmaxExperiment(fileName, true);
                 break;
             }
             case 3: {
+                fileName = "h_two_kmax_fix_" + timeStamp + ".csv";
+                e = new H2kmaxExperiment(fileName, false);
+                break;
+            }
+            case 4: {
                 fileName = "h_two_percent_" + timeStamp + ".csv";
                 e = new H2percentExperiment(fileName);
                 break;
             }
-            case 4: {
+            case 5: {
                 fileName = "h_two_ratio_" + timeStamp + ".csv";
                 e = new H2ratioExperiment(fileName);
                 break;
             }
-            case 5: {
+            case 6: {
                 fileName = "h_comparison_" + timeStamp + ".csv";
                 e = new HeuristicComparison(fileName);
                 break;
             }
             default:
-                System.out.println("Wrong experiment selected!\nAvailable: [1, 2, 3, 4, 5]");
+                System.out.println("Wrong experiment selected!\nAvailable: [1, 2, 3, 4, 5, 6]");
                 System.exit(0);
         }
 

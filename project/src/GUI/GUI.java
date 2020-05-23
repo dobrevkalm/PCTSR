@@ -47,9 +47,6 @@ public class GUI extends Application {
     //fields used for writing to the file
     private String resHeuristic = "";
     private String resDescription = "";
-    //font related settings
-    private final int FONT_SIZE_HEADER = 22;
-    private final int FONT_SIZE_FOOTER = 14;
     private final int FONT_SIZE_BODY = 13;
     private final String FONT_NAME = "Corbel Light";
     //color settings
@@ -103,8 +100,11 @@ public class GUI extends Application {
         pane.setBackground(new Background(new BackgroundFill(this.CENTRAL_PANEL_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // set the layout sections
-        pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", FONT_SIZE_HEADER));
-        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", FONT_SIZE_FOOTER));
+        //font related settings
+        int fontSizeHeader = 22;
+        int fontSizeFooter = 14;
+        pane.setTop(getHorizontalTextBox("Prize Collecting Traveling Sales Representative", fontSizeHeader));
+        pane.setBottom(getHorizontalTextBox("Created by: adwi@itu.dk & kald@itu.dk", fontSizeFooter));
         pane.setLeft(getInteractionPanel());
         pane.setCenter(getMainCanvas());
 

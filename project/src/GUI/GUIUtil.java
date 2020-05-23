@@ -3,11 +3,6 @@ package GUI;
 import model.Place;
 
 class GUIUtil {
-    //map's latitude and longitude values
-    private final double MIN_LATITUDE = 54.554316;
-    private final double MAX_LATITUDE = 57.751806;
-    private final double MIN_LONGITUDE = 8.072245;
-    private final double MAX_LONGITUDE = 12.793928;
     private double totalProfit;
 
     GUIUtil(Place[] places) {
@@ -22,11 +17,16 @@ class GUIUtil {
     }
 
     int getPlaceXposition(Place place, int maxX) {
-        return (int) ((((place.getLongitude() - MIN_LONGITUDE) * (maxX)) / (MAX_LONGITUDE - MIN_LONGITUDE)));
+        double minLongitude = 8.072245;
+        double maxLongitude = 12.793928;
+        return (int) ((((place.getLongitude() - minLongitude) * (maxX)) / (maxLongitude - minLongitude)));
     }
 
     int getPlaceYposition(Place place, int maxY) {
-        return (int) (maxY - (((place.getLatitude() - MIN_LATITUDE) * (maxY)) / (MAX_LATITUDE - MIN_LATITUDE)));
+        //map's latitude and longitude values
+        double minLatitude = 54.554316;
+        double maxLatitude = 57.751806;
+        return (int) (maxY - (((place.getLatitude() - minLatitude) * (maxY)) / (maxLatitude - minLatitude)));
     }
 
     double getTotalProfit() {

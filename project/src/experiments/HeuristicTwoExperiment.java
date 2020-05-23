@@ -46,7 +46,7 @@ public abstract class HeuristicTwoExperiment extends Experiment {
         }
     }
 
-    void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio) {
+    private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {
             int startV = START_VERTICES[i];
@@ -55,7 +55,7 @@ public abstract class HeuristicTwoExperiment extends Experiment {
         }
     }
 
-    void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
+    private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {
             int startV = START_VERTICES[i];
@@ -64,7 +64,7 @@ public abstract class HeuristicTwoExperiment extends Experiment {
         }
     }
 
-    void calculateDistanceResults(Heuristic h, int index, int numberOfRuns) {
+    private void calculateDistanceResults(Heuristic h, int index, int numberOfRuns) {
         double[] routeDistanceResults = new double[numberOfRuns];
 
         for (int i = 0; i < numberOfRuns; i++) {
