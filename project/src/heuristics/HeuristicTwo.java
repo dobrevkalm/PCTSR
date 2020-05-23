@@ -11,18 +11,18 @@ public class HeuristicTwo extends Heuristic {
     // the test field variables are used for the experiments
     private int testKmax = -1; // will determine the size of mutations to be made
     private int testPercent = -1; // will determine the number of vertices to remove/change based on the vertices covered by the agent
-    private double testMutationsRatio = -1; // the ratio used to choose whether to remove the most profitable vertex in the route
+    private double testRatio = -1; // the removeOperationRatio used to choose whether to remove the most profitable vertex in the route
 
     public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
     }
 
     // constructor used for experiments
-    public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, int kmax, int percent, double mutationsRatio) {
+    public HeuristicTwo(double[][] distanceMatrix, Place[] places, int startVertex, int agentsNumber, int minProfit, int kmax, int percent, double removeOperationRatio) {
         super(distanceMatrix, places, startVertex, agentsNumber, minProfit);
         this.testKmax = kmax;
         this.testPercent = percent;
-        this.testMutationsRatio = mutationsRatio;
+        this.testRatio = removeOperationRatio;
     }
 
     public PathResult[] getResultPaths() {
@@ -176,12 +176,12 @@ public class HeuristicTwo extends Heuristic {
 
         for (int k = 0; k < kmax; k++) {
             // randomly modify 0 to 80% of the route (determined by experiments)
-            int percent = random.nextInt(80);
-            // while conducting an experiment, overwrite the percent value with the tested value
+            int modificationPercent = random.nextInt(80);
+            // while conducting an experiment, overwrite the modificationPercent value with the tested value
             if (this.testPercent != -1) {
-                percent = this.testPercent;
+                modificationPercent = this.testPercent;
             }
-            previousMinLength = generateMutations(percent, previousMinLength);
+            previousMinLength = generateMutations(modificationPercent, previousMinLength);
         }
     }
 
@@ -228,21 +228,21 @@ public class HeuristicTwo extends Heuristic {
         Random rnd = new Random();
         boolean removeBest = rnd.nextBoolean();
 
-        // used for experiments
-        if (this.testMutationsRatio != -1) {
+
+        if (this.testRatio == -1) {
+            for (int i = 0; i < verticesToRemove; i++) {
+                remove(agent, removeBest);
+            }
+        } else { // used for experiments
             // what part of the remove mutations should be done with removing the best vertex
-            int mutationsRatio = (int) (this.testMutationsRatio * verticesToRemove);
+            int removeOperationRatio = (int) (this.testRatio * verticesToRemove);
 
             for (int i = 0; i < verticesToRemove; i++) {
-                if (i < mutationsRatio) {
+                if (i < removeOperationRatio) {
                     remove(agent, true);
                 } else {
                     remove(agent, false);
                 }
-            }
-        } else {
-            for (int i = 0; i < verticesToRemove; i++) {
-                remove(agent, removeBest);
             }
         }
     }

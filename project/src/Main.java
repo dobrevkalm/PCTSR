@@ -125,10 +125,14 @@ public class Main {
         System.out.println(" - In order to get correct test result, you need to run the program with assertions enabled.\nWas it ran correctly? [y/N]");
         String input = sc.nextLine();
         if (input.toLowerCase().contains("y")) {
-            HeuristicTest ht = new HeuristicTest();
-            ht.runTests();
+            System.out.println("Starting data tests\n");
             ReaderTest rt = new ReaderTest();
             rt.runTests();
+            System.out.println(" + DONE + \n");
+            System.out.println("Starting heuristic solutions test.\nRunning each solution from each starting vertex.\nEach run will test different number of agents and different profits.\n");
+            HeuristicTest ht = new HeuristicTest();
+            ht.runTests();
+            System.out.println("\n + ALL TESTS PASSES + \n");
         } else {
             System.out.println("## Please re-run using '-ea' tag, e.g. java -ea Main -t");
         }

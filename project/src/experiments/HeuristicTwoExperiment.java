@@ -15,16 +15,16 @@ public abstract class HeuristicTwoExperiment extends Experiment {
     @Override
     public abstract void run();
 
-    void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio) {
+    void runCoefficientsExperiments(int agents, int kmax, int percent, double removeOperationRatio) {
         for (int i = 0; i < PROFITS.length; i += 5) {
             int profit = PROFITS[i];
 
-            calculateResults(agents, profit, kmax, percent, mutationsRatio);
+            calculateResults(agents, profit, kmax, percent, removeOperationRatio);
 
             double distanceResult = calculateAverageDistance();
 
             // print row with test result
-            printRow(String.format(Locale.US,"%d,%d,%d,%.2f,%d,%.2f", agents, kmax, percent, mutationsRatio, profit, distanceResult));
+            printRow(String.format(Locale.US,"%d,%d,%d,%.2f,%d,%.2f", agents, kmax, percent, removeOperationRatio, profit, distanceResult));
 
             // re-instantiate the distance array in the parent class
             resetDistanceArray();
@@ -32,36 +32,36 @@ public abstract class HeuristicTwoExperiment extends Experiment {
     }
 
     // allows performing multiple runs per starting vertex in order to take the average when using random
-    void runCoefficientsExperiments(int agents, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
+    void runCoefficientsExperiments(int agents, int kmax, int percent, double removeOperationRatio, int numberOfRuns) {
         for (int i = 0; i < PROFITS.length; i += 5) {
             int profit = PROFITS[i];
-            calculateResults(agents, profit, kmax, percent, mutationsRatio, numberOfRuns);
+            calculateResults(agents, profit, kmax, percent, removeOperationRatio, numberOfRuns);
 
             double distanceResult = calculateAverageDistance();
 
             // print row with test result
-            printRow(String.format(Locale.US,"%d,%d,%d,%.2f,%d,%.2f", agents, kmax, percent, mutationsRatio, profit, distanceResult));
+            printRow(String.format(Locale.US,"%d,%d,%d,%.2f,%d,%.2f", agents, kmax, percent, removeOperationRatio, profit, distanceResult));
 
             // re-instantiate the distance array in the parent class
             resetDistanceArray();
         }
     }
 
-    private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio) {
+    private void calculateResults(int agents, int profit, int kmax, int percent, double removeOperationRatio) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {
             int startV = START_VERTICES[i];
-            Heuristic h = new HeuristicTwo(distanceMatrix, places, startV, agents, profit, kmax, percent, mutationsRatio);
+            Heuristic h = new HeuristicTwo(distanceMatrix, places, startV, agents, profit, kmax, percent, removeOperationRatio);
             calculateDistanceResults(h, i);
         }
     }
 
     // allows performing multiple runs per starting vertex in order to take the average when using random
-    private void calculateResults(int agents, int profit, int kmax, int percent, double mutationsRatio, int numberOfRuns) {
+    private void calculateResults(int agents, int profit, int kmax, int percent, double removeOperationRatio, int numberOfRuns) {
         // calculate results from every starting vertex and take the average
         for (int i = 0; i < START_VERTICES.length; i++) {
             int startV = START_VERTICES[i];
-            Heuristic h = new HeuristicTwo(distanceMatrix, places, startV, agents, profit, kmax, percent, mutationsRatio);
+            Heuristic h = new HeuristicTwo(distanceMatrix, places, startV, agents, profit, kmax, percent, removeOperationRatio);
             calculateDistanceResults(h, i, numberOfRuns);
         }
     }

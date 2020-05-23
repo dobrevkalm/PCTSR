@@ -28,11 +28,14 @@ public class HeuristicFour extends HeuristicTwo {
 
         Random random = new Random();
         // the number of mutations
-        int kmax = 10;
+        int kmax = 25;
+        if (agentsNumber > 3) {
+            kmax = 35;
+        }
 
         for (int k = 0; k < kmax; k++) {
-            int percent = random.nextInt(80);
-            previousMinLength = generateMutations(percent, previousMinLength);
+            int modificationPercent = random.nextInt(80);
+            previousMinLength = generateMutations(modificationPercent, previousMinLength);
         }
     }
 
@@ -87,7 +90,7 @@ public class HeuristicFour extends HeuristicTwo {
         double plusLength = 0.0;
         int agent = -1;
 
-        // find the agent and vertex with the best ratio: profit / increase of travelled distance
+        // find the agent and vertex with the best removeOperationRatio: profit / increase of travelled distance
         for (int agentNo = 0; agentNo < pathResult.length; agentNo++) {
             int n = pathResult[agentNo].getResultPath().size();
 

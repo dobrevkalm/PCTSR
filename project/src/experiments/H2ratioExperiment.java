@@ -25,15 +25,15 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
             int percent = -1;
             for (int m = 0; m <= 10; m++) {
                 // mutations ratio = -1 means that we will use random to determine whether to remove the best vertex in the route or not
-                double mutationsRatio = -1.0;
+                double removeOperationRatio = -1.0;
                 if (m > 0) {
                     // thank you Java for doing this to us -.-
-                    mutationsRatio = m / 10d;
+                    removeOperationRatio = m / 10d;
                 }
                 // indicate what is running
-                System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, mutationsRatio);
+                System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, removeOperationRatio);
                 // run experiments with the different profits using the above coefficients
-                runCoefficientsExperiments(agents, kmax, percent, mutationsRatio, NUM_RUNS);
+                runCoefficientsExperiments(agents, kmax, percent, removeOperationRatio, NUM_RUNS);
             }
         }
     }
