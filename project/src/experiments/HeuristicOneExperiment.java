@@ -27,8 +27,6 @@ public class HeuristicOneExperiment extends Experiment {
         for (int desiredProfit : PROFITS) {
             for (double coeff : coefficients) {
                 for (int agentsNumber : AGENTS) {
-                    // indicate what's running
-                    System.out.printf("@@@ RUN -> %d <> %.2f <> %d%n", desiredProfit, coeff, agentsNumber);
                     calculateResults(coeff, agentsNumber, desiredProfit);
                 }
             }

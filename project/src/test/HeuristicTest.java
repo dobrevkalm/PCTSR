@@ -16,7 +16,6 @@ public class HeuristicTest {
 
         final int P = 380;
         final int V = places.length;
-        // we have 91 companies so we should not need more than 10 agents...
         final int A = 10;
 
         // we want to run each heuristic solution from each starting vertex, with different number of agents and different profit to be collected
@@ -39,7 +38,6 @@ public class HeuristicTest {
                 profit = 100;
                 agents++;
             }
-            System.out.printf("%n| VERTEX %d DONE |%n", vertex);
             agents = 1;
             vertex++;
         }

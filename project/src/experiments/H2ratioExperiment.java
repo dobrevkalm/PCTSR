@@ -30,8 +30,6 @@ public class H2ratioExperiment extends HeuristicTwoExperiment {
                     // thank you Java for doing this to us -.-
                     removeOperationRatio = m / 10d;
                 }
-                // indicate what is running
-                System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, removeOperationRatio);
                 // run experiments with the different profits using the above coefficients
                 runCoefficientsExperiments(agents, kmax, percent, removeOperationRatio, NUM_RUNS);
             }

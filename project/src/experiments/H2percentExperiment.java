@@ -23,8 +23,6 @@ public class H2percentExperiment extends HeuristicTwoExperiment {
             int kmax = -1;
             for (int percent = 0; percent <= 100; percent += 10) {
                 double removeOperationRatio = -1;
-                // indicate what is running
-                System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent == 0 ? -1 : percent, removeOperationRatio);
                 // run experiments with the different profits using the above coefficients
                 if(percent != 0) {
                     //run the experiment with different values of constant percentage, e.g., 10%, 20%, etc.

@@ -34,8 +34,6 @@ public class H2kmaxExperiment extends HeuristicTwoExperiment {
                 } else {
                     removeOperationRatio = 0.3;
                 }
-                // indicate what is running
-                System.out.printf("@@@ RUN -> %d <> %d <> %d <> %.2f%n", agents, kmax, percent, removeOperationRatio);
                 // run experiments with the different profits using the above coefficients
                 runCoefficientsExperiments(agents, kmax, percent, removeOperationRatio);
             }
