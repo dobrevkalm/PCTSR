@@ -2,23 +2,25 @@ package experiments;
 
 import heuristics.*;
 import model.PathResult;
+import model.Place;
 
 import java.util.Locale;
 import java.util.Random;
 
 public class HeuristicComparison extends Experiment {
     private final int NUM_V = START_VERTICES.length;
-    private double[] timeResults = new double[NUM_V];
+    private long[] timeResults = new long[NUM_V];
+    private double totalProfit;
 
     public HeuristicComparison(String fileName) {
         super(fileName);
+        this.totalProfit = calculateTotalProfit();
     }
 
     public void run() {
         // warm up the compiler
         warmUp();
 
-        System.out.println("STARTING THE EXPERIMENT");
         // print the header row for the csv
         printRow(String.format("%s,%s,%s,%s,%s", "heuristic", "agents", "profit", "time (ns)", "distance (km)"));
 
@@ -35,28 +37,44 @@ public class HeuristicComparison extends Experiment {
     // runs the experiment with the specified heuristic method
     private void runExperiment(String heuristic) {
         for (int agent : AGENTS) {
-            // indicate what's running
-            System.out.printf("%n - RUNNING heuristic %s with %d agents%n", heuristic, agent);
-
             for (int profit : PROFITS) {
                 for (int i = 0; i < NUM_V; i++) {
                     int startV = START_VERTICES[i];
                     calculateResults(heuristic, startV, agent, profit, i);
                 }
 
-                double distance = calculateAverageDistance();
-                double time = 0d;
-                for (double timeRes : timeResults) {
-                    time += timeRes;
-                }
-
-                // print the results on the output file
-                printRow(String.format(Locale.US, "%s,%d,%d,%.2f,%.2f", heuristic, agent, profit, (time / NUM_V), (distance / 1000)));
-
-                // reset the two result arrays
-                resetResultArrays();
+                writeResultsAndReset(heuristic, agent, profit);
             }
+            runWithMaxProfit(agent, heuristic);
         }
+    }
+
+    private void runWithMaxProfit(int agent, String heuristic) {
+        for (int i = 0; i < NUM_V; i++) {
+            int startV = START_VERTICES[i];
+            // calculate the max profit we can collect from the starting vertex
+            int profit = (int) (this.totalProfit - this.places[startV].getFirmProfit());
+
+            calculateResults(heuristic, startV, agent, profit, i);
+        }
+
+        // 333 profit corresponds to the max profit we can collect from every vertex
+        writeResultsAndReset(heuristic, agent, 333);
+    }
+
+    // writes results to the output file and resets the time and distance arrays
+    private void writeResultsAndReset(String heuristic, int agent, int profit) {
+        double distance = calculateAverageDistance();
+        long time = 0;
+        for (long timeRes : timeResults) {
+            time += timeRes;
+        }
+
+        // print the results on the output file
+        printRow(String.format(Locale.US, "%s,%d,%d,%d,%.2f", heuristic, agent, profit, (time / NUM_V), (distance / 1000)));
+
+        // reset the two result arrays
+        resetResultArrays();
     }
 
     private void calculateResults(String heuristic, int startV, int agent, int profit, int resultIndex) {
@@ -82,7 +100,7 @@ public class HeuristicComparison extends Experiment {
 
     private void fillTimeAndDistanceResults(Heuristic h, int idx) {
         // get execution time
-        double time = System.nanoTime();
+        long time = System.nanoTime();
         PathResult[] resultPath = h.getResultPaths();
 
         // save time results
@@ -103,14 +121,22 @@ public class HeuristicComparison extends Experiment {
     private void resetResultArrays() {
         // re-instantiate the distance array in the parent class
         resetDistanceArray();
-        timeResults = new double[NUM_V];
+        timeResults = new long[NUM_V];
+    }
+
+    private double calculateTotalProfit() {
+        double res = 0;
+
+        for (Place p : places) {
+            res += p.getFirmProfit();
+        }
+
+        return res;
     }
 
     // HELPERS TO WARM UP THE COMPILER. NOT PART OF THE ACTUAL EXPERIMENT
 
     private void warmUp() {
-        System.out.printf("%nWARMING UP...");
-
         Random rnd = new Random();
         int tmp = 0;
 
@@ -131,7 +157,6 @@ public class HeuristicComparison extends Experiment {
             h = new HeuristicFour(distanceMatrix, places, startV, (agents + 1), profit);
             tmp -= sumWarmUpResults(h.getResultPaths());
         }
-        System.out.printf(" DONE > %d <%n%n%n", tmp);
     }
 
     private int sumWarmUpResults(PathResult[] results) {
