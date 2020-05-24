@@ -34,9 +34,7 @@ public class ResultPathTest {
                     break;
             }
 
-            if (h != null) {
-                printResults(h.getMethodName(), h.getResultPaths());
-            }
+            printResults(h.getMethodName(), h.getResultPaths());
         } else {
             System.out.println("## Wrong input ##");
             System.exit(0);
