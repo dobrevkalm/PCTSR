@@ -12,6 +12,9 @@ public class Main {
             runGUI();
         } else {
             switch (args[0]) {
+                case "-i":
+                    printInfo();
+                    break;
                 case "-t":
                     runGeneralTests();
                     break;
@@ -152,13 +155,24 @@ public class Main {
         }
     }
 
+    // print information about the running options
+    private static void printInfo() {
+        System.out.println("\nAvailable commands:");
+        System.out.println(" - java Main -> run the GUI");
+        System.out.println(" - java -ea Main -t -> run tests");
+        System.out.println(" - java Main -rp -> run the program without hte GUI");
+        System.out.println(" - java Main -e -> run all the experiments");
+        System.out.println(" - java Main -e {number 1-6} -> run a single experiment\n");
+    }
+
     private static void wrongArgument() {
         System.out.println("## Wrong argument entered ##");
-        System.out.println("## Available arguments: [-t, -rp, -e, -e {number} ##");
-        System.out.println("## Visit https://github.com/dobrevkalm/PCTSR for more info ##");
+        System.out.println("## Available arguments: [-i, -t, -rp, -e, -e {number}] ##");
+        System.out.println("## Run with -i or visit https://github.com/dobrevkalm/PCTSR for more info ##\n");
         System.exit(0);
     }
 
+    // just a simple timeout, wrapped in a method to handle the exception
     private static void timeout(int seconds) {
         try {
             Thread.sleep(seconds * 1000);

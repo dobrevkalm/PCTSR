@@ -14,22 +14,23 @@ The simple grapgic user interface allows the user to enter starting vertex (the 
 ![GUI](./GUI_RAN.png)
 
 ## How to run
-**First compile all the classes:**
+**Compile all the classes**
  - javac *.java
 
-**Then choose what to run:**
- - java Main - *run the GUI*
- - java -ea Main -t - *run tests (remember -ea to enable assertions)*
- - java Main -rp - *compute a tour and output it on the console (without the GUI)*
- - java Main -e - *run all the experiments (results are saved to .csv files)*
+**Choose what to run**
+ - java Main -> *run the GUI*
+ - java Main -i -> *information about available commands*
+ - java -ea Main -t -> *run tests (remember -ea to enable assertions)*
+ - java Main -rp -> *compute a tour and output it on the console (without the GUI)*
+ - java Main -e -> *run all the experiments (results are saved to .csv files)*
 
-**To run a specific experiment, add a number between 1 and 5:**
- - java Main -e 1 - *run experiment for HeuristicOne coefficient*
- - java Main -e 2 - *kmax parameter with random ratio for vertex removal for HeuristicTwo*
- - java Main -e 3 - *kmax parameter with fixed ratio for vertex removal for HeuristcTwo*
- - java Main -e 4 - *remove operation ratio for HeuristicTwo*
- - java Main -e 5 - *route modification percent for HeuristicTwo*
- - java Main -e 6 - *comparisson between all heuristic methods*
+**To run a specific experiment, add a number between 1 and 6**
+ - java Main -e 1 -> *run experiment for HeuristicOne coefficient*
+ - java Main -e 2 -> *kmax parameter with random ratio for vertex removal for HeuristicTwo*
+ - java Main -e 3 -> *kmax parameter with fixed ratio for vertex removal for HeuristcTwo*
+ - java Main -e 4 -> *remove operation ratio for HeuristicTwo*
+ - java Main -e 5 -> *route modification percent for HeuristicTwo*
+ - java Main -e 6 -> *comparisson between all heuristic methods*
 
 ## Authors
 Adrianna Wiacek (https://github.com/losica) & Kalin Dobrev (https://github.com/dobrevkalm)
