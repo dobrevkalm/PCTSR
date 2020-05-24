@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 public abstract class Experiment {
     private static PrintWriter writer;
     private DataReader reader = new DataReader();
+    // name of the output file
+    private String resultFile;
     // all companies and their info
     Place[] places = reader.getAllCompanies();
     // distances between companies
@@ -33,13 +35,14 @@ public abstract class Experiment {
 
     // resultFile is the name of the output file, e.g. results.csv
     Experiment(String resultFile) {
-        init(resultFile);
+        this.resultFile = resultFile;
+        init();
         initProfitArray();
         initStartVertices();
     }
 
     // instantiate the print writer
-    private void init(String resultFile) {
+    private void init() {
         Charset CHARSET = StandardCharsets.UTF_8;
         Path RES_FILE = Paths.get(resultFile);
         try {
@@ -106,5 +109,14 @@ public abstract class Experiment {
         }
         // index is the index of the current starting vertex
         distanceResults[index] = routeDistance;
+    }
+
+    public String getResultFileName() {
+        return this.resultFile;
+    }
+
+    public String getExperimentName() {
+        String name = this.getClass().getName();
+        return name.substring(name.indexOf('.') + 1);
     }
 }

@@ -49,7 +49,7 @@ public class Main {
         };
 
         for (Experiment e : experiments) {
-            e.run();
+            runSingleExperiment(e);
         }
     }
 
@@ -93,7 +93,14 @@ public class Main {
                 wrongArgument();
         }
 
+        runSingleExperiment(e);
+    }
+
+    private static void runSingleExperiment(Experiment e) {
+        System.out.printf("%nRUNNING %s...", e.getExperimentName());
         e.run();
+        System.out.printf("DONE!%nResults saved in %s%n%n", e.getResultFileName());
+        timeout(2);
     }
 
     private static void runResultPathTest() {
@@ -125,14 +132,21 @@ public class Main {
         System.out.println(" - In order to get correct test result, you need to run the program with assertions enabled.\nWas it ran correctly? [y/N]");
         String input = sc.nextLine();
         if (input.toLowerCase().contains("y")) {
-            System.out.println("Starting data tests\n");
+            System.out.println("\nStarting data tests.\nWill read through the input data and validate it.\n");
+            timeout(2);
+            System.out.print(" - RUNNING TESTS...");
             ReaderTest rt = new ReaderTest();
             rt.runTests();
-            System.out.println(" + DONE + \n");
+            System.out.print("DONE!\n\n\n");
+            timeout(1);
             System.out.println("Starting heuristic solutions test.\nRunning each solution from each starting vertex.\nEach run will test different number of agents and different profits.\n");
+            timeout(2);
+            System.out.print(" - RUNNING TESTS...");
             HeuristicTest ht = new HeuristicTest();
             ht.runTests();
-            System.out.println("\n + ALL TESTS PASSES + \n");
+            System.out.print("DONE!\n\n\n");
+            timeout(1);
+            System.out.println(" + ALL TESTS PASSES + \n");
         } else {
             System.out.println("## Please re-run using '-ea' tag, e.g. java -ea Main -t");
         }
@@ -143,5 +157,13 @@ public class Main {
         System.out.println("## Available arguments: [-t, -rp, -e, -e {number} ##");
         System.out.println("## Visit https://github.com/dobrevkalm/PCTSR for more info ##");
         System.exit(0);
+    }
+
+    private static void timeout(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
