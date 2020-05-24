@@ -384,13 +384,13 @@ public class GUI extends Application {
         this.resDescription = "Starting vertex: " + startVertex + "\n"
                 + "Minimum profit: " + minProfit + "\n"
                 + "Number of agents: " + agentsNumber + "\n"
-                + "Total profit collected: " + String.format(Locale.US, "%.2f", h.getSumProfit()) + "\n"
-                + "Total distance travelled: " + String.format(Locale.US, "%.2f", getTotalDistance()) + "\n\n";
+                + "Total profit collected (bn. DKK): " + String.format(Locale.US, "%.2f", h.getSumProfit()) + "\n"
+                + "Total distance travelled (km): " + String.format(Locale.US, "%.2f", getTotalDistance()) + "\n\n";
     }
 
     private void setDetailedInfo(double sumProfit) {
         String totalInfo = "Total profit (bn. DKK): " + String.format("%.2f", sumProfit) + "\n"
-                + "Total distance (m): " + String.format("%.2f", getTotalDistance()) + "\n\n"
+                + "Total distance (km): " + String.format("%.2f", getTotalDistance()) + "\n\n"
                 + "Distance per agent:\n";
         Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE_BODY, Color.BLACK);
         this.totalResultTxt.getChildren().add(infoTXT);
@@ -414,7 +414,7 @@ public class GUI extends Application {
         for (PathResult p : this.pathResults) {
             distance += p.getPathLength();
         }
-        return distance;
+        return distance / 1000;
     }
 
     private String getAvailableProfitFromVertex(int startVertex) {
