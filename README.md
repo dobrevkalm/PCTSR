@@ -27,8 +27,8 @@ The simple grapgic user interface allows the user to enter starting vertex (the 
  - java Main -e 1 - *run experiment for HeuristicOne coefficient*
  - java Main -e 2 - *kmax parameter with random ratio for vertex removal for HeuristicTwo*
  - java Main -e 3 - *kmax parameter with fixed ratio for vertex removal for HeuristcTwo*
- - java Main -e 4 - *route modification percent for HeuristicTwo*
- - java Main -e 5 - *mutations ratio for HeuristicTwo*
+ - java Main -e 4 - *remove operation ratio for HeuristicTwo*
+ - java Main -e 5 - *route modification percent for HeuristicTwo*
  - java Main -e 6 - *comparisson between all heuristic methods*
 
 ## Authors
