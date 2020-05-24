@@ -318,7 +318,7 @@ public class GUI extends Application {
     }
 
     private void drawPlaces(GraphicsContext gc, int width, int height) {
-        final int diameter = 4;
+        final int diameter = 3;
         if (this.places != null) {
             for (int i = 0; i < this.places.length; i++) {
                 Place p = this.places[i];
