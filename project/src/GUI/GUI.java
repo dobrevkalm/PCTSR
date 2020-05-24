@@ -216,12 +216,12 @@ public class GUI extends Application {
                 this.saveResultsBtn.setVisible(true);
             } else {
                 //set the error message
-                String error = "Invalid input. \n";
+                String error = "Invalid input.\n";
                 if (startingV < 0 || startingV > 90) {
                     error += "Starting vertex must be a number in range 0-90.\n";
                 }
                 if (startingV >= 0 && startingV < 91 && (minProfit < 0.0 || minProfit > this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit())) {
-                    error += "For chosen staring point profit can't be bigger than " + (int) (this.guiUtil.getTotalProfit() - this.places[startingV].getFirmProfit()) + ".\n";
+                    error += "For the chosen staring point,\nprofit can't be bigger than " + getAvailableProfitFromVertex(startingV) + ".\n";
                 }
                 if (agentsNumber < 0 || agentsNumber > 10) {
                     error += "Max no. of agents 10.";
@@ -237,7 +237,7 @@ public class GUI extends Application {
                 this.resHeuristic = "";
             }
         } catch (NumberFormatException e) {
-            this.errorMsg.setText("Invalid input type. Enter only numbers.");
+            this.errorMsg.setText("Invalid input type.\nPlease fill all input fields correctly.");
             e.getStackTrace();
             //hide the save results button
             this.saveResultsBtn.setVisible(false);
@@ -248,12 +248,18 @@ public class GUI extends Application {
     }
 
     private void initializeTextInputs() {
+        // initialize the input fields
         this.startVertexTxt = new TextField();
-        this.startVertexTxt.setPromptText("0 to 90");
         this.minProfitTxt = new TextField();
-        this.minProfitTxt.setPromptText("max 300");
         this.agentsNumberTxt = new TextField();
+        // add placeholders
+        this.startVertexTxt.setPromptText("0 to 90");
+        this.minProfitTxt.setPromptText("default max 299");
         this.agentsNumberTxt.setPromptText("1 to 10");
+        // add watcher for dynamic max profit update
+        this.startVertexTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.minProfitTxt.setPromptText("max " + getAvailableProfitFromVertex(Integer.parseInt(newValue)));
+        });
     }
 
     // creates a node that contains a text box
@@ -409,5 +415,9 @@ public class GUI extends Application {
             distance += p.getPathLength();
         }
         return distance;
+    }
+
+    private String getAvailableProfitFromVertex(int startVertex) {
+        return String.valueOf((int) (this.guiUtil.getTotalProfit() - this.places[startVertex].getFirmProfit()));
     }
 }
