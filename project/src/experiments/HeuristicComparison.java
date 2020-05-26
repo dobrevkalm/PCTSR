@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Random;
 
 public class HeuristicComparison extends Experiment {
+    private int NUM_RUNS = 100;
     private final int NUM_V = START_VERTICES.length;
     private long[] timeResults = new long[NUM_V];
     private double totalProfit;
@@ -42,7 +43,6 @@ public class HeuristicComparison extends Experiment {
                     int startV = START_VERTICES[i];
                     calculateResults(heuristic, startV, agent, profit, i);
                 }
-
                 writeResultsAndReset(heuristic, agent, profit);
             }
             runWithMaxProfit(agent, heuristic);
@@ -99,22 +99,33 @@ public class HeuristicComparison extends Experiment {
     }
 
     private void fillTimeAndDistanceResults(Heuristic h, int idx) {
-        // get execution time
-        long time = System.nanoTime();
-        PathResult[] resultPath = h.getResultPaths();
+        long totalRunTime = 0L;
+        double totalRunDistance = 0d;
+        for (int i = 0; i < NUM_RUNS; i++) {
+            // get execution time
+            long time = System.nanoTime();
+            PathResult[] resultPath = h.getResultPaths();
 
-        // save time results
-        time = System.nanoTime() - time;
+            // save time results
+            time = System.nanoTime() - time;
 
-        // sum the total path length
-        double totalDistance = 0d;
-        for (PathResult res : resultPath) {
-            totalDistance += res.getPathLength();
+            // sum the total path length
+            double totalDistance = 0d;
+            for (PathResult res : resultPath) {
+                totalDistance += res.getPathLength();
+            }
+
+            //save results to local variables
+            totalRunTime += time;
+            totalRunDistance += totalDistance;
+
+            //reset Heuristic results
+            h.resetResults();
         }
 
         // fill the results
-        timeResults[idx] = time;
-        distanceResults[idx] = totalDistance;
+        timeResults[idx] = totalRunTime / NUM_RUNS;
+        distanceResults[idx] = totalRunDistance / NUM_RUNS;
     }
 
     // reset the arrays with all the results
