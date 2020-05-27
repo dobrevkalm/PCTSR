@@ -258,7 +258,11 @@ public class GUI extends Application {
         this.agentsNumberTxt.setPromptText("1 to 10");
         // add watcher for dynamic max profit update
         this.startVertexTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.minProfitTxt.setPromptText("max " + getAvailableProfitFromVertex(Integer.parseInt(newValue)));
+            if (newValue.length() > 0) {
+                this.minProfitTxt.setPromptText("max " + getAvailableProfitFromVertex(Integer.parseInt(newValue)));
+            } else {
+                this.minProfitTxt.setPromptText("default max 299");
+            }
         });
     }
 
