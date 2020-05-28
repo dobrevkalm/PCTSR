@@ -114,8 +114,8 @@ public class GUI extends Application {
 
     private Pane getMainCanvas() {
         Pane wrapperPane = new Pane();
-        //add background image
-        wrapperPane.setStyle("-fx-background-image: url(\"/GUI/dk.png\");-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
+        // add background image
+        wrapperPane.setStyle("-fx-background-image: url('/GUI/dk.png');-fx-background-size: 100% 100%;-fx-background-repeat: no-repeat;");
 
         //add canvas
         this.canvas = new Canvas();
