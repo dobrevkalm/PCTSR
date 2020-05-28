@@ -2,6 +2,7 @@ package GUI;
 
 import heuristics.*;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -152,6 +153,7 @@ public class GUI extends Application {
                 this.totalResultTxt,
                 createSaveResultsButton()
         );
+        box.requestFocus();
 
         box.setBackground(new Background(new BackgroundFill(this.LEFT_PANEL_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         box.setSpacing(8);
@@ -252,18 +254,35 @@ public class GUI extends Application {
         this.startVertexTxt = new TextField();
         this.minProfitTxt = new TextField();
         this.agentsNumberTxt = new TextField();
+
         // add placeholders
-        this.startVertexTxt.setPromptText("0 to 90");
-        this.minProfitTxt.setPromptText("default max 299");
-        this.agentsNumberTxt.setPromptText("1 to 10");
+        String defaultMaxProfit = " default max 299";
+        this.startVertexTxt.setPromptText(" 0 to 90");
+        this.minProfitTxt.setPromptText(" default max 299");
+        this.agentsNumberTxt.setPromptText(defaultMaxProfit);
+
+        // keep the prompt text visible on focus if field is empty
+        bindPromptTextFormatOnFocus(this.startVertexTxt);
+        bindPromptTextFormatOnFocus(this.minProfitTxt);
+        bindPromptTextFormatOnFocus(this.agentsNumberTxt);
+
         // add watcher for dynamic max profit update
         this.startVertexTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 0) {
-                this.minProfitTxt.setPromptText("max " + getAvailableProfitFromVertex(Integer.parseInt(newValue)));
+            if (newValue.length() > 0 && newValue.matches("[0-9]+") && !newValue.matches("[a-zA-Z]+")) {
+                this.minProfitTxt.setPromptText(" max " + getAvailableProfitFromVertex(Integer.parseInt(newValue)));
             } else {
-                this.minProfitTxt.setPromptText("default max 299");
+                this.minProfitTxt.setPromptText(defaultMaxProfit);
             }
         });
+    }
+
+    private void bindPromptTextFormatOnFocus(TextField textField) {
+        String visualPromptText = "-fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);";
+        textField.styleProperty().bind(
+                Bindings
+                        .when(textField.focusedProperty())
+                        .then(visualPromptText)
+                        .otherwise(visualPromptText));
     }
 
     // creates a node that contains a text box
