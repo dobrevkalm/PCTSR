@@ -153,7 +153,6 @@ public class GUI extends Application {
                 this.totalResultTxt,
                 createSaveResultsButton()
         );
-        box.requestFocus();
 
         box.setBackground(new Background(new BackgroundFill(this.LEFT_PANEL_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         box.setSpacing(8);
