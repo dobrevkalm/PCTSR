@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
+            System.out.println("\nStarting the GUI.\nRun with -i for other available commands.\n");
             runGUI();
         } else {
             switch (args[0]) {
@@ -162,7 +163,8 @@ public class Main {
         System.out.println(" - java -ea Main -t -> run tests");
         System.out.println(" - java Main -rp -> run the program without hte GUI");
         System.out.println(" - java Main -e -> run all the experiments");
-        System.out.println(" - java Main -e {number 1-6} -> run a single experiment\n");
+        System.out.println(" - java Main -e {number 1-6} -> run a single experiment");
+        System.out.println("\nFor more info, visit https://github.com/dobrevkalm/PCTSR\n");
     }
 
     private static void wrongArgument() {
