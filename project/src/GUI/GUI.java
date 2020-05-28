@@ -413,17 +413,17 @@ public class GUI extends Application {
     private void setDetailedInfo(double sumProfit) {
         String totalInfo = "Total profit (bn. DKK): " + String.format("%.2f", sumProfit) + "\n"
                 + "Total distance (km): " + String.format("%.2f", getTotalDistance()) + "\n\n"
-                + "Distance per agent:\n";
+                + "Distance per agent (km):\n";
         Text infoTXT = createText(totalInfo, TextAlignment.LEFT, FONT_SIZE_BODY, Color.BLACK);
         this.totalResultTxt.getChildren().add(infoTXT);
         for (int i = 0; i < this.pathResults.length; i++) {
             PathResult p = this.pathResults[i];
             String agentNo = "#" + (i + 1) + " : ";
             String text;
-            if(i != pathResults.length -1) {
-                text = String.format("%.2f", p.getPathLength()) + "\n";
+            if (i != pathResults.length - 1) {
+                text = String.format("%.2f", (p.getPathLength() / 1000)) + "\n";
             } else {
-                text = String.format("%.2f", p.getPathLength());
+                text = String.format("%.2f", (p.getPathLength() / 1000));
             }
             Text t1 = createText(agentNo, TextAlignment.LEFT, FONT_SIZE_BODY, color[i]);
             Text t2 = createText(text, TextAlignment.LEFT, FONT_SIZE_BODY, Color.BLACK);

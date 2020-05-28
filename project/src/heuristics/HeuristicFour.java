@@ -91,7 +91,7 @@ public class HeuristicFour extends HeuristicTwo {
         int agent = -1;
 
         // find the agent and vertex with the best removeOperationRatio: profit / increase of travelled distance
-        for (int agentNo = 0; agentNo < pathResult.length; agentNo++) {
+        for (int agentNo = 0; agentNo < agentsNumber; agentNo++) {
             int n = pathResult[agentNo].getResultPath().size();
 
             // iterate through all the vertices
