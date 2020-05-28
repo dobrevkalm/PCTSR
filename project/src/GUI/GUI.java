@@ -257,8 +257,8 @@ public class GUI extends Application {
         // add placeholders
         String defaultMaxProfit = " default max 299";
         this.startVertexTxt.setPromptText(" 0 to 90");
-        this.minProfitTxt.setPromptText(" default max 299");
-        this.agentsNumberTxt.setPromptText(defaultMaxProfit);
+        this.minProfitTxt.setPromptText(defaultMaxProfit);
+        this.agentsNumberTxt.setPromptText(" 1 to 10");
 
         // keep the prompt text visible on focus if field is empty
         bindPromptTextFormatOnFocus(this.startVertexTxt);
