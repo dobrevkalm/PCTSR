@@ -21,10 +21,7 @@ public class HeuristicFour extends HeuristicTwo {
 
     @Override
     void performMutations() {
-        double previousMinLength = 10000000000.0;
-        for (int i = 0; i < agentsNumber; i++) {
-            previousMinLength += pathResult[i].getPathLength();
-        }
+        double previousMinLength = Double.MAX_VALUE;
 
         Random random = new Random();
         // the number of mutations
@@ -61,15 +58,14 @@ public class HeuristicFour extends HeuristicTwo {
             sumLength += pathResult[i].getPathLength();
         }
 
-        double previousMin = previousMinLength;
-        if (sumLength < previousMin) {
-            previousMin = sumLength;
+        if (sumLength < previousMinLength) {
+            previousMinLength = sumLength;
             // save the previous mutations of the routes
             savePreviousRoute();
         } else {
             updateAgentsPathResult(true);
         }
-        return previousMin;
+        return previousMinLength;
     }
 
     private void gatherProfit() {

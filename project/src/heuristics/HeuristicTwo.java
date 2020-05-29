@@ -106,7 +106,6 @@ public class HeuristicTwo extends Heuristic {
             if (!visited[i]) {
                 // find the best place to insert a new vertex
                 for (int j = 1; j < n; j++) {
-
                     List<Place> resPath = pathResult[k].getResultPath();
                     double minus = distanceMatrix[resPath.get(j - 1).getId()][resPath.get(j).getId()];
                     double plus = distanceMatrix[resPath.get(j - 1).getId()][i] + distanceMatrix[i][resPath.get(j).getId()];
@@ -156,10 +155,7 @@ public class HeuristicTwo extends Heuristic {
     // performs mutation to an existing route in order to try and improve it
     void performMutations() {
         // ensure that the first route created will be overwritten with one of the routes created by mutations
-        double previousMinLength = 10000000000.0;
-        for (int i = 0; i < agentsNumber; i++) {
-            previousMinLength += pathResult[i].getPathLength();
-        }
+        double previousMinLength = Double.MAX_VALUE;
 
         Random random = new Random();
         // the number of mutations
@@ -206,15 +202,14 @@ public class HeuristicTwo extends Heuristic {
             sumLength += pathResult[i].getPathLength();
         }
 
-        double previousMin = previousMinLength;
-        if (sumLength < previousMin) {
-            previousMin = sumLength;
+        if (sumLength < previousMinLength) {
+            previousMinLength = sumLength;
             // save the previous mutations of the routes
             savePreviousRoute();
         } else {
             updateAgentsPathResult(true);
         }
-        return previousMin;
+        return previousMinLength;
     }
 
     // perform mutation to a single agent's route
@@ -273,10 +268,11 @@ public class HeuristicTwo extends Heuristic {
             double previousLength = pathResult[i].getPreviousMinLength();
             pathResult[i].setActualProfit(previousProfit);
             pathResult[i].setPathLength(previousLength);
-            // adjust visited[] array to mirror actual current state
-            if (refresh) {
-                refreshVisitedVerticesArray();
-            }
+        }
+
+        // adjust visited[] array to mirror actual current state
+        if (refresh) {
+            refreshVisitedVerticesArray();
         }
     }
 
