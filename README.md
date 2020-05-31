@@ -14,6 +14,8 @@ The simple grapgic user interface allows the user to enter starting vertex (the 
 ![GUI](./GUI_RAN.png)
 
 ## How to run
+**Navigate to ./project/src/**
+
 **Compile all the classes**
  - javac *.java
 
