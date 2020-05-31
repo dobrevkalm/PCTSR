@@ -14,7 +14,11 @@ public class HeuristicTest {
         int agents = 1;
         int profit = 100;
 
-        final int P = 380;
+        double P = 0d;
+        for (Place place : places) {
+            P += place.getFirmProfit();
+        }
+
         final int V = places.length;
         final int A = 10;
 

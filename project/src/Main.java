@@ -143,7 +143,7 @@ public class Main {
             rt.runTests();
             System.out.print("DONE!\n\n\n");
             timeout(1);
-            System.out.println("Starting heuristic solutions test.\nRunning each solution from each starting vertex.\nEach run will test different number of agents and different profits.\n");
+            System.out.println("Starting heuristic solutions test. This takes couple of minutes.\nRunning each solution from each starting vertex.\nEach run will test different number of agents and different profits.\n");
             timeout(2);
             System.out.print(" - RUNNING TESTS...");
             HeuristicTest ht = new HeuristicTest();
