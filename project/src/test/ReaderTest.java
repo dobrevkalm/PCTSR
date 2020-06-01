@@ -10,6 +10,7 @@ public class ReaderTest {
     private final double[][] DISTANCE_MATRIX = reader.getDistanceMatrix();
 
     public void runTests() {
+        assert this.NUM_COMPANIES == 91;
         testDistanceMatrix();
         testPlaces();
         checkDistanceMatrix();
