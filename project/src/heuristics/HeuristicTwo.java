@@ -65,8 +65,10 @@ public class HeuristicTwo extends Heuristic {
 
             double minusProfit = pathResult[k].getResultPath().get(i).getFirmProfit();
 
-            // find a vertex that will shorten the distance travelled by a sale representative the most
+            // find a vertex that will shorten the distance travelled by a sales representative the most
             // while losing the least profit
+            // (minus - plus) - tells us how the distance will change after the vertex removal
+            // minusProfit - tells us what is the net profit of the vertex we want to remove
             if (!best && (minus - plus) / minusProfit > bestH) {
                 bestH = (minus - plus) / minusProfit;
                 besti = i;
@@ -107,14 +109,27 @@ public class HeuristicTwo extends Heuristic {
                 // find the best place to insert a new vertex
                 for (int j = 1; j < n; j++) {
                     List<Place> resPath = pathResult[k].getResultPath();
+                    // minus - it represents the distance between vertices j-1 and j, which basically is the edge
+                    //         we need to break to insert a new new vertex between vertex j-1 and vertex j
                     double minus = distanceMatrix[resPath.get(j - 1).getId()][resPath.get(j).getId()];
+                    // plus - it represents the distance after adding a new vertex; as we add a new vertex,
+                    //        two new edges will be added, one connecting to new vertex with vertex j-1 and the other
+                    //        connecting that new vertex with j
                     double plus = distanceMatrix[resPath.get(j - 1).getId()][i] + distanceMatrix[i][resPath.get(j).getId()];
                     double plusProfit = places[i].getFirmProfit();
 
+                    // plusProfit - profit of the new vertex (company's net profit)
+                    // (plus - minus) - the increase in distance caused by adding a new vertex
+                    // we are looking for a combination of an agent, vertex and index in the pathResult that gives
+                    // us the biggest value of (company's net profit / increase in the travelled distance) ratio
                     if (plusProfit / (plus - minus) > bestH) {
+                        // save best (company's net profit / increase in the travelled distance) ratio
                         bestH = plusProfit / (plus - minus);
+                        // save the ID of the vertex to insert
                         besti = i;
+                        // save the index in the pathResult where the new vertex should be inserted
                         bestj = j;
+                        // save the distance increase caused by adding the new vertex
                         plusLength = plus - minus;
                     }
                 }
@@ -134,7 +149,7 @@ public class HeuristicTwo extends Heuristic {
         pathResult[k].increasePathLength(plusLength);
         pathResult[k].increaseActualProfit(profitIncrease);
         pathResult[k].getResultPath().add(bestj, placeToInsert);
-        // add the newly inserted verted to the list of visited
+        // add the newly inserted vertex to the list of visited
         visited[besti] = true;
 
         return profitIncrease;
@@ -181,7 +196,7 @@ public class HeuristicTwo extends Heuristic {
         }
     }
 
-    // perform the mutations for all the agents
+    // perform the mutations for all the agents (sales representatives)
     double generateMutations(int percent, double previousMinLength) {
         for (int agent = 0; agent < agentsNumber; agent++) {
             generateAgentRouteMutation(agent, percent);

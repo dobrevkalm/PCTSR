@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeuristicOne extends Heuristic {
-    // the smalles coefficient h = distance/profit
+    // the smallest coefficient h = distance/profit
     int minHeuristicId = 0;
     int availablePlaces = 0;
     double distance = 0.0;
