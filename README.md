@@ -2,7 +2,7 @@
 The Prize Collecting Traveling Sales Representative (PCTSR) is an NP-hard problem in theoretical computer science. It is a variant of the classic Traveling Salesman Problem (TSP), often refered to as Quota TSP. Given a list of marketplaces, travel costs (e.g. distances between them) and a non-negative prize to collect at each market, the goal is to collect a given quota while minimizing the length of the tour.
 
 ## Implementation
-The implementation is made using Java 8 and JavaFX. In order to run it, you need to make sure your JDK version supports JavaFX as some of them have it removed. More information about JavaFX and how to run it can be found on https://openjfx.io/.
+The implementation is made using Java 8 and JavaFX.
 
 The algorithm runs on the list of the most profitable companies in Denmark for 2019, based on the data from http://www.largestcompanies.com/toplists/denmark/largest-companies-by-earnings/.
 
@@ -14,6 +14,8 @@ The simple grapgic user interface allows the user to enter starting vertex (the 
 ![GUI](./GUI_RAN.png)
 
 ## How to run
+In order to run the program, you need to have Java 8 configured on your machine (higher versions should also work but were not tested). You also need to make sure your JDK version supports JavaFX as some of them have it removed. More information about JavaFX and how to run it can be found on https://openjfx.io/.
+
 **Navigate to the project source folder**
  - cd ./project/src/
 
